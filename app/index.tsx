@@ -1,6 +1,10 @@
+import { api } from "@/convex/_generated/api";
+import { useQuery } from "convex/react";
 import { Text, View } from "react-native";
 
 export default function Index() {
+  const groups = useQuery(api.groups.get);
+
   return (
     <View
       style={{
@@ -9,7 +13,7 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
+      {groups?.map(({ _id, name }) => <Text key={_id}>{name}</Text>)}
     </View>
   );
 }
