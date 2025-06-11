@@ -4,9 +4,19 @@ import { query } from "./_generated/server";
 export const getAll = query({
   args: {},
   handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (identity === null) {
+      throw new Error("Not authenticated");
+    }
+
     return await ctx.db
       .query("groups")
-      .filter((q) => q.eq(q.field("archived"), false))
+      .filter((q) =>
+        q.and(
+          q.eq(q.field("user"), identity.tokenIdentifier),
+          q.eq(q.field("archived"), false)
+        )
+      )
       .collect();
   },
 });
@@ -16,6 +26,20 @@ export const getById = query({
     id: v.id("groups"),
   },
   handler: async (ctx, args) => {
-    return await ctx.db.get(args.id);
+    const identity = await ctx.auth.getUserIdentity();
+    if (identity === null) {
+      throw new Error("Not authenticated");
+    }
+
+    const group = await ctx.db.get(args.id);
+    if (group === null) {
+      throw new Error("Group not found");
+    }
+
+    if (group.user !== identity.tokenIdentifier) {
+      throw new Error("Unauthorized");
+    }
+
+    return group;
   },
 });

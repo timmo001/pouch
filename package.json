@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@babel/plugin-transform-class-static-block": "^7.27.1",
+    "@clerk/clerk-expo": "^2.13.0",
     "@expo/vector-icons": "^14.1.0",
     "@react-navigation/bottom-tabs": "^7.3.10",
     "@react-navigation/elements": "^2.3.8",
@@ -37,6 +38,7 @@
     "expo-modules-core": "~2.4.0",
     "expo-navigation-bar": "~4.2.4",
     "expo-router": "~5.0.7",
+    "expo-secure-store": "^14.2.3",
     "expo-splash-screen": "~0.30.9",
     "expo-status-bar": "~2.2.3",
     "expo-symbols": "~0.4.5",
@@ -65,5 +67,6 @@
     "eslint": "^9.25.0",
     "eslint-config-expo": "~9.2.0"
   },
-  "private": true
+  "private": true,
+  "packageManager": "bun@1.2.15"
 }
