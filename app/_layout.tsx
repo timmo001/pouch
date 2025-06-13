@@ -11,11 +11,10 @@ import {
 import { PortalHost } from "@rn-primitives/portal";
 import { ConvexReactClient } from "convex/react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
-import { Stack } from "expo-router";
+import { Slot } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
 import { Appearance, Platform } from "react-native";
-import { ThemeToggle } from "~/components/ThemeToggle";
 import { setAndroidNavigationBar } from "~/lib/android-navigation-bar";
 import { NAV_THEME } from "~/lib/constants";
 import { useColorScheme } from "~/lib/useColorScheme";
@@ -53,15 +52,7 @@ export default function RootLayout() {
       <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
         <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
           <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-          <Stack>
-            <Stack.Screen
-              name="index"
-              options={{
-                title: "Pouch",
-                headerRight: () => <ThemeToggle />,
-              }}
-            />
-          </Stack>
+          <Slot />
           <PortalHost />
         </ThemeProvider>
       </ConvexProviderWithClerk>
