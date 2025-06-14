@@ -2,8 +2,7 @@ import { Authenticated, AuthLoading, Unauthenticated } from "convex/react";
 import { Link, Stack } from "expo-router";
 import React from "react";
 import { View } from "react-native";
-import { SignOutButton } from "~/components/SignOutButton";
-import { ThemeToggle } from "~/components/ThemeToggle";
+import { AccountMenu } from "~/components/AcccountMenu";
 import { Button } from "~/components/ui/button";
 import { Text } from "~/components/ui/text";
 
@@ -23,9 +22,7 @@ export default function AuthenticatedLayout() {
         </View>
       </Unauthenticated>
       <Authenticated>
-        <SignOutButton />
-        <Text className="text-2xl font-bold text-center">Authenticated</Text>
-        <Stack screenOptions={{ headerRight: () => <ThemeToggle /> }}>
+        <Stack screenOptions={{ headerRight: () => <AccountMenu /> }}>
           <Stack.Screen name="index" options={{ title: "Pouch" }} />
         </Stack>
       </Authenticated>
