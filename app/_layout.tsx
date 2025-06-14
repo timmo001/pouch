@@ -2,6 +2,7 @@ import "~/global.css";
 
 import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
 import { tokenCache } from "@clerk/clerk-expo/token-cache";
+import { dark } from "@clerk/themes";
 import {
   DarkTheme,
   DefaultTheme,
@@ -48,7 +49,12 @@ export default function RootLayout() {
   const { isDarkColorScheme } = useColorScheme();
 
   return (
-    <ClerkProvider tokenCache={tokenCache}>
+    <ClerkProvider
+      appearance={{
+        baseTheme: isDarkColorScheme ? dark : undefined,
+      }}
+      tokenCache={tokenCache}
+    >
       <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
         <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
           <StatusBar style={isDarkColorScheme ? "light" : "dark"} />

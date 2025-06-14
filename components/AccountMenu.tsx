@@ -7,13 +7,15 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Text } from "~/components/ui/text";
 import { LogOut } from "~/lib/icons/LogOut";
+import { User } from "~/lib/icons/User";
 
 export function AccountMenu() {
-  const { user, signOut } = useClerk();
+  const { user, signOut, openUserProfile } = useClerk();
 
   async function handleSignOut() {
     try {
@@ -40,7 +42,13 @@ export function AccountMenu() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-          <ThemeToggle />
+        <ThemeToggle />
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onPress={openUserProfile}>
+          <User className="text-foreground" size={14} />
+          <Text className="text-foreground">Account</Text>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
         <DropdownMenuItem onPress={handleSignOut}>
           <LogOut className="text-foreground" size={14} />
           <Text className="text-foreground">Sign out</Text>

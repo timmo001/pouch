@@ -2,7 +2,7 @@ import { Authenticated, AuthLoading, Unauthenticated } from "convex/react";
 import { Link, Stack } from "expo-router";
 import React from "react";
 import { View } from "react-native";
-import { AccountMenu } from "~/components/AcccountMenu";
+import { AccountMenu } from "~/components/AccountMenu";
 import { Button } from "~/components/ui/button";
 import { Text } from "~/components/ui/text";
 
