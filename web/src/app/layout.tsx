@@ -8,7 +8,7 @@ import { ThemeToggle } from "~/components/ui/theme-toggle";
 export const metadata: Metadata = {
   title: "Pouch",
   description: "Store your favorite things",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [{ rel: "icon", url: "/icon" }],
 };
 
 const geist = Geist({
@@ -20,7 +20,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${geist.variable}`}>
+    <html lang="en" className={`${geist.variable}`} suppressHydrationWarning>
       <body className="bg-background text-foreground">
         <ThemeProvider attribute="class">
           <div className="fixed z-50 top-4 right-4">
