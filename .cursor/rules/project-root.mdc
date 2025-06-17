@@ -5,10 +5,11 @@ alwaysApply: true
 ---
 # Project Root Structure
 
-The project root contains two main subdirectories:
+The project root contains three main subdirectories:
 
+- `convex/`: Convex backend logic, including generated API files, schema definitions, and backend functions for data and authentication.
 - `native/`: The Expo/React Native mobile app
 - `web/`: The Next.js web app
 
-Each subdirectory is a standalone project with its own dependencies, configuration, and source code. Use the appropriate directory depending on whether you are working on the mobile or web version of the app.
+Each subdirectory is a standalone project with its own dependencies, configuration, and source code. Use the appropriate directory depending on whether you are working on the mobile, web, or backend logic of the app.
 

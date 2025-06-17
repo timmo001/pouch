@@ -5,15 +5,16 @@ alwaysApply: true
 ---
 # Web App Structure
 
-The `web/` directory contains the code for the Next.js web application. Key subdirectories and files:
+The `web/` directory contains the Next.js web application. Key structure and conventions:
 
-- `src/app/`: Main app entry, layout, and page components.
-- `src/components/`: Shared React components, with a `ui/` subfolder for UI primitives (e.g., button, card, avatar, etc.).
-- `src/lib/`: Utility functions.
-- `src/styles/`: Global CSS styles.
-- `public/`: Static assets, such as the favicon.
-- `package.json`: Project dependencies and scripts for development, building, and linting.
-- `tsconfig.json`, `eslint.config.js`, `tailwind.config.js`: TypeScript, ESLint, and Tailwind CSS configuration files.
+- Backend logic: ~/../convex/ — Convex backend logic, including generated API files, schema definitions, and backend functions for data and authentication.
+- Main entry point and layout: ~/app/layout.tsx
+- Main page: ~/app/page.tsx
+- UI primitives (shared components): ~/components/ui/
+- Utility functions: ~/lib/utils.ts
+- Global styles: ~/styles/globals.css
+- Project configuration: @package.json, @tsconfig.json, @eslint.config.js, @tailwind.config.js
 
-Use this structure to locate pages, components, utilities, and configuration for the web app.
+Use the `~/` alias for imports from `src/` (e.g., `~/components/ui/button`).
 
+Each subdirectory is a standalone project with its own dependencies and configuration.
