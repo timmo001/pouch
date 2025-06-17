@@ -1,0 +1,14 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Project Root Structure
+
+The project root contains two main subdirectories:
+
+- `native/`: The Expo/React Native mobile app
+- `web/`: The Next.js web app
+
+Each subdirectory is a standalone project with its own dependencies, configuration, and source code. Use the appropriate directory depending on whether you are working on the mobile or web version of the app.
+

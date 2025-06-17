@@ -1,0 +1,19 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Native App Structure
+
+The `native/` directory contains the code for the mobile (Expo/React Native) app. Key subdirectories and files:
+
+- `app/`: Route and screen definitions, using Expo Router. Auth and home flows are organized in `(auth)/` and `(home)/` folders, with nested layouts and screens.
+- `components/`: Shared React components, with a `ui/` subfolder for UI primitives (e.g., button, card, avatar, etc.).
+- `lib/`: Utility functions and constants, including an `icons/` subfolder for icon components.
+- `convex/`: Convex backend logic, including generated API files and schema definitions.
+- `assets/`: Static assets, such as images and fonts.
+- `global.css`, `tailwind.config.js`: Global styles and Tailwind CSS configuration.
+- `package.json`: Project dependencies and scripts for development, building, and cleaning.
+
+Use this structure to locate screens, components, utilities, and backend logic for the native app.
+

@@ -1,0 +1,14 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Cross-Platform UI Primitives
+
+Both the native and web apps use a set of shared UI primitives (e.g., button, card, avatar) located in:
+
+- `native/components/ui/` for the mobile app
+- `web/src/components/ui/` for the web app
+
+These primitives are designed to provide a consistent look and feel across platforms. When adding or updating a UI primitive, consider making corresponding changes in both locations to maintain design consistency.
+
