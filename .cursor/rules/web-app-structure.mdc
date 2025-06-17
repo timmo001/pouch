@@ -1,0 +1,20 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Web App Structure
+
+The `web/` directory contains the Next.js web application. Key structure and conventions:
+
+- Main entry point and layout: [src/app/layout.tsx](mdc:web/src/app/layout.tsx)
+- Main page: [src/app/page.tsx](mdc:web/src/app/page.tsx)
+- UI primitives (shared components): [src/components/ui/](mdc:web/src/components/ui)
+- Utility functions: [src/lib/utils.ts](mdc:web/src/lib/utils.ts)
+- Global styles: [src/styles/globals.css](mdc:web/src/styles/globals.css)
+- Static assets: [public/](mdc:web/public)
+- Project configuration: [package.json](mdc:web/package.json), [tsconfig.json](mdc:web/tsconfig.json), [eslint.config.js](mdc:web/eslint.config.js), [tailwind.config.js](mdc:web/tailwind.config.js)
+
+Use the `~/` alias for imports from `src/` (e.g., `~/components/ui/button`).
+
+Each subdirectory is a standalone project with its own dependencies and configuration.
