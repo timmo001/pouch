@@ -57,7 +57,7 @@ export default function RootLayout() {
     >
       <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
         <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-          <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
+          <StatusBar animated translucent style={isDarkColorScheme ? "light" : "dark"} />
           <Slot />
           <PortalHost />
         </ThemeProvider>

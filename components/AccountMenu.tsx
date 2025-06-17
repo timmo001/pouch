@@ -44,7 +44,7 @@ export function AccountMenu() {
       <DropdownMenuContent>
         <ThemeToggle />
         <DropdownMenuSeparator />
-        <DropdownMenuItem onPress={openUserProfile}>
+        <DropdownMenuItem onPress={() => openUserProfile()}>
           <User className="text-foreground" size={14} />
           <Text className="text-foreground">Account</Text>
         </DropdownMenuItem>
