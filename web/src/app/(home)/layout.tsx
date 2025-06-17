@@ -2,24 +2,21 @@
 
 import { Authenticated, Unauthenticated } from "convex/react";
 import { SignInButton, UserButton } from "@clerk/nextjs";
-import { useQuery } from "convex/react";
-import { api } from "~/convex/_generated/api";
 
-export default function HomePage() {
+export default function HomeLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <>
       <Authenticated>
         <UserButton />
-        <Content />
+        {children}
       </Authenticated>
       <Unauthenticated>
         <SignInButton />
       </Unauthenticated>
     </>
   );
-}
-
-function Content() {
-  const groups = useQuery(api.groups.getAll);
-  return <div>Authenticated content: {groups?.length}</div>;
 }

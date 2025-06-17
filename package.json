@@ -2,15 +2,22 @@
   "name": "pouch",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "copy-convex.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "copy-convex": "bun run copy-convex.ts",
+    "dev": "concurrently \"pnpm run dev:convex\" \"pnpm run dev:watch-convex\"",
+    "dev:convex": "convex dev",
+    "dev:watch-convex": "bunx chokidar \"convex/**/*\" -c \"bun run copy-convex\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.12.1",
   "dependencies": {
     "convex": "^1.24.8"
+  },
+  "packageManager": "bun@1.2.16",
+  "devDependencies": {
+    "chokidar-cli": "^3.0.0",
+    "concurrently": "^9.1.2"
   }
 }
