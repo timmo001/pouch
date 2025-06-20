@@ -14,28 +14,31 @@ export default function HomeLayout({
 
   return (
     <div className="flex flex-col w-screen h-screen">
-      <header className="flex flex-shrink-0 items-center px-4 h-14 border-b">
-        <div className="mr-auto text-lg font-semibold">Pouch</div>
-        <div className="flex gap-2 items-center">
-          <ThemeToggle />
-          <Authenticated>
-            <UserButton
-              customMenuItems={[
-                {
-                  label: theme === "dark" ? "Light mode" : "Dark mode",
-                  onClick: () => setTheme(theme === "dark" ? "light" : "dark"),
-                },
-              ]}
-            />
-          </Authenticated>
-          <Unauthenticated>
-            <Button size="sm" variant="default" asChild>
-              <SignInButton mode="modal" />
-            </Button>
-          </Unauthenticated>
+      <header className="border-b">
+        <div className="container flex flex-shrink-0 items-center px-4 mx-auto h-14">
+          <div className="mr-auto text-lg font-semibold">Pouch</div>
+          <div className="flex gap-2 items-center">
+            <ThemeToggle />
+            <Authenticated>
+              <UserButton
+                customMenuItems={[
+                  {
+                    label: theme === "dark" ? "Light mode" : "Dark mode",
+                    onClick: () =>
+                      setTheme(theme === "dark" ? "light" : "dark"),
+                  },
+                ]}
+              />
+            </Authenticated>
+            <Unauthenticated>
+              <Button size="sm" variant="default" asChild>
+                <SignInButton mode="modal" />
+              </Button>
+            </Unauthenticated>
+          </div>
         </div>
       </header>
-      <main className="container flex flex-col flex-1 mx-auto">
+      <main className="container flex flex-col flex-1 p-4 mx-auto">
         <Authenticated>{children}</Authenticated>
         <Unauthenticated>
           <div className="flex flex-col gap-4 justify-center items-center w-full h-full">
