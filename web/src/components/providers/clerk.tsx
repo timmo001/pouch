@@ -1,17 +1,14 @@
 "use client";
 import { ClerkProvider as ClerkProviderBase } from "@clerk/nextjs";
-import { dark } from "@clerk/themes";
 import { useTheme } from "next-themes";
+import { darkTheme, lightTheme } from "~/lib/clerk-theme";
 
 export function ClerkProvider({ children }: { children: React.ReactNode }) {
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
 
   return (
     <ClerkProviderBase
-      appearance={{
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        baseTheme: theme === "dark" ? dark : undefined,
-      }}
+      appearance={resolvedTheme === "dark" ? darkTheme : lightTheme}
     >
       {children}
     </ClerkProviderBase>
