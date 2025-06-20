@@ -1,6 +1,6 @@
 "use client";
 import { Authenticated, Unauthenticated } from "convex/react";
-import { SignInButton, UserButton } from "@clerk/nextjs";
+import { SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { useTheme } from "next-themes";
 import { Button } from "~/components/ui/button";
 import { ThemeToggle } from "~/components/ui/theme-toggle";
@@ -35,13 +35,26 @@ export default function HomeLayout({
           </Unauthenticated>
         </div>
       </header>
-      <main className="container flex flex-col flex-1">
+      <main className="container flex flex-col flex-1 mx-auto">
         <Authenticated>{children}</Authenticated>
         <Unauthenticated>
           <div className="flex flex-col gap-4 justify-center items-center w-full h-full">
-            <h1 className="text-2xl font-bold text-center lg:text-4xl">
-              Sign in to continue
-            </h1>
+            <div className="flex flex-col flex-1 gap-2 justify-center items-center">
+              <p className="text-2xl font-bold text-center lg:text-4xl">
+                Sign in to continue
+              </p>
+              <Button size="default" variant="default" asChild>
+                <SignInButton mode="modal" />
+              </Button>
+            </div>
+            <div className="flex flex-col flex-1 gap-2 justify-center items-center">
+              <p className="text-2xl font-bold text-center lg:text-4xl">
+                New here?
+              </p>
+              <Button size="default" variant="default" asChild>
+                <SignUpButton mode="modal" />
+              </Button>
+            </div>
           </div>
         </Unauthenticated>
       </main>
