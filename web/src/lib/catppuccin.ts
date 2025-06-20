@@ -1,4 +1,7 @@
+import { dark } from "@clerk/themes";
+
 export const latte = {
+  baseTheme: undefined,
   rosewater: "#dc8a78",
   flamingo: "#dd7878",
   pink: "#ea76cb",
@@ -28,6 +31,7 @@ export const latte = {
 };
 
 export const frappe = {
+  baseTheme: undefined,
   rosewater: "#f2d5cf",
   flamingo: "#eebebe",
   pink: "#f4b8e4",
@@ -57,6 +61,8 @@ export const frappe = {
 };
 
 export const macchiato = {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  baseTheme: dark,
   rosewater: "#f4dbd6",
   flamingo: "#f0c6c6",
   pink: "#f5bde6",
@@ -86,6 +92,8 @@ export const macchiato = {
 };
 
 export const mocha = {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  baseTheme: dark,
   rosewater: "#f5e0dc",
   flamingo: "#f2cdcd",
   pink: "#f5c2e7",

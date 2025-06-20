@@ -24,6 +24,7 @@ export default function HomeLayout({
             <ThemeToggle />
             <Authenticated>
               <UserButton
+              
                 customMenuItems={[
                   {
                     label: theme === "dark" ? "Light mode" : "Dark mode",

@@ -49,7 +49,7 @@
 :root {
   --radius: 0.625rem;
   /* Catppuccin Latte (light) */
-  --background: #f5e0dc;
+  --background: #e6e9ef;
   --foreground: #4c4f69;
   --card: #eff1f5;
   --card-foreground: #4c4f69;
@@ -57,7 +57,7 @@
   --popover-foreground: #4c4f69;
   --primary: #d20f39;
   --primary-foreground: #fff;
-  --secondary: #e6e9ef;
+  --secondary: #dce0e8;
   --secondary-foreground: #4c4f69;
   --muted: #e6e9ef;
   --muted-foreground: #6c6f85;

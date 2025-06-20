@@ -1,7 +1,11 @@
 import { type Appearance } from "@clerk/types";
 import { latte, mocha } from "~/lib/catppuccin";
 
-const buildTheme = (theme: typeof mocha | typeof latte): Partial<Appearance> => ({
+const buildTheme = (
+  theme: typeof mocha | typeof latte,
+): Partial<Appearance> => ({
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  baseTheme: theme.baseTheme,
   variables: {
     fontFamily: "var(--font-geist-sans)",
     fontFamilyButtons: "var(--font-geist-sans)",
@@ -23,9 +27,11 @@ const buildTheme = (theme: typeof mocha | typeof latte): Partial<Appearance> => 
       borderWidth: 2,
     },
     socialButtonsBlockButton: {
+      backgroundColor: theme.surface0,
       borderColor: theme.surface1,
+      color: theme.text,
       "&:hover": {
-        backgroundColor: theme.surface0,
+        backgroundColor: theme.surface1,
       },
     },
     dividerLine: {
@@ -45,8 +51,26 @@ const buildTheme = (theme: typeof mocha | typeof latte): Partial<Appearance> => 
         backgroundColor: theme.mauve,
       },
     },
+    userButtonPopoverActionButton: {
+      color: theme.text,
+      "&:hover": {
+        backgroundColor: theme.surface0,
+        color: theme.text,
+      },
+    },
+    badge: {
+      backgroundColor: theme.mauve,
+      color: theme.base,
+    },
+    navbarButton: {
+      color: theme.subtext0,
+      "&:hover": {
+        backgroundColor: theme.surface0,
+        color: theme.text,
+      },
+    },
   },
 });
 
 export const lightTheme: Partial<Appearance> = buildTheme(latte);
-export const darkTheme: Partial<Appearance> = buildTheme(mocha); 
+export const darkTheme: Partial<Appearance> = buildTheme(mocha);
