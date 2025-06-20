@@ -2,9 +2,8 @@ import "~/styles/globals.css";
 
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
-import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "~/components/ui/theme-provider";
-import { ThemeToggle } from "~/components/ui/theme-toggle";
+import { ClerkProvider } from "~/components/providers/clerk";
 import { ConvexClientProvider } from "~/components/providers/convex-with-clerk";
 
 export const metadata: Metadata = {
@@ -26,12 +25,7 @@ export default function RootLayout({
       <body className="bg-background text-foreground">
         <ThemeProvider attribute="class">
           <ClerkProvider>
-            <ConvexClientProvider>
-              <div className="fixed z-50 top-4 right-4">
-                <ThemeToggle />
-              </div>
-              {children}
-            </ConvexClientProvider>
+            <ConvexClientProvider>{children}</ConvexClientProvider>
           </ClerkProvider>
         </ThemeProvider>
       </body>

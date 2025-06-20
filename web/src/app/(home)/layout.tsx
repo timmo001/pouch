@@ -1,28 +1,50 @@
 "use client";
-
 import { Authenticated, Unauthenticated } from "convex/react";
 import { SignInButton, UserButton } from "@clerk/nextjs";
+import { useTheme } from "next-themes";
 import { Button } from "~/components/ui/button";
+import { ThemeToggle } from "~/components/ui/theme-toggle";
 
 export default function HomeLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { theme, setTheme } = useTheme();
+
   return (
-    <>
-      <Authenticated>
-        <UserButton />
-        {children}
-      </Authenticated>
-      <Unauthenticated>
-        <div className="items-center justify-center flex-1 gap-4">
-          <p className="text-2xl font-bold text-center">Sign in to continue</p>
-          <Button size="lg" variant="default" asChild>
-            <SignInButton mode="modal" />
-          </Button>
+    <div className="flex flex-col w-screen h-screen">
+      <header className="flex flex-shrink-0 items-center px-4 h-14 border-b">
+        <div className="mr-auto text-lg font-semibold">Pouch</div>
+        <div className="flex gap-2 items-center">
+          <ThemeToggle />
+          <Authenticated>
+            <UserButton
+              customMenuItems={[
+                {
+                  label: theme === "dark" ? "Light mode" : "Dark mode",
+                  onClick: () => setTheme(theme === "dark" ? "light" : "dark"),
+                },
+              ]}
+            />
+          </Authenticated>
+          <Unauthenticated>
+            <Button size="sm" variant="default" asChild>
+              <SignInButton mode="modal" />
+            </Button>
+          </Unauthenticated>
         </div>
-      </Unauthenticated>
-    </>
+      </header>
+      <main className="container flex flex-col flex-1">
+        <Authenticated>{children}</Authenticated>
+        <Unauthenticated>
+          <div className="flex flex-col gap-4 justify-center items-center w-full h-full">
+            <h1 className="text-2xl font-bold text-center lg:text-4xl">
+              Sign in to continue
+            </h1>
+          </div>
+        </Unauthenticated>
+      </main>
+    </div>
   );
 }
