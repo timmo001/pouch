@@ -5,7 +5,9 @@
   "main": "copy-convex.ts",
   "scripts": {
     "copy-convex": "bun run copy-convex.ts",
-    "dev": "concurrently \"pnpm run dev:convex\" \"pnpm run dev:watch-convex\"",
+    "dev": "concurrently \"bun run dev:convex\" \"bun run dev:watch-convex\" \"cd native && pnpm run dev\" \"cd web && pnpm run dev\"",
+    "dev:native": "concurrently \"bun run dev:convex\" \"bun run dev:watch-convex\" \"cd native && pnpm run dev\"",
+    "dev:web": "concurrently \"bun run dev:convex\" \"bun run dev:watch-convex\" \"cd web && pnpm run dev\"",
     "dev:convex": "convex dev",
     "dev:watch-convex": "bunx chokidar \"convex/**/*\" -c \"bun run copy-convex\""
   },
