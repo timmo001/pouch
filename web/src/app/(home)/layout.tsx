@@ -4,6 +4,7 @@ import { SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { useTheme } from "next-themes";
 import { Button } from "~/components/ui/button";
 import { ThemeToggle } from "~/components/ui/theme-toggle";
+import Link from "next/link";
 
 export default function HomeLayout({
   children,
@@ -16,7 +17,9 @@ export default function HomeLayout({
     <div className="flex flex-col w-screen h-screen">
       <header className="border-b">
         <div className="container flex flex-shrink-0 items-center px-4 mx-auto h-14">
-          <div className="mr-auto text-lg font-semibold">Pouch</div>
+          <div className="mr-auto text-lg font-semibold">
+            <Link href="/">Pouch</Link>
+          </div>
           <div className="flex gap-2 items-center">
             <ThemeToggle />
             <Authenticated>
