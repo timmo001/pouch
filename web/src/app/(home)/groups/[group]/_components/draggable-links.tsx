@@ -30,7 +30,7 @@ export function DraggableLinks({
   });
 
   const updatePosition = useMutation({
-    mutationFn: useConvexMutation(api.links.updateLinkPosition),
+    mutationFn: useConvexMutation(api.links.updateOrder),
     onSuccess: () => {
       void refetch();
     },
@@ -41,17 +41,9 @@ export function DraggableLinks({
   });
 
   function onSort(sortedLinks: (Doc<"links"> & SortableItem)[]) {
-    // We only care about the final order, so we can ignore intermediate states
-    // and just send the final positions to the server.
-    sortedLinks.forEach((link, index) => {
-      // Check if the position has changed
-      if (link.position !== index + 1) {
-        updatePosition.mutate({
-          id: link._id,
-          position: index + 1,
-          group: groupId,
-        });
-      }
+    updatePosition.mutate({
+      group: groupId,
+      orderedIds: sortedLinks.map((link) => link._id),
     });
   }
 

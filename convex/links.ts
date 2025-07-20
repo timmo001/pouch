@@ -178,9 +178,10 @@ export const deleteLink = mutation({
   },
 });
 
-export const updatePositions = mutation({
+export const updateOrder = mutation({
   args: {
     group: v.id("groups"),
+    orderedIds: v.array(v.id("links")),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -188,57 +189,28 @@ export const updatePositions = mutation({
       throw new Error("Not authenticated");
     }
 
-    // Get all links in the group that don't have a position
-    const linksWithoutPosition = await ctx.db
-      .query("links")
-      .withIndex("by_group_user_archived_position", (q) =>
-        q
-          .eq("group", args.group)
-          .eq("user", identity.tokenIdentifier)
-          .eq("archived", false)
-      )
-      .filter((q) => q.eq(q.field("position"), undefined))
-      .collect();
-
-    // Update each link with a position
-    for (let i = 0; i < linksWithoutPosition.length; i++) {
-      const link = linksWithoutPosition[i];
-      if (link) {
-        await ctx.db.patch(link._id, {
-          position: i + 1,
-        });
-      }
+    const group = await ctx.db.get(args.group);
+    if (!group) {
+      throw new Error("Group not found");
     }
 
-    return linksWithoutPosition.length;
-  },
-});
-
-export const updateLinkPosition = mutation({
-  args: {
-    group: v.id("groups"),
-    id: v.id("links"),
-    position: v.number(),
-  },
-  handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (identity === null) {
-      throw new Error("Not authenticated");
+    if (group.user !== identity.tokenIdentifier) {
+      throw new Error("Not authorized to access this group");
     }
 
-    const link = await ctx.db.get(args.id);
-    if (!link) return null;
-
-    if (link.user !== identity.tokenIdentifier) {
-      throw new Error("Not authorized to update this link");
-    }
-
-    if (link.group !== args.group) {
-      throw new Error("Not authorized to update this link");
-    }
-
-    return await ctx.db.patch(args.id, {
-      position: args.position,
-    });
+    await Promise.all(
+      args.orderedIds.map(async (linkId, index) => {
+        const link = await ctx.db.get(linkId);
+        if (
+          link &&
+          link.user === identity.tokenIdentifier &&
+          link.group === args.group
+        ) {
+          await ctx.db.patch(linkId, {
+            position: index + 1,
+          });
+        }
+      })
+    );
   },
 });
