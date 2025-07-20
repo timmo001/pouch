@@ -15,5 +15,11 @@ export default defineSchema({
     group: v.id("groups"),
     user: v.string(),
     archived: v.boolean(),
-  }),
+    position: v.optional(v.number()),
+  }).index("by_group_user_archived_position", [
+    "group",
+    "user",
+    "archived",
+    "position",
+  ]),
 });

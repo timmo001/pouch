@@ -1,18 +1,17 @@
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { PlusIcon, ExternalLinkIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import { fetchQuery } from "convex/nextjs";
 import { api } from "~/convex/_generated/api";
-import { getLinkTitle } from "~/lib/link";
 import { getAuthToken } from "~/server/auth";
 import { Button } from "~/components/ui/button";
 import { type Id } from "~/convex/_generated/dataModel";
 import { BreadcrumbsSetter } from "~/components/breadcrumbs/setter";
 import Link from "next/link";
-import { LinkActions } from "~/app/(home)/groups/[group]/_components/link-actions";
 import { GroupEditName } from "~/app/(home)/groups/[group]/_components/group-edit-name";
 import { GroupEditDescription } from "~/app/(home)/groups/[group]/_components/group-edit-description";
 import { GroupDelete } from "~/app/(home)/groups/[group]/_components/group-delete";
+import { DraggableLinks } from "~/app/(home)/groups/[group]/_components/draggable-links";
 
 export async function generateMetadata({
   params,
@@ -106,30 +105,7 @@ export default async function GroupPage({
             Total: {links?.length}
           </p>
         </div>
-        <div className="divide-border/60 flex flex-col divide-y">
-          {links?.map((link) => (
-            <div
-              key={link._id}
-              className="flex flex-row items-center justify-between gap-2 px-2 py-1.5"
-            >
-              <Link className="group flex-grow" href={link.url} target="_blank">
-                <div className="grid grid-cols-[1fr_auto] items-baseline gap-2">
-                  <span className="flex flex-row items-center gap-2">
-                    {getLinkTitle({
-                      description: link.description,
-                      url: link.url,
-                    })}
-                    <ExternalLinkIcon className="size-3.5 opacity-0 transition-opacity group-hover:opacity-100" />
-                  </span>
-                  <span className="text-muted-foreground text-center text-sm opacity-0 transition-opacity group-hover:opacity-100">
-                    {link.url}
-                  </span>
-                </div>
-              </Link>
-              <LinkActions link={link} />
-            </div>
-          ))}
-        </div>
+        <DraggableLinks links={links || []} groupId={group._id} />
         <div className="flex w-full flex-row items-center justify-between gap-2 px-2">
           <Link
             className="w-full"
