@@ -23,11 +23,11 @@ export default async function HomePage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="text-2xl font-bold">Groups</h2>
+      <h1 className="text-3xl font-bold">Groups</h1>
       <div className="flex flex-row items-center justify-between gap-2 px-2">
         <p className="text-muted-foreground text-sm">Total: {groups?.length}</p>
         <Link href="/groups/create" passHref>
-          <Button size="sm" variant="secondary">
+          <Button size="lg" variant="secondary">
             <PlusIcon className="h-4 w-4" />
             Create new
           </Button>
