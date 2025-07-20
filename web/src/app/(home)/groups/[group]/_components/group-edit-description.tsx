@@ -75,7 +75,7 @@ export function GroupEditDescription({
       <DialogTrigger asChild>
         <Button size="lg" variant="secondary">
           <PencilRulerIcon />
-          Edit group description
+          Edit description
         </Button>
       </DialogTrigger>
       <DialogContent>

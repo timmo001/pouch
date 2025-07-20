@@ -26,7 +26,7 @@ export default async function HomePage() {
     <>
       <BreadcrumbsSetter items={[{ key: "home", title: "Pouch" }]} />
       <div className="flex flex-col gap-4">
-        <div className="flex flex-row items-baseline justify-between gap-2 px-2">
+        <div className="flex flex-row items-center justify-between gap-2 px-2">
           <h1 className="text-3xl font-bold">Groups</h1>
           <p className="text-muted-foreground text-center text-sm">
             Total: {groups?.length}

@@ -71,7 +71,7 @@ export function GroupEditName({ group: groupIn }: { group: Doc<"groups"> }) {
       <DialogTrigger asChild>
         <Button size="lg" variant="secondary">
           <PencilLineIcon />
-          Edit group name
+          Edit name
         </Button>
       </DialogTrigger>
       <DialogContent>
