@@ -5,6 +5,7 @@ import { Geist } from "next/font/google";
 import { ThemeProvider } from "~/components/ui/theme-provider";
 import { ClerkProvider } from "~/components/providers/clerk";
 import { ConvexClientProvider } from "~/components/providers/convex-with-clerk";
+import { TanstackQueryProvider } from "~/components/providers/tanstack-query";
 
 export const metadata: Metadata = {
   title: "Pouch",
@@ -23,11 +24,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geist.variable}`} suppressHydrationWarning>
       <body className="bg-background text-foreground">
-        <ThemeProvider attribute="class">
-          <ClerkProvider>
-            <ConvexClientProvider>{children}</ConvexClientProvider>
-          </ClerkProvider>
-        </ThemeProvider>
+        <TanstackQueryProvider>
+          <ThemeProvider attribute="class">
+            <ClerkProvider>
+              <ConvexClientProvider>{children}</ConvexClientProvider>
+            </ClerkProvider>
+          </ThemeProvider>
+        </TanstackQueryProvider>
       </body>
     </html>
   );
