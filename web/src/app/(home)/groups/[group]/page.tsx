@@ -79,7 +79,7 @@ export default async function GroupPage({
       "[groups/[group]/page] Error fetching links from api.links.getFromGroup",
       error,
     );
-    return [];
+    return null;
   });
 
   return (
@@ -99,7 +99,9 @@ export default async function GroupPage({
             <GroupDelete group={group} />
           </div>
         </div>
-        <DraggableLinks group={group} preloadedLinks={preloadedLinks} />
+        {preloadedLinks && (
+          <DraggableLinks group={group} preloadedLinks={preloadedLinks} />
+        )}
         <div className="flex w-full flex-row items-center justify-between gap-2 px-2">
           <Link
             className="w-full"
