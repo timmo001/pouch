@@ -5,9 +5,11 @@ import {
   PencilRulerIcon,
   PlusIcon,
   Trash2Icon,
+  ExternalLinkIcon,
 } from "lucide-react";
 import { fetchQuery } from "convex/nextjs";
 import { api } from "~/convex/_generated/api";
+import { getLinkTitle } from "~/lib/link";
 import { getAuthToken } from "~/server/auth";
 import { Button } from "~/components/ui/button";
 import { type Id } from "~/convex/_generated/dataModel";
@@ -130,8 +132,16 @@ export default async function GroupPage({
               key={link._id}
               className="flex flex-row items-center justify-between gap-2 px-2"
             >
-              <Link className="flex-grow" href={link.url} target="_blank">
-                {link.url}
+              <Link
+                className="group flex flex-grow flex-row items-baseline gap-2"
+                href={link.url}
+                target="_blank"
+              >
+                {getLinkTitle({
+                  description: link.description,
+                  url: link.url,
+                })}
+                <ExternalLinkIcon className="size-3.5 opacity-0 transition-opacity group-hover:opacity-100" />
               </Link>
               <LinkActions link={link} />
             </div>
