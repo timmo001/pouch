@@ -38,31 +38,22 @@ export function DraggableLinks({
    */
   function onSort(list: "active" | "archived", updatedList: Doc<"links">[]) {
     const newActiveList = (list === "active" ? updatedList : links.active).map(
-      (link) => ({
-        id: link._id,
-        title: getLinkTitle({
-          description: link.description,
-          url: link.url,
-        }),
-      }),
+      (link) => link._id,
     );
-    // All archived links should be at the end of the positions.
     const newArchivedList = (
       list === "archived" ? updatedList : links.archived
-    ).map((link) => ({
-      id: link._id,
-      title: getLinkTitle({
-        description: link.description,
-        url: link.url,
-      }),
-    }));
+    ).map((link) => link._id);
 
-    const orderedIds = [...newActiveList, ...newArchivedList];
+    const orderedIds = [
+      ...newActiveList,
+      // The archived list will always be positioned after the active list
+      ...newArchivedList,
+    ];
     console.log("Ordered IDs:", orderedIds);
 
     updatePosition.mutate({
       group: group._id,
-      orderedIds: orderedIds.map((link) => link.id),
+      orderedIds,
     });
   }
 
@@ -116,10 +107,8 @@ function SortableLinks({
       setList={(sortedLinks) => {
         // Update the local state with the new order
         setLinks(sortedLinks);
-      }}
-      onEnd={() => {
         // Update the database with the new order
-        onSort(links);
+        onSort(sortedLinks);
       }}
     >
       {links.map((link) => (
