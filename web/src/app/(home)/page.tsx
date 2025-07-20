@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { ChevronRightIcon, PlusIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import { fetchQuery } from "convex/nextjs";
 import { api } from "~/convex/_generated/api";
-import { Button } from "~/components/ui/button";
 import { getAuthToken } from "~/server/auth";
+import { Button } from "~/components/ui/button";
 import { DateLocale } from "~/components/date-locale";
 
 export const dynamic = "force-dynamic";
@@ -11,7 +11,15 @@ export const dynamic = "force-dynamic";
 export default async function HomePage() {
   const token = await getAuthToken();
 
-  const groups = await fetchQuery(api.groups.getAll, {}, { token });
+  const groups = await fetchQuery(api.groups.getAll, {}, { token }).catch(
+    (error) => {
+      console.warn(
+        "[home/page] Error fetching groups from api.groups.getAll",
+        error,
+      );
+      return [];
+    },
+  );
 
   return (
     <div className="flex flex-col gap-4">

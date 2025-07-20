@@ -9,7 +9,10 @@ import { ConvexClientProvider } from "~/components/providers/convex-with-clerk";
 import { TanstackQueryProvider } from "~/components/providers/tanstack-query";
 
 export const metadata: Metadata = {
-  title: "Pouch",
+  title: {
+    template: "%s | Pouch",
+    default: "Pouch",
+  },
   description: "Store your favorite things",
   icons: [{ rel: "icon", url: "/icon" }],
 };
