@@ -161,6 +161,7 @@ export const reorder = mutation({
     group: v.id("groups"),
     orderedIds: v.array(v.id("links")),
   },
+  returns: v.array(v.id("links")),
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
     if (identity === null) {
@@ -176,20 +177,38 @@ export const reorder = mutation({
       throw new Error("Not authorized to access this group");
     }
 
-    await Promise.all(
+    console.log("Ordered IDs:", args.orderedIds);
+
+    const results = await Promise.all(
       args.orderedIds.map(async (linkId, index) => {
-        const link = await ctx.db.get(linkId);
-        if (
-          link &&
-          link.user === identity.tokenIdentifier &&
-          link.group === args.group
-        ) {
-          await ctx.db.patch(linkId, {
-            position: index + 1,
-          });
+        const existingLink = await ctx.db.get(linkId);
+
+        if (!existingLink) {
+          console.warn("Link not found:", linkId);
+          return null;
         }
+
+        if (existingLink.user !== identity.tokenIdentifier) {
+          console.warn("Not authorized to update this link:", existingLink._id);
+          return null;
+        }
+
+        if (existingLink.group !== args.group) {
+          console.warn("Link is not in the correct group:", existingLink._id);
+          return null;
+        }
+
+        await ctx.db.patch(linkId, {
+          position: (index + 1) * 100,
+        });
+
+        // Return the link ID to indicate success
+        return linkId;
       })
     );
+
+    // Filter out null results and return only successful updates
+    return results.filter((result) => result !== null);
   },
 });
 

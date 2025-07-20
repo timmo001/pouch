@@ -1,5 +1,5 @@
 "use client";
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { type Preloaded, usePreloadedQuery } from "convex/react";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
@@ -25,7 +25,6 @@ export function DraggableLinks({
     mutationFn: useConvexMutation(api.links.reorder),
     onSuccess: () => {
       console.log("Successfully reordered links");
-      toast.success("Successfully reordered links");
     },
     onError: (error) => {
       toast.error("Failed to reorder link");
@@ -33,10 +32,37 @@ export function DraggableLinks({
     },
   });
 
-  function onSort(sortedLinks: Doc<"links">[]) {
+  /**
+   * @param list The list of links that was sorted. This will be either the active or archived list.
+   * @param updatedList The list of links in the correct order. This will be either the active or archived list.
+   */
+  function onSort(list: "active" | "archived", updatedList: Doc<"links">[]) {
+    const newActiveList = (list === "active" ? updatedList : links.active).map(
+      (link) => ({
+        id: link._id,
+        title: getLinkTitle({
+          description: link.description,
+          url: link.url,
+        }),
+      }),
+    );
+    // All archived links should be at the end of the positions.
+    const newArchivedList = (
+      list === "archived" ? updatedList : links.archived
+    ).map((link) => ({
+      id: link._id,
+      title: getLinkTitle({
+        description: link.description,
+        url: link.url,
+      }),
+    }));
+
+    const orderedIds = [...newActiveList, ...newArchivedList];
+    console.log("Ordered IDs:", orderedIds);
+
     updatePosition.mutate({
       group: group._id,
-      orderedIds: sortedLinks.map((link) => link._id),
+      orderedIds: orderedIds.map((link) => link.id),
     });
   }
 
@@ -50,9 +76,12 @@ export function DraggableLinks({
           Total: {links?.active.length}
         </p>
       </div>
-      <SortableLinks links={links.active} onSort={onSort} />
+      <SortableLinks links={links.active} onSort={(l) => onSort("active", l)} />
       <h2 className="px-2 text-lg font-semibold">Archived</h2>
-      <SortableLinks links={links.archived} onSort={onSort} />
+      <SortableLinks
+        links={links.archived}
+        onSort={(l) => onSort("archived", l)}
+      />
     </>
   );
 }
@@ -62,9 +91,9 @@ function SortableLinks({
   onSort,
 }: {
   links: Doc<"links">[];
-  onSort: (sortedLinks: Doc<"links">[]) => void;
+  onSort: (updatedList: Doc<"links">[]) => void;
 }) {
-  const links = useMemo(
+  const linksFromProps = useMemo(
     () =>
       (linksIn ?? []).map((link) => ({
         ...link,
@@ -72,6 +101,11 @@ function SortableLinks({
       })),
     [linksIn],
   );
+  const [links, setLinks] = useState(linksFromProps);
+
+  useEffect(() => {
+    setLinks(linksFromProps);
+  }, [linksFromProps]);
 
   return (
     <ReactSortable
@@ -79,21 +113,14 @@ function SortableLinks({
       animation={150}
       handle=".drag-handle"
       list={links}
-      setList={() => {
-        /* This is handled by onEnd */
+      setList={(sortedLinks) => {
+        // Update the local state with the new order
+        setLinks(sortedLinks);
       }}
-      onEnd={(evt) => {
-      const { oldIndex, newIndex } = evt;
-      if (oldIndex === undefined || newIndex === undefined) return;
-
-      // Create a new sorted list based on the drag-and-drop event
-      const newSortedLinks = [...links];
-      const [movedLink] = newSortedLinks.splice(oldIndex, 1);
-      if (!movedLink) return;
-      newSortedLinks.splice(newIndex, 0, movedLink);
-
-      onSort(newSortedLinks);
-    }}
+      onEnd={() => {
+        // Update the database with the new order
+        onSort(links);
+      }}
     >
       {links.map((link) => (
         <div
@@ -114,6 +141,8 @@ function SortableLinks({
                   <ExternalLinkIcon className="size-3.5 opacity-0 transition-opacity group-hover:opacity-100" />
                 </span>
                 <span className="text-muted-foreground text-center text-sm opacity-0 transition-opacity group-hover:opacity-100">
+                  {link._id}
+                  {" - "}
                   {link.url}
                 </span>
               </div>
