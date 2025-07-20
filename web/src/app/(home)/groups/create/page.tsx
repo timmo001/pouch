@@ -1,9 +1,11 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "convex/react";
+import { useMutation } from "@tanstack/react-query";
+import { useConvexMutation } from "@convex-dev/react-query";
 import { z } from "zod";
 import { api } from "~/convex/_generated/api";
+import { type Id } from "~/convex/_generated/dataModel";
 import { Button } from "~/components/ui/button";
 import {
   Form,
@@ -14,6 +16,7 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const CreateGroupFormSchema = z.object({
   name: z.string().min(1),
@@ -22,7 +25,16 @@ const CreateGroupFormSchema = z.object({
 type CreateGroupForm = z.infer<typeof CreateGroupFormSchema>;
 
 export default function CreateGroupPage() {
-  const createGroup = useMutation(api.groups.create);
+  const { mutate, isPending } = useMutation({
+    mutationFn: useConvexMutation(api.groups.create),
+    onSuccess: (newId: Id<"groups">) => {
+      router.replace(`/groups/${newId}`);
+    },
+    onError: (error) => {
+      console.error(error);
+      toast.error("Failed to create group");
+    },
+  });
   const router = useRouter();
 
   const form = useForm<CreateGroupForm>({
@@ -32,9 +44,8 @@ export default function CreateGroupPage() {
     },
   });
 
-  async function onSubmit(values: CreateGroupForm) {
-    const newId = await createGroup(values);
-    router.replace(`/groups/${newId}`);
+  function onSubmit(values: CreateGroupForm) {
+    mutate(values);
   }
 
   return (
@@ -54,7 +65,9 @@ export default function CreateGroupPage() {
               </FormItem>
             )}
           />
-          <Button type="submit">Create</Button>
+          <Button type="submit" disabled={isPending}>
+            {isPending ? "Creating..." : "Create"}
+          </Button>
         </form>
       </Form>
     </div>
