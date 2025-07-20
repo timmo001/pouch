@@ -113,14 +113,16 @@ export default async function GroupPage({
               className="flex flex-row items-center justify-between gap-2 px-2 py-1.5"
             >
               <Link className="group flex-grow" href={link.url} target="_blank">
-                <div className="flex flex-row items-baseline gap-2">
-                  {getLinkTitle({
-                    description: link.description,
-                    url: link.url,
-                  })}
-                  <ExternalLinkIcon className="size-3.5 opacity-0 transition-opacity group-hover:opacity-100" />
+                <div className="grid grid-cols-[1fr_auto] items-baseline gap-2">
+                  <span className="flex flex-row items-center gap-2">
+                    {getLinkTitle({
+                      description: link.description,
+                      url: link.url,
+                    })}
+                    <ExternalLinkIcon className="size-3.5 opacity-0 transition-opacity group-hover:opacity-100" />
+                  </span>
                   {link.description?.length ? (
-                    <span className="text-muted-foreground flex-grow text-center text-sm">
+                    <span className="text-muted-foreground text-center text-sm opacity-0 transition-opacity group-hover:opacity-100">
                       {link.url}
                     </span>
                   ) : null}
