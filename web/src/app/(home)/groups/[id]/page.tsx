@@ -8,17 +8,18 @@ import { Button } from "~/components/ui/button";
 import { DateLocale } from "~/components/ui/date-locale";
 import { type Id } from "~/convex/_generated/dataModel";
 import { notFound } from "next/navigation";
+import { BreadcrumbsSetter } from "~/components/breadcrumbs/setter";
 
 export async function generateMetadata({
   params,
 }: {
-  params: { id: Id<"groups"> };
+  params: Promise<{ id: Id<"groups"> }>;
 }): Promise<Metadata> {
   const token = await getAuthToken();
 
   const group = await fetchQuery(
     api.groups.getById,
-    { id: params.id },
+    { id: (await params).id },
     { token },
   ).catch((error) => {
     console.warn(
@@ -44,12 +45,12 @@ export async function generateMetadata({
 export default async function GroupPage({
   params,
 }: {
-  params: { id: Id<"groups"> };
+  params: Promise<{ id: Id<"groups"> }>;
 }) {
   const token = await getAuthToken();
   const group = await fetchQuery(
     api.groups.getById,
-    { id: params.id },
+    { id: (await params).id },
     { token },
   ).catch((error) => {
     console.warn(
@@ -77,17 +78,27 @@ export default async function GroupPage({
   });
 
   return (
-    <div className="flex flex-col gap-4">
-      <h1 className="text-3xl font-bold">{group.name}</h1>
-      <div className="flex flex-row items-center justify-between gap-2 px-2">
-        <p className="text-muted-foreground text-sm">Total: {links?.length}</p>
-        <Link href={`/groups/${group._id}/links/create`} passHref>
-          <Button size="lg" variant="secondary">
-            <PlusIcon className="h-4 w-4" />
-            Create new
-          </Button>
-        </Link>
+    <>
+      <BreadcrumbsSetter
+        items={[
+          { key: "home", title: "Pouch", href: "/" },
+          { key: `groups/${group._id}`, title: group.name },
+        ]}
+      />
+      <div className="flex flex-col gap-4">
+        <h1 className="text-3xl font-bold">{group.name}</h1>
+        <div className="flex flex-row items-center justify-between gap-2 px-2">
+          <p className="text-muted-foreground text-sm">
+            Total: {links?.length}
+          </p>
+          <Link href={`/groups/${group._id}/links/create`} passHref>
+            <Button size="lg" variant="secondary">
+              <PlusIcon className="h-4 w-4" />
+              Create new
+            </Button>
+          </Link>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

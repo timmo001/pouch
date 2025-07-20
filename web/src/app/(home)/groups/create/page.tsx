@@ -18,6 +18,7 @@ import {
   FormLabel,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { BreadcrumbsSetter } from "~/components/breadcrumbs/setter";
 
 const CreateGroupFormSchema = z.object({
   name: z.string().min(1),
@@ -50,34 +51,42 @@ export default function CreateGroupPage() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <h1 className="text-3xl font-bold">Create Group</h1>
-      <Form {...form}>
-        <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <Button type="submit" disabled={isPending}>
-            {isPending ? (
-              <span>
-                Creating
-                <Dots count={3} />
-              </span>
-            ) : (
-              "Create"
-            )}
-          </Button>
-        </form>
-      </Form>
-    </div>
+    <>
+      <BreadcrumbsSetter
+        items={[
+          { key: "home", title: "Pouch", href: "/" },
+          { key: "groups/create", title: "Create Group" },
+        ]}
+      />
+      <div className="flex flex-col gap-4">
+        <h1 className="text-3xl font-bold">Create Group</h1>
+        <Form {...form}>
+          <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <Button type="submit" disabled={isPending}>
+              {isPending ? (
+                <span>
+                  Creating
+                  <Dots count={3} />
+                </span>
+              ) : (
+                "Create"
+              )}
+            </Button>
+          </form>
+        </Form>
+      </div>
+    </>
   );
 }
