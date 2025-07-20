@@ -5,7 +5,7 @@ import { fetchQuery } from "convex/nextjs";
 import { api } from "~/convex/_generated/api";
 import { getAuthToken } from "~/server/auth";
 import { Button } from "~/components/ui/button";
-import { DateLocale } from "~/components/date-locale";
+import { DateLocale } from "~/components/ui/date-locale";
 import type { Group, Id } from "~/convex/_generated/dataModel";
 import { notFound } from "next/navigation";
 import type { FunctionReturnType } from "convex/server";
@@ -42,7 +42,11 @@ export async function generateMetadata({
   };
 }
 
-export default async function GroupPage({ params }: { params: { id: Id<"groups"> } }) {
+export default async function GroupPage({
+  params,
+}: {
+  params: { id: Id<"groups"> };
+}) {
   const token = await getAuthToken();
   const group = await fetchQuery(
     api.groups.getById,
@@ -63,7 +67,7 @@ export default async function GroupPage({ params }: { params: { id: Id<"groups">
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-2xl font-bold">{group.name}</h1>
+      <h1 className="text-3xl font-bold">{group.name}</h1>
     </div>
   );
 }

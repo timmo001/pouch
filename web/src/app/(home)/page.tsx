@@ -4,7 +4,7 @@ import { fetchQuery } from "convex/nextjs";
 import { api } from "~/convex/_generated/api";
 import { getAuthToken } from "~/server/auth";
 import { Button } from "~/components/ui/button";
-import { DateLocale } from "~/components/date-locale";
+import { DateLocale } from "~/components/ui/date-locale";
 
 export const dynamic = "force-dynamic";
 

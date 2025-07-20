@@ -1,11 +1,14 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { z } from "zod";
 import { api } from "~/convex/_generated/api";
 import { type Id } from "~/convex/_generated/dataModel";
+import { Dots } from "~/components/ui/dots";
 import { Button } from "~/components/ui/button";
 import {
   Form,
@@ -15,8 +18,6 @@ import {
   FormLabel,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 
 const CreateGroupFormSchema = z.object({
   name: z.string().min(1),
@@ -50,7 +51,7 @@ export default function CreateGroupPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-2xl font-bold">Create Group</h1>
+      <h1 className="text-3xl font-bold">Create Group</h1>
       <Form {...form}>
         <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
@@ -66,7 +67,14 @@ export default function CreateGroupPage() {
             )}
           />
           <Button type="submit" disabled={isPending}>
-            {isPending ? "Creating..." : "Create"}
+            {isPending ? (
+              <span>
+                Creating
+                <Dots count={3} />
+              </span>
+            ) : (
+              "Create"
+            )}
           </Button>
         </form>
       </Form>

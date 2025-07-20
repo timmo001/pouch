@@ -10,7 +10,7 @@ export default function AuthenticatedLayout() {
   return (
     <>
       <Unauthenticated>
-        <View className="items-center justify-center flex-1 gap-4">
+        <View className="flex-1 gap-4 justify-center items-center">
           <Text className="text-2xl font-bold text-center">
             Sign in to continue
           </Text>
