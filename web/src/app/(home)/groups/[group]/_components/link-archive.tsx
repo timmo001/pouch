@@ -49,12 +49,9 @@ export function LinkArchive({
 
   return (
     <Button
-      className={cn(
-        variant === "icon" && "hover:bg-destructive/10 hover:text-destructive",
-      )}
       type="button"
       size={variant === "icon" ? "icon" : "default"}
-      variant={variant === "icon" ? "ghost" : "destructive"}
+      variant={variant === "icon" ? "ghost" : "secondary"}
       onClick={() => {
         mutate({ group: link.group, id: link._id });
       }}
