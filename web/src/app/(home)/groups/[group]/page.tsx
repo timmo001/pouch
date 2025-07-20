@@ -88,9 +88,9 @@ export default async function GroupPage({
         ]}
       />
       <div className="flex flex-col gap-4">
-        <div className="flex flex-row items-center justify-between gap-2 px-2">
-          <h1 className="text-3xl font-bold">{group.name}</h1>
-          <div className="flex flex-row gap-2">
+        <div className="flex w-full flex-row items-center justify-between gap-2 px-2">
+          <h1 className="text-3xl font-bold text-wrap">{group.name}</h1>
+          <div className="flex flex-grow flex-row flex-wrap justify-end gap-2">
             <GroupEditName group={group} />
             <GroupEditDescription group={group} />
             <GroupDelete group={group} />
