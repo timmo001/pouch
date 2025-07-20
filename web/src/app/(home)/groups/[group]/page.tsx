@@ -121,11 +121,9 @@ export default async function GroupPage({
                     })}
                     <ExternalLinkIcon className="size-3.5 opacity-0 transition-opacity group-hover:opacity-100" />
                   </span>
-                  {link.description?.length ? (
-                    <span className="text-muted-foreground text-center text-sm opacity-0 transition-opacity group-hover:opacity-100">
-                      {link.url}
-                    </span>
-                  ) : null}
+                  <span className="text-muted-foreground text-center text-sm opacity-0 transition-opacity group-hover:opacity-100">
+                    {link.url}
+                  </span>
                 </div>
               </Link>
               <LinkActions link={link} />
