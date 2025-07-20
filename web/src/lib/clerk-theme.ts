@@ -4,7 +4,6 @@ import { latte, mocha } from "~/lib/catppuccin";
 const buildTheme = (
   theme: typeof mocha | typeof latte,
 ): Partial<Appearance> => ({
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   baseTheme: theme.baseTheme,
   variables: {
     fontFamily: "var(--font-geist-sans)",

@@ -61,7 +61,6 @@ export const frappe = {
 };
 
 export const macchiato = {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   baseTheme: dark,
   rosewater: "#f4dbd6",
   flamingo: "#f0c6c6",
@@ -92,7 +91,6 @@ export const macchiato = {
 };
 
 export const mocha = {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   baseTheme: dark,
   rosewater: "#f5e0dc",
   flamingo: "#f2cdcd",
