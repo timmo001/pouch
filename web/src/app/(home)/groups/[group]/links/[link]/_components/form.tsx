@@ -1,4 +1,5 @@
 "use client";
+import { useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
@@ -18,9 +19,9 @@ import {
   FormLabel,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
-import { Trash2Icon } from "lucide-react";
 import { BreadcrumbsSetter } from "~/components/breadcrumbs/setter";
-import { useMemo } from "react";
+import { LinkDelete } from "~/app/(home)/groups/[group]/_components/link-delete";
+import { getLinkTitle } from "~/lib/link";
 
 const UpdateLinkFormSchema = z.object({
   url: z.string().min(1),
@@ -68,17 +69,14 @@ export function UpdateLinkForm({
     mutate({ group: linkIn.group._id, id: linkIn._id, ...values });
   }
 
-  const title = useMemo(() => {
-    if (description?.length) {
-      return description;
-    }
-
-    if (url.length) {
-      return url;
-    }
-
-    return linkIn.url;
-  }, [description, url, linkIn.url]);
+  const title = useMemo(
+    () =>
+      getLinkTitle({
+        description,
+        url,
+      }),
+    [description, url],
+  );
 
   return (
     <>
@@ -98,53 +96,54 @@ export function UpdateLinkForm({
       />
       <div className="flex flex-col gap-4">
         <div className="flex flex-row gap-2">
-          <h1 className="flex-grow text-3xl font-bold">{title}</h1>
-          <Button className="hover:bg-destructive/10 hover:text-destructive">
-            <Trash2Icon />
-            Delete
-          </Button>
+          <h1 className="flex-grow text-3xl font-bold">Update Link: {title}</h1>
+          <LinkDelete
+            link={{
+              ...linkIn,
+              group: linkIn.group._id,
+            }}
+            variant="text"
+          />
         </div>
-        <div className="flex flex-col gap-4">
-          <h1 className="text-3xl font-bold">Update Link</h1>
-          <Form {...form}>
-            <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
-              <FormField
-                control={form.control}
-                name="url"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>URL</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description (optional)</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" disabled={isPending}>
-                {isPending ? (
-                  <span>
-                    Updating
-                    <Dots count={3} />
-                  </span>
-                ) : (
-                  "Update"
-                )}
-              </Button>
-            </form>
-          </Form>
-        </div>
+        <Form {...form}>
+          <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
+            <FormField
+              control={form.control}
+              name="url"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>URL</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description (optional)</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            <Button type="submit" disabled={isPending}>
+              {isPending ? (
+                <span>
+                  Updating
+                  <Dots count={3} />
+                </span>
+              ) : (
+                "Update"
+              )}
+            </Button>
+          </form>
+        </Form>
       </div>
     </>
   );

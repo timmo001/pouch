@@ -43,7 +43,7 @@ export default async function CreateLinkPage({
           { key: "links/create", title: "Create Link" },
         ]}
       />
-      <CreateLinkForm groupId={group._id} />
+      <CreateLinkForm group={group} />
     </>
   );
 }

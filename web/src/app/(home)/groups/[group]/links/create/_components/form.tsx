@@ -7,7 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { z } from "zod";
 import { api } from "~/convex/_generated/api";
-import { type Id } from "~/convex/_generated/dataModel";
+import { type Doc, type Id } from "~/convex/_generated/dataModel";
 import { Dots } from "~/components/ui/dots";
 import { Button } from "~/components/ui/button";
 import {
@@ -26,11 +26,11 @@ const CreateLinkFormSchema = z.object({
 
 type CreateLinkForm = z.infer<typeof CreateLinkFormSchema>;
 
-export function CreateLinkForm({ groupId }: { groupId: Id<"groups"> }) {
+export function CreateLinkForm({ group }: { group: Doc<"groups"> }) {
   const { mutate, isPending } = useMutation({
     mutationFn: useConvexMutation(api.links.create),
     onSuccess: (newId: Id<"links">) => {
-      router.replace(`/groups/${groupId}/links/${newId}`);
+      router.replace(`/groups/${group._id}/links/${newId}`);
     },
     onError: (error) => {
       console.error(error);
@@ -48,12 +48,12 @@ export function CreateLinkForm({ groupId }: { groupId: Id<"groups"> }) {
   });
 
   function onSubmit(values: CreateLinkForm) {
-    mutate({ group: groupId, ...values });
+    mutate({ group: group._id, ...values });
   }
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-3xl font-bold">Create Link</h1>
+      <h1 className="text-3xl font-bold">Create Link in {group.name}</h1>
       <Form {...form}>
         <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
