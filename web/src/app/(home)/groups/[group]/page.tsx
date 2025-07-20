@@ -1,6 +1,11 @@
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { PencilLineIcon, PlusIcon, Trash2Icon } from "lucide-react";
+import {
+  PencilLineIcon,
+  PencilRulerIcon,
+  PlusIcon,
+  Trash2Icon,
+} from "lucide-react";
 import { fetchQuery } from "convex/nextjs";
 import { api } from "~/convex/_generated/api";
 import { getAuthToken } from "~/server/auth";
@@ -85,7 +90,28 @@ export default async function GroupPage({
         ]}
       />
       <div className="flex flex-col gap-4">
-        <h1 className="text-3xl font-bold">{group.name}</h1>
+        <div className="flex flex-row items-center justify-between gap-2 px-2">
+          <h1 className="text-3xl font-bold">{group.name}</h1>
+          <div className="flex flex-row gap-2">
+            <Button size="lg" variant="secondary">
+              <PencilLineIcon />
+              Edit group name
+            </Button>
+            <Button size="lg" variant="secondary">
+              <PencilRulerIcon />
+              Edit group description
+            </Button>
+            <Button size="lg" variant="destructive">
+              <Trash2Icon />
+              Delete group
+            </Button>
+          </div>
+        </div>
+        {group.description && (
+          <div className="flex flex-col gap-2">
+            <p className="text-muted-foreground text-sm">{group.description}</p>
+          </div>
+        )}
         <div className="flex flex-row items-center justify-between gap-2 px-2">
           <p className="text-muted-foreground text-sm">
             Total: {links?.length}
