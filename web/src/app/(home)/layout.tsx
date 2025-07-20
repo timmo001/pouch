@@ -16,8 +16,8 @@ export default function HomeLayout({
 
   return (
     <BreadcrumbsStoreProvider>
-      <div className="flex h-screen w-screen flex-col">
-        <header className="border-b">
+      <div className="relative flex h-screen w-screen max-w-screen flex-col">
+        <header className="bg-background/50 absolute top-0 right-0 left-0 z-50 w-screen border-b backdrop-blur-sm">
           <div className="container mx-auto flex h-14 flex-shrink-0 items-center px-4">
             <div className="mr-auto text-lg font-semibold">
               <Breadcrumbs />
@@ -43,6 +43,7 @@ export default function HomeLayout({
             </div>
           </div>
         </header>
+        <div className="min-h-14" />
         <main className="container mx-auto flex flex-1 flex-col p-4">
           <Authenticated>{children}</Authenticated>
           <Unauthenticated>

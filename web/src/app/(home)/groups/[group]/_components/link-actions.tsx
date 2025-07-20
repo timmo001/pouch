@@ -8,7 +8,7 @@ import { LinkDelete } from "~/app/(home)/groups/[group]/_components/link-delete"
 
 export function LinkActions({ link }: { link: Doc<"links"> }) {
   return (
-    <div className="flex flex-row gap-2">
+    <div className="flex flex-shrink-0 flex-row gap-2">
       <Link href={`/groups/${link.group}/links/${link._id}`} passHref>
         <Button type="button" size="icon" variant="ghost">
           <PencilLineIcon />

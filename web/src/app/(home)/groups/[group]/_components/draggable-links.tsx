@@ -162,22 +162,26 @@ function SortableLinks({
       {links.map((link) => (
         <div
           key={link._id}
-          className="flex flex-row items-center justify-between gap-2 px-2 py-1.5"
+          className="flex min-w-0 flex-row items-center justify-between gap-2 px-2 py-1.5"
         >
-          <div className="flex flex-grow flex-row items-center gap-2">
-            <div className="drag-handle cursor-grab active:cursor-grabbing">
+          <div className="flex min-w-0 flex-grow flex-row items-center gap-2">
+            <div className="drag-handle flex-shrink-0 cursor-grab active:cursor-grabbing">
               <GripVertical className="h-4 w-4" />
             </div>
-            <Link className="group flex-grow" href={link.url} target="_blank">
-              <div className="grid grid-cols-[1fr_auto] items-baseline gap-2">
-                <span className="flex flex-row items-center gap-2">
+            <Link
+              className="group flex min-w-0 flex-grow"
+              href={link.url}
+              target="_blank"
+            >
+              <div className="flex w-full min-w-0 flex-grow flex-row items-baseline justify-between gap-2">
+                <span className="flex flex-shrink-0 flex-row items-baseline gap-2 text-nowrap">
                   {getLinkTitle({
                     description: link.description,
                     url: link.url,
                   })}
-                  <ExternalLinkIcon className="size-3.5 opacity-0 transition-opacity group-hover:opacity-100" />
+                  <ExternalLinkIcon className="size-3.5 flex-shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
                 </span>
-                <span className="text-muted-foreground text-center text-sm opacity-0 transition-opacity group-hover:opacity-100">
+                <span className="text-muted-foreground min-w-0 flex-shrink truncate text-sm opacity-0 transition-opacity group-hover:opacity-100">
                   {link.url}
                 </span>
               </div>
