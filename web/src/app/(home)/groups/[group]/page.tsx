@@ -13,6 +13,7 @@ import { Button } from "~/components/ui/button";
 import { type Id } from "~/convex/_generated/dataModel";
 import { BreadcrumbsSetter } from "~/components/breadcrumbs/setter";
 import Link from "next/link";
+import { LinkActions } from "~/app/(home)/groups/[group]/_components/link-actions";
 
 export async function generateMetadata({
   params,
@@ -132,20 +133,7 @@ export default async function GroupPage({
               <Link className="flex-grow" href={link.url} target="_blank">
                 {link.url}
               </Link>
-              <div className="flex flex-row gap-2">
-                <Link href={`/groups/${group._id}/links/${link._id}`} passHref>
-                  <Button size="icon" variant="ghost">
-                    <PencilLineIcon />
-                  </Button>
-                </Link>
-                <Button
-                  className="hover:bg-destructive/10 hover:text-destructive"
-                  size="icon"
-                  variant="ghost"
-                >
-                  <Trash2Icon />
-                </Button>
-              </div>
+              <LinkActions link={link} />
             </div>
           ))}
         </div>
