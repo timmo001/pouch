@@ -14,13 +14,17 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "packageManager": "bun@1.2.16",
   "dependencies": {
     "convex": "^1.24.8"
   },
-  "packageManager": "bun@1.2.16",
   "devDependencies": {
     "@types/node": "^24.0.3",
     "chokidar-cli": "^3.0.0",
     "concurrently": "^9.1.2"
-  }
+  },
+  "workspaces": [
+    "native",
+    "web"
+  ]
 }
