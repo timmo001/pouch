@@ -24,13 +24,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geist.variable}`} suppressHydrationWarning>
       <body className="bg-background text-foreground">
-        <TanstackQueryProvider>
-          <ThemeProvider attribute="class">
-            <ClerkProvider>
-              <ConvexClientProvider>{children}</ConvexClientProvider>
-            </ClerkProvider>
-          </ThemeProvider>
-        </TanstackQueryProvider>
+        <ThemeProvider attribute="class">
+          <ClerkProvider>
+            <ConvexClientProvider>
+              <TanstackQueryProvider>{children}</TanstackQueryProvider>
+            </ConvexClientProvider>
+          </ClerkProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
