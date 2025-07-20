@@ -26,17 +26,11 @@ export default async function HomePage() {
     <>
       <BreadcrumbsSetter items={[{ key: "home", title: "Pouch" }]} />
       <div className="flex flex-col gap-4">
-        <h1 className="text-3xl font-bold">Groups</h1>
-        <div className="flex flex-row items-center justify-between gap-2 px-2">
-          <p className="text-muted-foreground text-sm">
+        <div className="flex flex-row items-baseline justify-between gap-2 px-2">
+          <h1 className="text-3xl font-bold">Groups</h1>
+          <p className="text-muted-foreground text-center text-sm">
             Total: {groups?.length}
           </p>
-          <Link href="/groups/create" passHref>
-            <Button size="lg" variant="secondary">
-              <PlusIcon className="h-4 w-4" />
-              Create new
-            </Button>
-          </Link>
         </div>
         <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
           {groups?.map((group) => (
@@ -58,6 +52,16 @@ export default async function HomePage() {
               </Button>
             </Link>
           ))}
+          <Link href="/groups/create" passHref>
+            <Button
+              className="flex h-32 w-full flex-row items-center gap-2 p-6 text-4xl"
+              size="lg"
+              variant="outline"
+            >
+              <PlusIcon className="size-10" />
+              Create new
+            </Button>
+          </Link>
         </div>
       </div>
     </>
