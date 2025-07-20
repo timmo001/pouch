@@ -1,7 +1,7 @@
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PlusIcon } from "lucide-react";
-import { fetchQuery } from "convex/nextjs";
+import { fetchQuery, preloadQuery } from "convex/nextjs";
 import { api } from "~/convex/_generated/api";
 import { getAuthToken } from "~/server/auth";
 import { Button } from "~/components/ui/button";
@@ -45,6 +45,8 @@ export async function generateMetadata({
   };
 }
 
+export const dynamic = "force-dynamic";
+
 export default async function GroupPage({
   params,
 }: {
@@ -68,7 +70,7 @@ export default async function GroupPage({
     notFound();
   }
 
-  const links = await fetchQuery(
+  const preloadedLinks = await preloadQuery(
     api.links.getFromGroup,
     { group: group._id },
     { token },
@@ -97,15 +99,7 @@ export default async function GroupPage({
             <GroupDelete group={group} />
           </div>
         </div>
-        <div className="flex flex-row justify-between gap-2 px-3 pt-3 pb-2">
-          {group.description && (
-            <p className="text-muted-foreground text-sm">{group.description}</p>
-          )}
-          <p className="text-muted-foreground text-sm">
-            Total: {links?.length}
-          </p>
-        </div>
-        <DraggableLinks links={links || []} groupId={group._id} />
+        <DraggableLinks group={group} preloadedLinks={preloadedLinks} />
         <div className="flex w-full flex-row items-center justify-between gap-2 px-2">
           <Link
             className="w-full"

@@ -12,6 +12,8 @@ export const metadata: Metadata = {
   description: "Create a new link",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function CreateLinkPage({
   params,
 }: {

@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   description: "Create a new group",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function CreateGroupPage() {
   return (
     <>
