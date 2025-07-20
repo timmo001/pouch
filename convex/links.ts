@@ -1,5 +1,10 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import type { Doc } from "./_generated/dataModel";
+
+function sortByPosition(a: Doc<"links">, b: Doc<"links">) {
+  return (a.position ?? 0) - (b.position ?? 0);
+}
 
 export const getFromGroup = query({
   args: {
@@ -14,15 +19,14 @@ export const getFromGroup = query({
     const links = await ctx.db
       .query("links")
       .withIndex("by_group_user_archived_position", (q) =>
-        q
-          .eq("group", args.group)
-          .eq("user", identity.tokenIdentifier)
-          .eq("archived", false)
+        q.eq("group", args.group).eq("user", identity.tokenIdentifier)
       )
       .collect();
 
-    // Sort by position, with undefined positions treated as 0
-    return links.sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
+    return {
+      active: links.filter((link) => !link.archived).sort(sortByPosition),
+      archived: links.filter((link) => link.archived).sort(sortByPosition),
+    };
   },
 });
 
@@ -124,7 +128,7 @@ export const update = mutation({
   },
 });
 
-export const archive = mutation({
+export const toggleArchive = mutation({
   args: {
     group: v.id("groups"),
     id: v.id("links"),
@@ -147,38 +151,12 @@ export const archive = mutation({
     }
 
     return await ctx.db.patch(args.id, {
-      archived: true,
+      archived: !link.archived,
     });
   },
 });
 
-export const deleteLink = mutation({
-  args: {
-    group: v.id("groups"),
-    id: v.id("links"),
-  },
-  handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (identity === null) {
-      throw new Error("Not authenticated");
-    }
-
-    const link = await ctx.db.get(args.id);
-    if (!link) return null;
-
-    if (link.user !== identity.tokenIdentifier) {
-      throw new Error("Not authorized to delete this link");
-    }
-
-    if (link.group !== args.group) {
-      throw new Error("Not authorized to delete this link");
-    }
-
-    return await ctx.db.delete(args.id);
-  },
-});
-
-export const updateOrder = mutation({
+export const reorder = mutation({
   args: {
     group: v.id("groups"),
     orderedIds: v.array(v.id("links")),
@@ -212,5 +190,31 @@ export const updateOrder = mutation({
         }
       })
     );
+  },
+});
+
+export const deleteLink = mutation({
+  args: {
+    group: v.id("groups"),
+    id: v.id("links"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (identity === null) {
+      throw new Error("Not authenticated");
+    }
+
+    const link = await ctx.db.get(args.id);
+    if (!link) return null;
+
+    if (link.user !== identity.tokenIdentifier) {
+      throw new Error("Not authorized to delete this link");
+    }
+
+    if (link.group !== args.group) {
+      throw new Error("Not authorized to delete this link");
+    }
+
+    return await ctx.db.delete(args.id);
   },
 });
