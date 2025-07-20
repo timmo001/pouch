@@ -20,7 +20,6 @@ export default function Loading() {
           The page you are looking for does not exist.
         </p>
         <Button
-          size="lg"
           onClick={() => {
             router.back();
           }}
