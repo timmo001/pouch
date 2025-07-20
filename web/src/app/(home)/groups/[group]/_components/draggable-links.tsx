@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useCallback, useRef } from "react";
 import { type Preloaded, usePreloadedQuery } from "convex/react";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
@@ -7,7 +7,7 @@ import { ExternalLinkIcon, GripVertical } from "lucide-react";
 import { ReactSortable } from "react-sortablejs";
 import { toast } from "sonner";
 import Link from "next/link";
-import { type Doc } from "~/convex/_generated/dataModel";
+import { type Doc, type Id } from "~/convex/_generated/dataModel";
 import { api } from "~/convex/_generated/api";
 import { getLinkTitle } from "~/lib/link";
 import { LinkActions } from "~/app/(home)/groups/[group]/_components/link-actions";
@@ -32,6 +32,25 @@ export function DraggableLinks({
     },
   });
 
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Debounced reorder function
+  const debouncedReorder = useCallback(
+    (orderedIds: Id<"links">[]) => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        updatePosition.mutate({
+          group: group._id,
+          orderedIds,
+        });
+      }, 500);
+    },
+    [updatePosition, group._id],
+  );
+
   /**
    * @param list The list of links that was sorted. This will be either the active or archived list.
    * @param updatedList The list of links in the correct order. This will be either the active or archived list.
@@ -49,12 +68,9 @@ export function DraggableLinks({
       // The archived list will always be positioned after the active list
       ...newArchivedList,
     ];
-    console.log("Ordered IDs:", orderedIds);
 
-    updatePosition.mutate({
-      group: group._id,
-      orderedIds,
-    });
+    // Use the debounced function instead of calling updatePosition directly
+    debouncedReorder(orderedIds);
   }
 
   return (
