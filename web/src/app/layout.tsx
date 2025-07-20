@@ -3,6 +3,7 @@ import "~/styles/globals.css";
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
 import { ThemeProvider } from "~/components/ui/theme-provider";
+import { Toaster } from "~/components/ui/sonner";
 import { ClerkProvider } from "~/components/providers/clerk";
 import { ConvexClientProvider } from "~/components/providers/convex-with-clerk";
 import { TanstackQueryProvider } from "~/components/providers/tanstack-query";
@@ -27,7 +28,10 @@ export default function RootLayout({
         <ThemeProvider attribute="class">
           <ClerkProvider>
             <ConvexClientProvider>
-              <TanstackQueryProvider>{children}</TanstackQueryProvider>
+              <TanstackQueryProvider>
+                {children}
+                <Toaster />
+              </TanstackQueryProvider>
             </ConvexClientProvider>
           </ClerkProvider>
         </ThemeProvider>
