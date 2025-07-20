@@ -31,8 +31,8 @@ export default function CreateGroupPage() {
   }
 
   return (
-    <div>
-      <h1>Create Group</h1>
+    <div className="flex flex-col gap-4">
+      <h1 className="text-2xl font-bold">Create Group</h1>
       <Form {...form}>
         <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
