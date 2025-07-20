@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { query } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 
 export const getFromGroup = query({
   args: {
@@ -21,5 +21,86 @@ export const getFromGroup = query({
         )
       )
       .collect();
+  },
+});
+
+export const getById = query({
+  args: {
+    id: v.id("links"),
+    group: v.id("groups"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (identity === null) {
+      throw new Error("Not authenticated");
+    }
+
+    const link = await ctx.db.get(args.id);
+    if (!link) return null;
+
+    const group = await ctx.db.get(args.group);
+    if (!group) return null;
+
+    if (group.user !== identity.tokenIdentifier) {
+      throw new Error("Not authorized to access this group");
+    }
+
+    if (link.user !== identity.tokenIdentifier) {
+      throw new Error("Not authorized to access this link");
+    }
+
+    return {
+      ...link,
+      group: group,
+    };
+  },
+});
+
+export const create = mutation({
+  args: {
+    group: v.id("groups"),
+    url: v.string(),
+    description: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (identity === null) {
+      throw new Error("Not authenticated");
+    }
+
+    return await ctx.db.insert("links", {
+      url: args.url,
+      description: args.description,
+      group: args.group,
+      user: identity.tokenIdentifier,
+      archived: false,
+    });
+  },
+});
+
+export const update = mutation({
+  args: {
+    group: v.id("groups"),
+    id: v.id("links"),
+    url: v.string(),
+    description: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (identity === null) {
+      throw new Error("Not authenticated");
+    }
+
+    const link = await ctx.db.get(args.id);
+    if (!link) return null;
+
+    if (link.user !== identity.tokenIdentifier) {
+      throw new Error("Not authorized to update this link");
+    }
+
+    return await ctx.db.patch(args.id, {
+      url: args.url,
+      description: args.description,
+    });
   },
 });

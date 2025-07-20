@@ -3,15 +3,17 @@ import { v } from "convex/values";
 
 export default defineSchema({
   groups: defineTable({
-    archived: v.boolean(),
     name: v.string(),
+    description: v.optional(v.string()),
     user: v.string(),
+    archived: v.boolean(),
   }),
 
   links: defineTable({
-    archived: v.boolean(),
-    group: v.id("groups"),
     url: v.string(),
+    description: v.optional(v.string()),
+    group: v.id("groups"),
     user: v.string(),
+    archived: v.boolean(),
   }),
 });

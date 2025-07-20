@@ -1,4 +1,5 @@
 "use client";
+import { type Metadata } from "next";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -20,8 +21,14 @@ import {
 import { Input } from "~/components/ui/input";
 import { BreadcrumbsSetter } from "~/components/breadcrumbs/setter";
 
+export const metadata: Metadata = {
+  title: "Create Group",
+  description: "Create a new group",
+};
+
 const CreateGroupFormSchema = z.object({
   name: z.string().min(1),
+  description: z.string().optional(),
 });
 
 type CreateGroupForm = z.infer<typeof CreateGroupFormSchema>;
@@ -43,6 +50,7 @@ export default function CreateGroupPage() {
     resolver: zodResolver(CreateGroupFormSchema),
     defaultValues: {
       name: "",
+      description: "",
     },
   });
 
@@ -68,6 +76,18 @@ export default function CreateGroupPage() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description (optional)</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>

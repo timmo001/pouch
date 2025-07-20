@@ -47,6 +47,7 @@ export const getById = query({
 export const create = mutation({
   args: {
     name: v.string(),
+    description: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -56,6 +57,7 @@ export const create = mutation({
 
     return await ctx.db.insert("groups", {
       name: args.name,
+      description: args.description,
       user: identity.tokenIdentifier,
       archived: false,
     });
