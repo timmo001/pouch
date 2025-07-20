@@ -3,14 +3,21 @@ import { useMemo, useState, useEffect, useCallback, useRef } from "react";
 import { type Preloaded, usePreloadedQuery } from "convex/react";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
-import { ExternalLinkIcon, GripVertical } from "lucide-react";
+import { ExternalLinkIcon, GripVertical, PlusIcon } from "lucide-react";
 import { ReactSortable } from "react-sortablejs";
 import { toast } from "sonner";
 import Link from "next/link";
 import { type Doc, type Id } from "~/convex/_generated/dataModel";
 import { api } from "~/convex/_generated/api";
 import { getLinkTitle } from "~/lib/link";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "~/components/ui/accordion";
 import { LinkActions } from "~/app/(home)/groups/[group]/_components/link-actions";
+import { Button } from "~/components/ui/button";
 
 export function DraggableLinks({
   group,
@@ -79,16 +86,41 @@ export function DraggableLinks({
         {group.description && (
           <p className="text-muted-foreground text-sm">{group.description}</p>
         )}
-        <p className="text-muted-foreground text-sm">
-          Total: {links?.active.length}
-        </p>
+        <div className="flex w-full flex-row items-center justify-between gap-2">
+          <span className="text-muted-foreground text-sm">
+            Total: {links?.active.length + links?.archived.length}
+          </span>
+          <span className="text-muted-foreground text-sm">
+            {links?.active.length} active, {links?.archived.length} archived
+          </span>
+        </div>
       </div>
       <SortableLinks links={links.active} onSort={(l) => onSort("active", l)} />
-      <h2 className="px-2 text-lg font-semibold">Archived</h2>
-      <SortableLinks
-        links={links.archived}
-        onSort={(l) => onSort("archived", l)}
-      />
+      <div className="flex w-full flex-row items-center justify-between gap-2 px-2">
+        <Link
+          className="w-full"
+          href={`/groups/${group._id}/links/create`}
+          passHref
+        >
+          <Button className="w-full" size="lg" variant="secondary">
+            <PlusIcon className="h-4 w-4" />
+            Create new
+          </Button>
+        </Link>
+      </div>
+      <Accordion type="single" collapsible>
+        <AccordionItem value="archived">
+          <AccordionTrigger className="flex flex-row items-center gap-2 px-3 text-lg font-semibold">
+            Archived
+          </AccordionTrigger>
+          <AccordionContent>
+            <SortableLinks
+              links={links.archived}
+              onSort={(l) => onSort("archived", l)}
+            />
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </>
   );
 }
@@ -146,8 +178,6 @@ function SortableLinks({
                   <ExternalLinkIcon className="size-3.5 opacity-0 transition-opacity group-hover:opacity-100" />
                 </span>
                 <span className="text-muted-foreground text-center text-sm opacity-0 transition-opacity group-hover:opacity-100">
-                  {link._id}
-                  {" - "}
                   {link.url}
                 </span>
               </div>

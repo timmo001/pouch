@@ -1,13 +1,10 @@
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { PlusIcon } from "lucide-react";
 import { fetchQuery, preloadQuery } from "convex/nextjs";
 import { api } from "~/convex/_generated/api";
 import { getAuthToken } from "~/server/auth";
-import { Button } from "~/components/ui/button";
 import { type Id } from "~/convex/_generated/dataModel";
 import { BreadcrumbsSetter } from "~/components/breadcrumbs/setter";
-import Link from "next/link";
 import { GroupEditName } from "~/app/(home)/groups/[group]/_components/group-edit-name";
 import { GroupEditDescription } from "~/app/(home)/groups/[group]/_components/group-edit-description";
 import { GroupDelete } from "~/app/(home)/groups/[group]/_components/group-delete";
@@ -102,18 +99,6 @@ export default async function GroupPage({
         {preloadedLinks && (
           <DraggableLinks group={group} preloadedLinks={preloadedLinks} />
         )}
-        <div className="flex w-full flex-row items-center justify-between gap-2 px-2">
-          <Link
-            className="w-full"
-            href={`/groups/${group._id}/links/create`}
-            passHref
-          >
-            <Button className="w-full" size="lg" variant="secondary">
-              <PlusIcon className="h-4 w-4" />
-              Create new
-            </Button>
-          </Link>
-        </div>
       </div>
     </>
   );
