@@ -6,7 +6,7 @@ import { useStore } from "zustand";
 import {
   type BreadcrumbsStore,
   createBreadcrumbsStore,
-} from "~/components/hooks/store/breadcrumbs";
+} from "~/components/store/breadcrumbs";
 
 export type BreadcrumbsStoreApi = ReturnType<typeof createBreadcrumbsStore>;
 

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { useBreadcrumbsStore } from "~/components/providers/breadcrumbs-store-provider";
-import { type BreadcrumbItem } from "~/components/hooks/store/breadcrumbs";
+import { type BreadcrumbItem } from "~/components/store/breadcrumbs";
 
 interface BreadcrumbsSetterProps {
   items: BreadcrumbItem[] | null;
