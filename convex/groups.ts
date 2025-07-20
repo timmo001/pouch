@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { query } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 
 export const getAll = query({
   args: {},
@@ -41,5 +41,23 @@ export const getById = query({
     }
 
     return group;
+  },
+});
+
+export const create = mutation({
+  args: {
+    name: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (identity === null) {
+      throw new Error("Not authenticated");
+    }
+
+    return await ctx.db.insert("groups", {
+      name: args.name,
+      user: identity.tokenIdentifier,
+      archived: false,
+    });
   },
 });

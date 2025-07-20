@@ -1,7 +1,9 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "convex/react";
 import { z } from "zod";
+import { api } from "~/convex/_generated/api";
 import { Button } from "~/components/ui/button";
 import {
   Form,
@@ -11,6 +13,7 @@ import {
   FormLabel,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { useRouter } from "next/navigation";
 
 const CreateGroupFormSchema = z.object({
   name: z.string().min(1),
@@ -19,6 +22,9 @@ const CreateGroupFormSchema = z.object({
 type CreateGroupForm = z.infer<typeof CreateGroupFormSchema>;
 
 export default function CreateGroupPage() {
+  const createGroup = useMutation(api.groups.create);
+  const router = useRouter();
+
   const form = useForm<CreateGroupForm>({
     resolver: zodResolver(CreateGroupFormSchema),
     defaultValues: {
@@ -26,8 +32,9 @@ export default function CreateGroupPage() {
     },
   });
 
-  function onSubmit(values: CreateGroupForm) {
-    console.log(values);
+  async function onSubmit(values: CreateGroupForm) {
+    const newId = await createGroup(values);
+    router.replace(`/groups/${newId}`);
   }
 
   return (
