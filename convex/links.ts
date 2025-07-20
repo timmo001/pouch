@@ -177,8 +177,6 @@ export const reorder = mutation({
       throw new Error("Not authorized to access this group");
     }
 
-    console.log("Ordered IDs:", args.orderedIds);
-
     const results = await Promise.all(
       args.orderedIds.map(async (linkId, index) => {
         const existingLink = await ctx.db.get(linkId);
