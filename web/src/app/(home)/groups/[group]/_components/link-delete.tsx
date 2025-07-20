@@ -29,6 +29,8 @@ export function LinkDelete({
       toast.success(`${title} deleted`);
       if (pathname.includes(link._id)) {
         router.replace(`/groups/${link.group}`);
+      } else {
+        router.refresh();
       }
     },
     onError: (error) => {

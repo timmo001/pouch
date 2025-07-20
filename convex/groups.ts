@@ -64,10 +64,10 @@ export const create = mutation({
   },
 });
 
-export const updateTitle = mutation({
+export const updateName = mutation({
   args: {
     id: v.id("groups"),
-    title: v.string(),
+    name: v.string(),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -85,7 +85,7 @@ export const updateTitle = mutation({
     }
 
     return await ctx.db.patch(args.id, {
-      name: args.title,
+      name: args.name,
     });
   },
 });

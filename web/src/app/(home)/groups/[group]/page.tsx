@@ -1,12 +1,6 @@
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import {
-  PencilLineIcon,
-  PencilRulerIcon,
-  PlusIcon,
-  Trash2Icon,
-  ExternalLinkIcon,
-} from "lucide-react";
+import { PlusIcon, ExternalLinkIcon } from "lucide-react";
 import { fetchQuery } from "convex/nextjs";
 import { api } from "~/convex/_generated/api";
 import { getLinkTitle } from "~/lib/link";
@@ -16,6 +10,9 @@ import { type Id } from "~/convex/_generated/dataModel";
 import { BreadcrumbsSetter } from "~/components/breadcrumbs/setter";
 import Link from "next/link";
 import { LinkActions } from "~/app/(home)/groups/[group]/_components/link-actions";
+import { GroupEditName } from "~/app/(home)/groups/[group]/_components/group-edit-name";
+import { GroupEditDescription } from "~/app/(home)/groups/[group]/_components/group-edit-description";
+import { GroupDelete } from "~/app/(home)/groups/[group]/_components/group-delete";
 
 export async function generateMetadata({
   params,
@@ -96,35 +93,18 @@ export default async function GroupPage({
         <div className="flex flex-row items-center justify-between gap-2 px-2">
           <h1 className="text-3xl font-bold">{group.name}</h1>
           <div className="flex flex-row gap-2">
-            <Button size="lg" variant="secondary">
-              <PencilLineIcon />
-              Edit group name
-            </Button>
-            <Button size="lg" variant="secondary">
-              <PencilRulerIcon />
-              Edit group description
-            </Button>
-            <Button size="lg" variant="destructive">
-              <Trash2Icon />
-              Delete group
-            </Button>
+            <GroupEditName group={group} />
+            <GroupEditDescription group={group} />
+            <GroupDelete group={group} />
           </div>
         </div>
-        {group.description && (
-          <div className="flex flex-col gap-2">
+        <div className="flex flex-row justify-between gap-2 px-3 pt-3 pb-2">
+          {group.description && (
             <p className="text-muted-foreground text-sm">{group.description}</p>
-          </div>
-        )}
-        <div className="flex flex-row items-center justify-between gap-2 px-2">
+          )}
           <p className="text-muted-foreground text-sm">
             Total: {links?.length}
           </p>
-          <Link href={`/groups/${group._id}/links/create`} passHref>
-            <Button size="lg" variant="secondary">
-              <PlusIcon className="h-4 w-4" />
-              Create new
-            </Button>
-          </Link>
         </div>
         <div className="divide-border/60 flex flex-col divide-y">
           {links?.map((link) => (
@@ -149,6 +129,18 @@ export default async function GroupPage({
               <LinkActions link={link} />
             </div>
           ))}
+        </div>
+        <div className="flex w-full flex-row items-center justify-between gap-2 px-2">
+          <Link
+            className="w-full"
+            href={`/groups/${group._id}/links/create`}
+            passHref
+          >
+            <Button className="w-full" size="lg" variant="secondary">
+              <PlusIcon className="h-4 w-4" />
+              Create new
+            </Button>
+          </Link>
         </div>
       </div>
     </>
