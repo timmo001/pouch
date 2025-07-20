@@ -14,8 +14,8 @@
   },
   "dependencies": {
     "@babel/plugin-transform-class-static-block": "^7.27.1",
-    "@clerk/clerk-expo": "^2.13.0",
-    "@clerk/themes": "^2.2.50",
+    "@clerk/clerk-expo": "^2.14.9",
+    "@clerk/themes": "^2.3.3",
     "@expo/vector-icons": "^14.1.0",
     "@react-navigation/bottom-tabs": "^7.3.10",
     "@react-navigation/elements": "^2.3.8",
@@ -29,8 +29,8 @@
     "@rn-primitives/slot": "^1.2.0",
     "@rn-primitives/tooltip": "~1.2.0",
     "class-variance-authority": "^0.7.0",
-    "clsx": "^2.1.0",
-    "convex": "^1.24.8",
+    "clsx": "^2.1.1",
+    "convex": "^1.25.4",
     "expo": "^53.0.11",
     "expo-blur": "~14.1.5",
     "expo-constants": "~17.1.6",
@@ -65,7 +65,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
-    "@types/react": "~19.0.10",
+    "@types/react": "~19.1.8",
     "typescript": "~5.8.3",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~9.2.0"
