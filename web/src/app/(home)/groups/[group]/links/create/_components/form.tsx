@@ -29,8 +29,8 @@ type CreateLinkForm = z.infer<typeof CreateLinkFormSchema>;
 export function CreateLinkForm({ group }: { group: Doc<"groups"> }) {
   const { mutate, isPending } = useMutation({
     mutationFn: useConvexMutation(api.links.create),
-    onSuccess: (newId: Id<"links">) => {
-      router.replace(`/groups/${group._id}/links/${newId}`);
+    onSuccess: (_newId: Id<"links">) => {
+      router.replace(`/groups/${group._id}`);
     },
     onError: (error) => {
       console.error(error);
