@@ -37,7 +37,7 @@ export const getById = query({
     }
 
     if (group.user !== identity.tokenIdentifier) {
-      throw new Error("Unauthorized");
+      throw new Error("You are not the owner of this group");
     }
 
     return group;
@@ -61,5 +61,95 @@ export const create = mutation({
       user: identity.tokenIdentifier,
       archived: false,
     });
+  },
+});
+
+export const updateTitle = mutation({
+  args: {
+    id: v.id("groups"),
+    title: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (identity === null) {
+      throw new Error("Not authenticated");
+    }
+
+    const group = await ctx.db.get(args.id);
+    if (group === null) {
+      throw new Error("Group not found");
+    }
+
+    if (group.user !== identity.tokenIdentifier) {
+      throw new Error("You are not the owner of this group");
+    }
+
+    return await ctx.db.patch(args.id, {
+      name: args.title,
+    });
+  },
+});
+
+export const updateDescription = mutation({
+  args: {
+    id: v.id("groups"),
+    description: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (identity === null) {
+      throw new Error("Not authenticated");
+    }
+
+    const group = await ctx.db.get(args.id);
+    if (group === null) {
+      throw new Error("Group not found");
+    }
+
+    if (group.user !== identity.tokenIdentifier) {
+      throw new Error("You are not the owner of this group");
+    }
+
+    return await ctx.db.patch(args.id, {
+      description: args.description,
+    });
+  },
+});
+
+export const deleteGroup = mutation({
+  args: {
+    id: v.id("groups"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (identity === null) {
+      throw new Error("Not authenticated");
+    }
+
+    const group = await ctx.db.get(args.id);
+    if (group === null) {
+      throw new Error("Group not found");
+    }
+
+    if (group.user !== identity.tokenIdentifier) {
+      throw new Error("You are not the owner of this group");
+    }
+
+    // First delete all links in the group
+    const links = await ctx.db
+      .query("links")
+      .filter((q) => q.eq(q.field("group"), args.id))
+      .collect();
+
+    for (const link of links) {
+      if (link.user !== identity.tokenIdentifier) {
+        throw new Error("You are not the owner of this link");
+      }
+
+      await ctx.db.delete(link._id);
+    }
+
+    // Then delete the group
+    return await ctx.db.delete(args.id);
   },
 });

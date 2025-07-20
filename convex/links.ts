@@ -104,3 +104,57 @@ export const update = mutation({
     });
   },
 });
+
+export const archive = mutation({
+  args: {
+    group: v.id("groups"),
+    id: v.id("links"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (identity === null) {
+      throw new Error("Not authenticated");
+    }
+
+    const link = await ctx.db.get(args.id);
+    if (!link) return null;
+
+    if (link.user !== identity.tokenIdentifier) {
+      throw new Error("Not authorized to archive this link");
+    }
+
+    if (link.group !== args.group) {
+      throw new Error("Not authorized to archive this link");
+    }
+
+    return await ctx.db.patch(args.id, {
+      archived: true,
+    });
+  },
+});
+
+export const deleteLink = mutation({
+  args: {
+    group: v.id("groups"),
+    id: v.id("links"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (identity === null) {
+      throw new Error("Not authenticated");
+    }
+
+    const link = await ctx.db.get(args.id);
+    if (!link) return null;
+
+    if (link.user !== identity.tokenIdentifier) {
+      throw new Error("Not authorized to delete this link");
+    }
+
+    if (link.group !== args.group) {
+      throw new Error("Not authorized to delete this link");
+    }
+
+    return await ctx.db.delete(args.id);
+  },
+});
