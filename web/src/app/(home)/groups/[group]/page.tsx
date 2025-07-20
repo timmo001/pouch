@@ -126,22 +126,25 @@ export default async function GroupPage({
             </Button>
           </Link>
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="divide-border/60 flex flex-col divide-y">
           {links?.map((link) => (
             <div
               key={link._id}
-              className="flex flex-row items-center justify-between gap-2 px-2"
+              className="flex flex-row items-center justify-between gap-2 px-2 py-1.5"
             >
-              <Link
-                className="group flex flex-grow flex-row items-baseline gap-2"
-                href={link.url}
-                target="_blank"
-              >
-                {getLinkTitle({
-                  description: link.description,
-                  url: link.url,
-                })}
-                <ExternalLinkIcon className="size-3.5 opacity-0 transition-opacity group-hover:opacity-100" />
+              <Link className="group flex-grow" href={link.url} target="_blank">
+                <div className="flex flex-row items-baseline gap-2">
+                  {getLinkTitle({
+                    description: link.description,
+                    url: link.url,
+                  })}
+                  <ExternalLinkIcon className="size-3.5 opacity-0 transition-opacity group-hover:opacity-100" />
+                  {link.description?.length ? (
+                    <span className="text-muted-foreground flex-grow text-center text-sm">
+                      {link.url}
+                    </span>
+                  ) : null}
+                </div>
               </Link>
               <LinkActions link={link} />
             </div>
