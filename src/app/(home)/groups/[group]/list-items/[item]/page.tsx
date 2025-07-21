@@ -6,6 +6,8 @@ import { getAuthToken } from "~/server/auth";
 import { type Id } from "~/convex/_generated/dataModel";
 import { BreadcrumbsSetter } from "~/components/breadcrumbs/setter";
 import { UpdateListItemForm } from "~/app/(home)/groups/[group]/list-items/[item]/_components/form";
+import { getListItemTitle } from "~/lib/list-item";
+import { ListItemDelete } from "~/app/(home)/groups/[group]/_components/list-item-delete";
 
 export async function generateMetadata({
   params,
@@ -74,6 +76,11 @@ export default async function GroupPage({
     notFound();
   }
 
+  const title = getListItemTitle({
+    description: listItem.description,
+    value: listItem.value,
+  });
+
   return (
     <>
       <BreadcrumbsSetter
@@ -86,11 +93,25 @@ export default async function GroupPage({
           },
           {
             key: `list-items/${itemId}`,
-            title: listItem.description ?? listItem.value,
+            title,
           },
         ]}
       />
-      <UpdateListItemForm listItem={listItem} />
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-row gap-2">
+          <h1 className="flex-grow text-3xl font-bold">
+            Update ListItem: {title}
+          </h1>
+          <ListItemDelete
+            listItem={{
+              ...listItem,
+              group: listItem.group._id,
+            }}
+            variant="text"
+          />
+        </div>
+        <UpdateListItemForm listItem={listItem} />
+      </div>
     </>
   );
 }
