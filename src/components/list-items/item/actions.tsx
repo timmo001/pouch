@@ -3,8 +3,8 @@ import { PencilLineIcon } from "lucide-react";
 import Link from "next/link";
 import { type Doc } from "~/convex/_generated/dataModel";
 import { Button } from "~/components/ui/button";
-import { ListItemArchive } from "~/app/(home)/groups/[group]/_components/list-item-archive";
-import { ListItemDelete } from "~/app/(home)/groups/[group]/_components/list-item-delete";
+import { ListItemArchive } from "~/components/list-items/item/archive";
+import { ListItemDelete } from "~/components/list-items/item/delete";
 
 export function ListItemActions({ listItem }: { listItem: Doc<"listItems"> }) {
   return (

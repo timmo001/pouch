@@ -5,10 +5,10 @@ import { api } from "~/convex/_generated/api";
 import { getAuthToken } from "~/server/auth";
 import { type Id } from "~/convex/_generated/dataModel";
 import { BreadcrumbsSetter } from "~/components/breadcrumbs/setter";
-import { GroupEditName } from "~/app/(home)/groups/[group]/_components/group-edit-name";
-import { GroupEditDescription } from "~/app/(home)/groups/[group]/_components/group-edit-description";
-import { GroupDelete } from "~/app/(home)/groups/[group]/_components/group-delete";
-import { DraggableListItems } from "~/app/(home)/groups/[group]/_components/draggable-list-items";
+import { GroupEditName } from "~/components/groups/group/edit-name";
+import { GroupEditDescription } from "~/components/groups/group/edit-description";
+import { GroupDelete } from "~/components/groups/group/delete";
+import { DraggableListItems } from "~/components/list-items/draggable-list";
 
 export async function generateMetadata({
   params,

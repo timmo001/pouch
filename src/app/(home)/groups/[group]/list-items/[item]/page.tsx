@@ -7,7 +7,7 @@ import { type Id } from "~/convex/_generated/dataModel";
 import { BreadcrumbsSetter } from "~/components/breadcrumbs/setter";
 import { UpdateListItemForm } from "~/app/(home)/groups/[group]/list-items/[item]/_components/form";
 import { getListItemTitle } from "~/lib/list-item";
-import { ListItemDelete } from "~/app/(home)/groups/[group]/_components/list-item-delete";
+import { ListItemDelete } from "~/components/list-items/item/delete";
 
 export async function generateMetadata({
   params,

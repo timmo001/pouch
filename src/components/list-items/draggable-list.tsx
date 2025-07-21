@@ -16,7 +16,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "~/components/ui/accordion";
-import { ListItemActions } from "~/app/(home)/groups/[group]/_components/list-item-actions";
+import { ListItemActions } from "~/components/list-items/item/actions";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 
