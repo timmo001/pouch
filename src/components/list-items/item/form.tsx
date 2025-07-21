@@ -121,7 +121,11 @@ export function ListItemForm({
                   }
                 />
               </FormControl>
-              <FormDescription />
+              <FormDescription>
+                {currentType === "url"
+                  ? "This can be opened when clicking on the URL list item"
+                  : "This will be the title of the text list item"}
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -144,7 +148,11 @@ export function ListItemForm({
                   )}
                 </div>
               </FormControl>
-              <FormDescription />
+              <FormDescription>
+                {currentType === "url"
+                  ? "This will be used as the title of the list item"
+                  : "This will be shown when hovering over the list item"}
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
