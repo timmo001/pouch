@@ -26,7 +26,7 @@ export function ListItemArchive({
     mutationFn: useConvexMutation(api.listItems.toggleArchive),
     onSuccess: () => {
       toast.success(`${title} archived`);
-      if (pathname.includes(listItem._id)) {
+      if (pathname?.includes(listItem._id)) {
         router.replace(`/groups/${listItem.group}`);
       } else {
         router.refresh();

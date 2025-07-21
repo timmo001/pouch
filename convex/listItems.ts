@@ -224,7 +224,7 @@ export const reorder = mutation({
   },
 });
 
-export const deletelistItem = mutation({
+export const deleteListItem = mutation({
   args: {
     group: v.id("groups"),
     id: v.id("listItems"),
