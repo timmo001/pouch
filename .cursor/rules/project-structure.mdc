@@ -1,0 +1,22 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+
+# Project Structure
+
+This project is organized as follows:
+
+- **convex/**: Contains backend logic, including authentication (`auth.config.ts`), group and link logic (`groups.ts`, `links.ts`), and schema definitions (`schema.ts`).
+- **src/app/**: Main Next.js application directory. Contains route groups, pages, and components for the UI.
+  - `(home)/groups/`: Group-related pages and components, including group and link management.
+  - `global-error.tsx`, `layout.tsx`, `loading.tsx`: App-level error, layout, and loading components.
+- **src/components/**: Shared React components, including UI primitives (`ui/`), providers, and store logic.
+- **src/lib/**: Utility and theme files.
+- **src/styles/**: Global CSS styles.
+- **instrumentation-client.ts**, **instrumentation.ts**: Sentry and other instrumentation setup.
+- **sentry.edge.config.ts**, **sentry.server.config.ts**: Sentry configuration for edge and server environments.
+- **next.config.js**: Next.js configuration.
+- **package.json**, **pnpm-lock.yaml**, **pnpm-workspace.yaml**: Project dependencies and workspace configuration.
+- **tsconfig.json**: TypeScript configuration.

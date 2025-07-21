@@ -1,0 +1,28 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+
+# Package Manager Rules
+
+This project uses [pnpm](https://pnpm.io/) as its package manager. All dependency management, script running, and installs should be performed using pnpm, **not npm or yarn**.
+
+## Basic Commands
+
+- Install dependencies: `pnpm install`
+- Add a dependency: `pnpm add <package>`
+- Add a dev dependency: `pnpm add -D <package>`
+- Remove a dependency: `pnpm remove <package>`
+- Run a script: `pnpm run <script>`
+- Run a command similar to `npx`: `pnpm dlx <command>`
+- Add a shadcn component: `pnpm dlx shadcn@latest add <component>`
+
+## Best Practices
+
+- Never use `npm`, `yarn`, or `bun` commands in this repository.
+- Always check in `pnpm-lock.yaml` with dependency changes.
+- Use workspace features if working with multiple packages.
+- Prefer `pnpm` for all package management tasks, including CI/CD scripts.
+
+For more details, see the [pnpm documentation](https://pnpm.io/).
