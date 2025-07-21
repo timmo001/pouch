@@ -133,7 +133,7 @@ export async function DELETE(
   try {
     const token = getAuthToken(req);
     await fetchMutation(
-      api.listItems.deletelistItem,
+      api.listItems.deleteListItem,
       { group: id, id: itemId },
       { token },
     );

@@ -24,10 +24,10 @@ export function ListItemDelete({
   const pathname = usePathname();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: useConvexMutation(api.listItems.deletelistItem),
+    mutationFn: useConvexMutation(api.listItems.deleteListItem),
     onSuccess: () => {
       toast.success(`${title} deleted`);
-      if (pathname.includes(listItem._id)) {
+      if (pathname?.includes(listItem._id)) {
         router.replace(`/groups/${listItem.group}`);
       } else {
         router.refresh();
