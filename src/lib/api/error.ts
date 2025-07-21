@@ -21,44 +21,43 @@ function isObjectWithCode(obj: unknown): obj is { code: string | number } {
 /**
  * Maps common error types to HTTP status codes.
  */
-function getStatusCode(error: unknown): number {
+function getStatusCode(error: unknown): { status: number; code?: string | number } {
   if (isObjectWithStatus(error)) {
-    return error.status;
+    return { status: error.status };
   }
   if (isObjectWithStatusCode(error)) {
-    return error.statusCode;
+    return { status: error.statusCode };
   }
   if (isObjectWithCode(error)) {
     const code = error.code;
-    if (typeof code === "number") return code;
+    if (typeof code === "number") return { status: code, code };
     if (typeof code === "string") {
       // Map some common string codes
       switch (code) {
         case "UNAUTHORIZED":
-          return 401;
+          return { status: 401, code };
         case "FORBIDDEN":
-          return 403;
+          return { status: 403, code };
         case "NOT_FOUND":
-          return 404;
+          return { status: 404, code };
         case "BAD_REQUEST":
-          return 400;
+          return { status: 400, code };
         default:
-          return 400;
+          return { status: 400, code };
       }
     }
   }
   if (error instanceof Error && error.message.includes("not authenticated"))
-    return 401;
-  return 500;
+    return { status: 401 };
+  return { status: 500 };
 }
 
 /**
  * Formats an error into the standard API error response structure.
  */
 export function handleApiError(error: unknown) {
-  const status = getStatusCode(error);
+  const { status, code } = getStatusCode(error);
   const message = error instanceof Error ? error.message : String(error);
-  const code = isObjectWithCode(error) ? error.code : undefined;
   return {
     status,
     body: {
