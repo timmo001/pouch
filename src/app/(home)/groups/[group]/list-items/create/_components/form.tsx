@@ -5,8 +5,8 @@ import { useMutation } from "@tanstack/react-query";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { api } from "~/convex/_generated/api";
 import { type Doc, type Id } from "~/convex/_generated/dataModel";
-import { ListItemForm } from "~/components/forms/list-item";
-import type { ListItemFormType } from "~/components/forms/list-item";
+import { ListItemForm } from "~/components/list-items/item/form";
+import type { ListItemFormType } from "~/components/list-items/item/form";
 
 export function CreateListItemForm({ group }: { group: Doc<"groups"> }) {
   const router = useRouter();
