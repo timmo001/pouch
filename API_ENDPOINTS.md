@@ -20,6 +20,22 @@ The default token is `dev-token-123` (configurable via `API_ACCESS_TOKEN` enviro
 
 Until this is resolved, the API calls will fail with authentication errors.
 
+## API Structure
+
+The API follows the same structure as your application routes:
+
+```
+/api/groups/                           -> List groups
+/api/groups/create/                    -> Create group
+/api/groups/{group}/                   -> Group operations
+/api/groups/{group}/list-items/        -> List items in group
+/api/groups/{group}/list-items/create/ -> Create list item
+/api/groups/{group}/list-items/{item}/ -> List item operations
+/api/groups/{group}/list-items/reorder -> Reorder list items
+/api/groups/{group}/notepads/          -> Notepad operations
+/api/groups/{group}/notepads/{notepad} -> Individual notepad
+```
+
 ## Groups API
 
 ### Get All Groups
@@ -50,7 +66,7 @@ Returns all groups for the authenticated user.
 ### Create Group
 
 ```
-POST /api/groups
+POST /api/groups/create
 Content-Type: application/json
 
 {
@@ -72,13 +88,13 @@ Content-Type: application/json
 ### Get Group by ID
 
 ```
-GET /api/groups/{groupId}
+GET /api/groups/{group}
 ```
 
 ### Update Group
 
 ```
-PATCH /api/groups/{groupId}
+PATCH /api/groups/{group}
 Content-Type: application/json
 
 {
@@ -90,7 +106,7 @@ Content-Type: application/json
 ### Delete Group
 
 ```
-DELETE /api/groups/{groupId}
+DELETE /api/groups/{group}
 ```
 
 ## List Items API
@@ -98,7 +114,7 @@ DELETE /api/groups/{groupId}
 ### Get List Items from Group
 
 ```
-GET /api/list-items?group={groupId}
+GET /api/groups/{group}/list-items
 ```
 
 **Response:**
@@ -125,11 +141,23 @@ GET /api/list-items?group={groupId}
 ### Create List Item
 
 ```
-POST /api/list-items
+POST /api/groups/{group}/list-items
 Content-Type: application/json
 
 {
-  "group": "group_id",
+  "type": "text",
+  "value": "Item content",
+  "description": "Optional description"
+}
+```
+
+### Create List Item (Alternative endpoint)
+
+```
+POST /api/groups/{group}/list-items/create
+Content-Type: application/json
+
+{
   "type": "text",
   "value": "Item content",
   "description": "Optional description"
@@ -139,17 +167,16 @@ Content-Type: application/json
 ### Get List Item by ID
 
 ```
-GET /api/list-items/{itemId}?group={groupId}
+GET /api/groups/{group}/list-items/{item}
 ```
 
 ### Update List Item
 
 ```
-PATCH /api/list-items/{itemId}
+PATCH /api/groups/{group}/list-items/{item}
 Content-Type: application/json
 
 {
-  "group": "group_id",
   "type": "url",
   "value": "https://example.com",
   "description": "Updated description",
@@ -160,17 +187,16 @@ Content-Type: application/json
 ### Delete List Item
 
 ```
-DELETE /api/list-items/{itemId}?group={groupId}
+DELETE /api/groups/{group}/list-items/{item}
 ```
 
 ### Reorder List Items
 
 ```
-POST /api/list-items/reorder
+POST /api/groups/{group}/list-items/reorder
 Content-Type: application/json
 
 {
-  "group": "group_id",
   "orderedIds": ["item1", "item2", "item3"]
 }
 ```
@@ -180,7 +206,7 @@ Content-Type: application/json
 ### Get Notepad from Group
 
 ```
-GET /api/notepads?group={groupId}
+GET /api/groups/{group}/notepads
 ```
 
 **Response:**
@@ -200,22 +226,19 @@ GET /api/notepads?group={groupId}
 ### Create Notepad
 
 ```
-POST /api/notepads
+POST /api/groups/{group}/notepads
 Content-Type: application/json
 
-{
-  "group": "group_id"
-}
+{}
 ```
 
 ### Update Notepad
 
 ```
-PATCH /api/notepads/{notepadId}
+PATCH /api/groups/{group}/notepads/{notepad}
 Content-Type: application/json
 
 {
-  "group": "group_id",
   "content": "Updated notepad content"
 }
 ```
@@ -223,7 +246,7 @@ Content-Type: application/json
 ### Delete Notepad
 
 ```
-DELETE /api/notepads/{notepadId}?group={groupId}
+DELETE /api/groups/{group}/notepads/{notepad}
 ```
 
 ## Error Responses
@@ -252,7 +275,7 @@ curl -H "X-Access-Token: dev-token-123" \
      -H "Content-Type: application/json" \
      -X POST \
      -d '{"name":"My New Group","description":"Test group"}' \
-     http://localhost:3000/api/groups
+     http://localhost:3000/api/groups/create
 ```
 
 ### Using curl with query parameter authentication:
@@ -266,7 +289,8 @@ curl -H "Content-Type: application/json" \
 ### Using JavaScript fetch:
 
 ```javascript
-const response = await fetch("/api/groups", {
+// Create a group
+const response = await fetch("/api/groups/create", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
@@ -278,5 +302,46 @@ const response = await fetch("/api/groups", {
   }),
 });
 
-const result = await response.json();
+// Get list items for a group
+const listItemsResponse = await fetch("/api/groups/group123/list-items", {
+  method: "GET",
+  headers: {
+    "X-Access-Token": "dev-token-123",
+  },
+});
+
+// Create a list item
+const createItemResponse = await fetch("/api/groups/group123/list-items", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "X-Access-Token": "dev-token-123",
+  },
+  body: JSON.stringify({
+    type: "text",
+    value: "My todo item",
+    description: "This is a todo item",
+  }),
+});
 ```
+
+## Migration from Old Structure
+
+If you were using the old API structure, here are the mappings:
+
+| Old Endpoint                                  | New Endpoint                                    |
+| --------------------------------------------- | ----------------------------------------------- |
+| `POST /api/groups`                            | `POST /api/groups/create`                       |
+| `GET /api/groups/{id}`                        | `GET /api/groups/{group}`                       |
+| `PATCH /api/groups/{id}`                      | `PATCH /api/groups/{group}`                     |
+| `DELETE /api/groups/{id}`                     | `DELETE /api/groups/{group}`                    |
+| `GET /api/list-items?group={groupId}`         | `GET /api/groups/{group}/list-items`            |
+| `POST /api/list-items`                        | `POST /api/groups/{group}/list-items`           |
+| `GET /api/list-items/{id}?group={groupId}`    | `GET /api/groups/{group}/list-items/{item}`     |
+| `PATCH /api/list-items/{id}`                  | `PATCH /api/groups/{group}/list-items/{item}`   |
+| `DELETE /api/list-items/{id}?group={groupId}` | `DELETE /api/groups/{group}/list-items/{item}`  |
+| `POST /api/list-items/reorder`                | `POST /api/groups/{group}/list-items/reorder`   |
+| `GET /api/notepads?group={groupId}`           | `GET /api/groups/{group}/notepads`              |
+| `POST /api/notepads`                          | `POST /api/groups/{group}/notepads`             |
+| `PATCH /api/notepads/{id}`                    | `PATCH /api/groups/{group}/notepads/{notepad}`  |
+| `DELETE /api/notepads/{id}?group={groupId}`   | `DELETE /api/groups/{group}/notepads/{notepad}` |

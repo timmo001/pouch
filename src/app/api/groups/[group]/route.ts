@@ -9,7 +9,7 @@ import type { Id } from "~/convex/_generated/dataModel";
 
 interface RouteContext {
   params: {
-    id: string;
+    group: string;
   };
 }
 
@@ -18,13 +18,13 @@ export async function GET(request: NextRequest, context: RouteContext) {
   if (authError) return authError;
 
   try {
-    const { id } = context.params;
+    const { group } = context.params;
 
     const convex = getConvexClient();
-    const group = await convex.query(api.groups.getById, {
-      id: id as Id<"groups">,
+    const groupData = await convex.query(api.groups.getById, {
+      id: group as Id<"groups">,
     });
-    return NextResponse.json({ data: group });
+    return NextResponse.json({ data: groupData });
   } catch (error) {
     return handleError(error);
   }
@@ -35,7 +35,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
   if (authError) return authError;
 
   try {
-    const { id } = context.params;
+    const { group } = context.params;
     const body = (await request.json()) as {
       name?: string;
       description?: string;
@@ -47,7 +47,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
     // Update name if provided
     if (name && typeof name === "string") {
       await convex.mutation(api.groups.updateName, {
-        id: id as Id<"groups">,
+        id: group as Id<"groups">,
         name,
       });
     }
@@ -55,7 +55,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
     // Update description if provided
     if (description !== undefined) {
       await convex.mutation(api.groups.updateDescription, {
-        id: id as Id<"groups">,
+        id: group as Id<"groups">,
         description: typeof description === "string" ? description : undefined,
       });
     }
@@ -71,10 +71,12 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
   if (authError) return authError;
 
   try {
-    const { id } = context.params;
+    const { group } = context.params;
 
     const convex = getConvexClient();
-    await convex.mutation(api.groups.deleteGroup, { id: id as Id<"groups"> });
+    await convex.mutation(api.groups.deleteGroup, {
+      id: group as Id<"groups">,
+    });
     return NextResponse.json({ data: { success: true } });
   } catch (error) {
     return handleError(error);

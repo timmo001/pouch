@@ -9,7 +9,8 @@ import type { Id } from "~/convex/_generated/dataModel";
 
 interface RouteContext {
   params: {
-    id: string;
+    group: string;
+    item: string;
   };
 }
 
@@ -18,21 +19,12 @@ export async function GET(request: NextRequest, context: RouteContext) {
   if (authError) return authError;
 
   try {
-    const { id } = context.params;
-    const url = new URL(request.url);
-    const groupId = url.searchParams.get("group");
-
-    if (!groupId) {
-      return NextResponse.json(
-        { error: "Group ID is required as query parameter" },
-        { status: 400 },
-      );
-    }
+    const { group, item } = context.params;
 
     const convex = getConvexClient();
     const listItem = await convex.query(api.listItems.getById, {
-      id: id as Id<"listItems">,
-      group: groupId as Id<"groups">,
+      id: item as Id<"listItems">,
+      group: group as Id<"groups">,
     });
 
     return NextResponse.json({ data: listItem });
@@ -46,29 +38,21 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
   if (authError) return authError;
 
   try {
-    const { id } = context.params;
+    const { group, item } = context.params;
     const body = (await request.json()) as {
-      group?: string;
       type?: "text" | "url";
       value?: string;
       description?: string;
       archived?: boolean;
     };
-    const { group, type, value, description, archived } = body;
-
-    if (!group) {
-      return NextResponse.json(
-        { error: "Group ID is required" },
-        { status: 400 },
-      );
-    }
+    const { type, value, description, archived } = body;
 
     const convex = getConvexClient();
 
     // Handle archive/unarchive
     if (archived !== undefined) {
       await convex.mutation(api.listItems.toggleArchive, {
-        id: id as Id<"listItems">,
+        id: item as Id<"listItems">,
         group: group as Id<"groups">,
       });
     }
@@ -90,7 +74,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       }
 
       await convex.mutation(api.listItems.update, {
-        id: id as Id<"listItems">,
+        id: item as Id<"listItems">,
         group: group as Id<"groups">,
         type,
         value,
@@ -109,21 +93,12 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
   if (authError) return authError;
 
   try {
-    const { id } = context.params;
-    const url = new URL(request.url);
-    const groupId = url.searchParams.get("group");
-
-    if (!groupId) {
-      return NextResponse.json(
-        { error: "Group ID is required as query parameter" },
-        { status: 400 },
-      );
-    }
+    const { group, item } = context.params;
 
     const convex = getConvexClient();
     await convex.mutation(api.listItems.deletelistItem, {
-      id: id as Id<"listItems">,
-      group: groupId as Id<"groups">,
+      id: item as Id<"listItems">,
+      group: group as Id<"groups">,
     });
 
     return NextResponse.json({ data: { success: true } });

@@ -9,7 +9,8 @@ import type { Id } from "~/convex/_generated/dataModel";
 
 interface RouteContext {
   params: {
-    id: string;
+    group: string;
+    notepad: string;
   };
 }
 
@@ -18,16 +19,15 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
   if (authError) return authError;
 
   try {
-    const { id } = context.params;
+    const { group, notepad } = context.params;
     const body = (await request.json()) as {
-      group?: string;
       content?: string;
     };
-    const { group, content } = body;
+    const { content } = body;
 
-    if (!group || content === undefined) {
+    if (content === undefined) {
       return NextResponse.json(
-        { error: "Group ID and content are required" },
+        { error: "Content is required" },
         { status: 400 },
       );
     }
@@ -41,7 +41,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
 
     const convex = getConvexClient();
     await convex.mutation(api.notepads.update, {
-      id: id as Id<"notepads">,
+      id: notepad as Id<"notepads">,
       group: group as Id<"groups">,
       content,
     });
@@ -57,21 +57,12 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
   if (authError) return authError;
 
   try {
-    const { id } = context.params;
-    const url = new URL(request.url);
-    const groupId = url.searchParams.get("group");
-
-    if (!groupId) {
-      return NextResponse.json(
-        { error: "Group ID is required as query parameter" },
-        { status: 400 },
-      );
-    }
+    const { group, notepad } = context.params;
 
     const convex = getConvexClient();
     await convex.mutation(api.notepads.deleteNotepad, {
-      id: id as Id<"notepads">,
-      group: groupId as Id<"groups">,
+      id: notepad as Id<"notepads">,
+      group: group as Id<"groups">,
     });
 
     return NextResponse.json({ data: { success: true } });

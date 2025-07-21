@@ -7,20 +7,26 @@ import {
 import { api } from "~/convex/_generated/api";
 import type { Id } from "~/convex/_generated/dataModel";
 
-export async function POST(request: NextRequest) {
+interface RouteContext {
+  params: {
+    group: string;
+  };
+}
+
+export async function POST(request: NextRequest, context: RouteContext) {
   const authError = authenticateRequest(request);
   if (authError) return authError;
 
   try {
+    const { group } = context.params;
     const body = (await request.json()) as {
-      group?: string;
       orderedIds?: string[];
     };
-    const { group, orderedIds } = body;
+    const { orderedIds } = body;
 
-    if (!group || !orderedIds || !Array.isArray(orderedIds)) {
+    if (!orderedIds || !Array.isArray(orderedIds)) {
       return NextResponse.json(
-        { error: "Group and orderedIds array are required" },
+        { error: "orderedIds array is required" },
         { status: 400 },
       );
     }

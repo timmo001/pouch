@@ -7,24 +7,22 @@ import {
 import { api } from "~/convex/_generated/api";
 import type { Id } from "~/convex/_generated/dataModel";
 
-export async function GET(request: NextRequest) {
+interface RouteContext {
+  params: {
+    group: string;
+  };
+}
+
+export async function GET(request: NextRequest, context: RouteContext) {
   const authError = authenticateRequest(request);
   if (authError) return authError;
 
   try {
-    const url = new URL(request.url);
-    const groupId = url.searchParams.get("group");
-
-    if (!groupId) {
-      return NextResponse.json(
-        { error: "Group ID is required as query parameter" },
-        { status: 400 },
-      );
-    }
+    const { group } = context.params;
 
     const convex = getConvexClient();
     const notepad = await convex.query(api.notepads.getFromGroup, {
-      group: groupId as Id<"groups">,
+      group: group as Id<"groups">,
     });
 
     return NextResponse.json({ data: notepad });
@@ -33,22 +31,12 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest, context: RouteContext) {
   const authError = authenticateRequest(request);
   if (authError) return authError;
 
   try {
-    const body = (await request.json()) as {
-      group?: string;
-    };
-    const { group } = body;
-
-    if (!group) {
-      return NextResponse.json(
-        { error: "Group ID is required" },
-        { status: 400 },
-      );
-    }
+    const { group } = context.params;
 
     const convex = getConvexClient();
     const notepad = await convex.mutation(api.notepads.create, {

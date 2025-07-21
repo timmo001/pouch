@@ -7,48 +7,28 @@ import {
 import { api } from "~/convex/_generated/api";
 import type { Id } from "~/convex/_generated/dataModel";
 
-export async function GET(request: NextRequest) {
-  const authError = authenticateRequest(request);
-  if (authError) return authError;
-
-  try {
-    const url = new URL(request.url);
-    const groupId = url.searchParams.get("group");
-
-    if (!groupId) {
-      return NextResponse.json(
-        { error: "Group ID is required as query parameter" },
-        { status: 400 },
-      );
-    }
-
-    const convex = getConvexClient();
-    const listItems = await convex.query(api.listItems.getFromGroup, {
-      group: groupId as Id<"groups">,
-    });
-
-    return NextResponse.json({ data: listItems });
-  } catch (error) {
-    return handleError(error);
-  }
+interface RouteContext {
+  params: {
+    group: string;
+  };
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest, context: RouteContext) {
   const authError = authenticateRequest(request);
   if (authError) return authError;
 
   try {
+    const { group } = context.params;
     const body = (await request.json()) as {
-      group?: string;
       type?: "text" | "url";
       value?: string;
       description?: string;
     };
-    const { group, type, value, description } = body;
+    const { type, value, description } = body;
 
-    if (!group || !type || !value) {
+    if (!type || !value) {
       return NextResponse.json(
-        { error: "Group, type, and value are required" },
+        { error: "Type and value are required" },
         { status: 400 },
       );
     }
