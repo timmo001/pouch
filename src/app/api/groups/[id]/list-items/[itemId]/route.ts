@@ -30,16 +30,14 @@ import type z from "zod";
 // GET /api/groups/[id]/list-items/[itemId] - get list item by id
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string; itemId: string } },
+  { params }: { params: Promise<{ id: Id<"groups">; itemId: Id<"listItems"> }> },
 ) {
+  const { id, itemId } = await params;
   try {
     const token = getAuthToken(req);
     const item = await fetchQuery(
       api.listItems.getById,
-      {
-        id: params.itemId as Id<"listItems">,
-        group: params.id as Id<"groups">,
-      },
+      { id: itemId, group: id },
       { token },
     );
     return NextResponse.json({ data: item, error: null });
@@ -72,8 +70,9 @@ export async function GET(
 // PUT /api/groups/[id]/list-items/[itemId] - update list item
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string; itemId: string } },
+  { params }: { params: Promise<{ id: Id<"groups">; itemId: Id<"listItems"> }> },
 ) {
+  const { id, itemId } = await params;
   try {
     const token = getAuthToken(req);
     const body = (await req.json()) as z.infer<
@@ -92,8 +91,8 @@ export async function PUT(
     await fetchMutation(
       api.listItems.update,
       {
-        group: params.id as Id<"groups">,
-        id: params.itemId as Id<"listItems">,
+        group: id,
+        id: itemId,
         ...parsed.data,
       },
       { token },
@@ -128,16 +127,14 @@ export async function PUT(
 // DELETE /api/groups/[id]/list-items/[itemId] - delete list item
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string; itemId: string } },
+  { params }: { params: Promise<{ id: Id<"groups">; itemId: Id<"listItems"> }> },
 ) {
+  const { id, itemId } = await params;
   try {
     const token = getAuthToken(req);
     await fetchMutation(
       api.listItems.deletelistItem,
-      {
-        group: params.id as Id<"groups">,
-        id: params.itemId as Id<"listItems">,
-      },
+      { group: id, id: itemId },
       { token },
     );
     return NextResponse.json({ data: true, error: null });

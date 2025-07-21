@@ -25,13 +25,14 @@ import type z from "zod";
 // GET /api/groups/[id]/notepad - get notepad for group
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: Id<"groups"> }> },
 ) {
+  const { id } = await params;
   try {
     const token = getAuthToken(req);
     const notepad = await fetchQuery(
       api.notepads.getFromGroup,
-      { group: params.id as Id<"groups"> },
+      { group: id },
       { token },
     );
     return NextResponse.json({ data: notepad, error: null });
@@ -59,13 +60,14 @@ export async function GET(
 // POST /api/groups/[id]/notepad - create notepad for group
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: Id<"groups"> }> },
 ) {
+  const { id } = await params;
   try {
     const token = getAuthToken(req);
     const notepad = await fetchMutation(
       api.notepads.create,
-      { group: params.id as Id<"groups"> },
+      { group: id },
       { token },
     );
     return NextResponse.json({ data: notepad, error: null }, { status: 201 });
@@ -98,8 +100,9 @@ export async function POST(
 // PUT /api/groups/[id]/notepad - update notepad content
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string; groupId: string } },
+  { params }: { params: Promise<{ id: Id<"groups"> }> },
 ) {
+  const { id } = await params;
   try {
     const token = getAuthToken(req);
     const body = (await req.json()) as z.infer<
@@ -115,12 +118,28 @@ export async function PUT(
         { status: 400 },
       );
     }
+
+    const currentNotepad = await fetchQuery(
+      api.notepads.getFromGroup,
+      { group: id },
+      { token },
+    );
+    if (!currentNotepad) {
+      return NextResponse.json(
+        {
+          data: null,
+          error: { message: "Notepad not found", code: "NOT_FOUND" },
+        },
+        { status: 404 },
+      );
+    }
+
     const notepad = await fetchMutation(
       api.notepads.update,
       {
         ...parsed.data,
-        id: params.id as Id<"notepads">,
-        group: params.groupId as Id<"groups">,
+        id: currentNotepad._id,
+        group: id,
       },
       { token },
     );
@@ -149,14 +168,15 @@ export async function PUT(
 // DELETE /api/groups/[id]/notepad - delete notepad
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string; notepadId?: string } },
+  { params }: { params: Promise<{ id: string; notepadId?: string }> },
 ) {
+  const { id } = await params;
   try {
     const token = getAuthToken(req);
-    // notepadId is not in the route, so we need to fetch the notepad first
+
     const notepad = await fetchQuery(
       api.notepads.getFromGroup,
-      { group: params.id as Id<"groups"> },
+      { group: id as Id<"groups"> },
       { token },
     );
     if (!notepad) {
@@ -168,9 +188,10 @@ export async function DELETE(
         { status: 404 },
       );
     }
+
     await fetchMutation(
       api.notepads.deleteNotepad,
-      { id: notepad._id as Id<"notepads">, group: params.id as Id<"groups"> },
+      { id: notepad._id as Id<"notepads">, group: id as Id<"groups"> },
       { token },
     );
     return NextResponse.json({ data: true, error: null });

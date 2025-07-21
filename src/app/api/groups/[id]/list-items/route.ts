@@ -25,13 +25,14 @@ import type z from "zod";
 // GET /api/groups/[id]/list-items - list items in group
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: Id<"groups"> }> },
 ) {
+  const { id } = await params;
   try {
     const token = getAuthToken(req);
     const items = await fetchQuery(
       api.listItems.getFromGroup,
-      { group: params.id as Id<"groups"> },
+      { group: id },
       { token },
     );
     return NextResponse.json({ data: items, error: null });
@@ -59,8 +60,9 @@ export async function GET(
 // POST /api/groups/[id]/list-items - create list item in group
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: Id<"groups"> }> },
 ) {
+  const { id } = await params;
   try {
     const token = getAuthToken(req);
     const body = (await req.json()) as z.infer<
@@ -78,7 +80,7 @@ export async function POST(
     }
     const newId = (await fetchMutation(
       api.listItems.create,
-      { group: params.id as Id<"groups">, ...parsed.data },
+      { group: id, ...parsed.data },
       { token },
     )) as string;
     return NextResponse.json({ data: newId, error: null }, { status: 201 });
