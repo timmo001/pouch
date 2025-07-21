@@ -5,16 +5,16 @@ import { api } from "~/convex/_generated/api";
 import { type Id } from "~/convex/_generated/dataModel";
 import { getAuthToken } from "~/server/auth";
 import { BreadcrumbsSetter } from "~/components/breadcrumbs/setter";
-import { CreateLinkForm } from "~/app/(home)/groups/[group]/links/create/_components/form";
+import { CreateListItemForm } from "~/app/(home)/groups/[group]/list-items/create/_components/form";
 
 export const metadata: Metadata = {
-  title: "Create Link",
-  description: "Create a new link",
+  title: "Create List Item",
+  description: "Create a new list item",
 };
 
 export const dynamic = "force-dynamic";
 
-export default async function CreateLinkPage({
+export default async function CreateListItemPage({
   params,
 }: {
   params: Promise<{ group: Id<"groups"> }>;
@@ -42,10 +42,10 @@ export default async function CreateLinkPage({
             title: group.name,
             href: `/groups/${group._id}`,
           },
-          { key: "links/create", title: "Create Link" },
+          { key: "list-items/create", title: "Create List Item" },
         ]}
       />
-      <CreateLinkForm group={group} />
+      <CreateListItemForm group={group} />
     </>
   );
 }

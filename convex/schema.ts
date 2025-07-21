@@ -9,8 +9,9 @@ export default defineSchema({
     archived: v.boolean(),
   }),
 
-  links: defineTable({
-    url: v.string(),
+  listItems: defineTable({
+    type: v.union(v.literal("text"), v.literal("url")),
+    value: v.string(),
     description: v.optional(v.string()),
     group: v.id("groups"),
     user: v.string(),

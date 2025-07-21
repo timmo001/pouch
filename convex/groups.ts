@@ -14,8 +14,8 @@ export const getAll = query({
       .filter((q) =>
         q.and(
           q.eq(q.field("user"), identity.tokenIdentifier),
-          q.eq(q.field("archived"), false)
-        )
+          q.eq(q.field("archived"), false),
+        ),
       )
       .collect();
   },
@@ -135,18 +135,18 @@ export const deleteGroup = mutation({
       throw new Error("You are not the owner of this group");
     }
 
-    // First delete all links in the group
-    const links = await ctx.db
-      .query("links")
+    // First delete all listItems in the group
+    const listItems = await ctx.db
+      .query("listItems")
       .filter((q) => q.eq(q.field("group"), args.id))
       .collect();
 
-    for (const link of links) {
-      if (link.user !== identity.tokenIdentifier) {
-        throw new Error("You are not the owner of this link");
+    for (const listItem of listItems) {
+      if (listItem.user !== identity.tokenIdentifier) {
+        throw new Error("You are not the owner of this listItem");
       }
 
-      await ctx.db.delete(link._id);
+      await ctx.db.delete(listItem._id);
     }
 
     // Then delete the group

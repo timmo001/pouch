@@ -1,13 +1,13 @@
-export function getLinkTitle({
+export function getListItemTitle({
   description,
-  url,
+  value,
 }: {
-  url: string;
+  value: string;
   description?: string;
 }) {
   if (description?.length) {
     return description;
   }
 
-  return url;
+  return value;
 }

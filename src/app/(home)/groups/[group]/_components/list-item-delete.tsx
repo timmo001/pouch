@@ -11,47 +11,47 @@ import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { api } from "~/convex/_generated/api";
-import { getLinkTitle } from "~/lib/link";
+import { getListItemTitle } from "~/lib/list-item";
 
-export function LinkDelete({
-  link,
+export function ListItemDelete({
+  listItem,
   variant,
 }: {
-  link: Doc<"links">;
+  listItem: Doc<"listItems">;
   variant: "icon" | "text";
 }) {
   const router = useRouter();
   const pathname = usePathname();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: useConvexMutation(api.links.deleteLink),
+    mutationFn: useConvexMutation(api.listItems.deletelistItem),
     onSuccess: () => {
       toast.success(`${title} deleted`);
-      if (pathname.includes(link._id)) {
-        router.replace(`/groups/${link.group}`);
+      if (pathname.includes(listItem._id)) {
+        router.replace(`/groups/${listItem.group}`);
       } else {
         router.refresh();
       }
     },
     onError: (error) => {
       console.error(error);
-      toast.error("Failed to delete link");
+      toast.error("Failed to delete item");
     },
   });
 
   const title = useMemo(
     () =>
-      getLinkTitle({
-        description: link.description,
-        url: link.url,
+      getListItemTitle({
+        description: listItem.description,
+        value: listItem.value,
       }),
-    [link.description, link.url],
+    [listItem.description, listItem.value],
   );
 
   return (
     <Confirmation
       title={`Delete ${title}`}
-      description="Are you sure you want to delete this link?"
+      description="Are you sure you want to delete this item?"
       confirm={{
         text: "Delete",
         variant: "destructive",
@@ -63,7 +63,7 @@ export function LinkDelete({
         ),
         isPending,
         onConfirm: () => {
-          mutate({ group: link.group, id: link._id });
+          mutate({ group: listItem.group, id: listItem._id });
         },
       }}
       trigger={

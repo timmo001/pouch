@@ -8,7 +8,7 @@ import { BreadcrumbsSetter } from "~/components/breadcrumbs/setter";
 import { GroupEditName } from "~/app/(home)/groups/[group]/_components/group-edit-name";
 import { GroupEditDescription } from "~/app/(home)/groups/[group]/_components/group-edit-description";
 import { GroupDelete } from "~/app/(home)/groups/[group]/_components/group-delete";
-import { DraggableLinks } from "~/app/(home)/groups/[group]/_components/draggable-links";
+import { DraggableListItems } from "~/app/(home)/groups/[group]/_components/draggable-list-items";
 
 export async function generateMetadata({
   params,
@@ -67,13 +67,13 @@ export default async function GroupPage({
     notFound();
   }
 
-  const preloadedLinks = await preloadQuery(
-    api.links.getFromGroup,
+  const preloadedListItems = await preloadQuery(
+    api.listItems.getFromGroup,
     { group: group._id },
     { token },
   ).catch((error) => {
     console.warn(
-      "[groups/[group]/page] Error fetching links from api.links.getFromGroup",
+      "[groups/[group]/page] Error fetching listItems from api.listItems.getFromGroup",
       error,
     );
     return null;
@@ -96,8 +96,11 @@ export default async function GroupPage({
             <GroupDelete group={group} />
           </div>
         </div>
-        {preloadedLinks && (
-          <DraggableLinks group={group} preloadedLinks={preloadedLinks} />
+        {preloadedListItems && (
+          <DraggableListItems
+            group={group}
+            preloadedListItems={preloadedListItems}
+          />
         )}
       </div>
     </>

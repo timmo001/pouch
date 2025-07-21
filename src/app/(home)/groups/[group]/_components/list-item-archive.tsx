@@ -10,41 +10,41 @@ import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { api } from "~/convex/_generated/api";
-import { getLinkTitle } from "~/lib/link";
+import { getListItemTitle } from "~/lib/list-item";
 
-export function LinkArchive({
-  link,
+export function ListItemArchive({
+  listItem,
   variant,
 }: {
-  link: Doc<"links">;
+  listItem: Doc<"listItems">;
   variant: "icon" | "text";
 }) {
   const router = useRouter();
   const pathname = usePathname();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: useConvexMutation(api.links.toggleArchive),
+    mutationFn: useConvexMutation(api.listItems.toggleArchive),
     onSuccess: () => {
       toast.success(`${title} archived`);
-      if (pathname.includes(link._id)) {
-        router.replace(`/groups/${link.group}`);
+      if (pathname.includes(listItem._id)) {
+        router.replace(`/groups/${listItem.group}`);
       } else {
         router.refresh();
       }
     },
     onError: (error) => {
       console.error(error);
-      toast.error("Failed to archive link");
+      toast.error("Failed to archive item");
     },
   });
 
   const title = useMemo(
     () =>
-      getLinkTitle({
-        description: link.description,
-        url: link.url,
+      getListItemTitle({
+        description: listItem.description,
+        value: listItem.value,
       }),
-    [link.description, link.url],
+    [listItem.description, listItem.value],
   );
 
   return (
@@ -53,7 +53,7 @@ export function LinkArchive({
       size={variant === "icon" ? "icon" : "default"}
       variant={variant === "icon" ? "ghost" : "secondary"}
       onClick={() => {
-        mutate({ group: link.group, id: link._id });
+        mutate({ group: listItem.group, id: listItem._id });
       }}
     >
       <ArchiveIcon />

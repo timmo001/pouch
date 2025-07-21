@@ -14,7 +14,7 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as groups from "../groups.js";
-import type * as links from "../links.js";
+import type * as listItems from "../listItems.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -26,7 +26,7 @@ import type * as links from "../links.js";
  */
 declare const fullApi: ApiFromModules<{
   groups: typeof groups;
-  links: typeof links;
+  listItems: typeof listItems;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

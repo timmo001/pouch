@@ -1,5 +1,6 @@
 "use client";
-
+import React from "react";
+import Link from "next/link";
 import {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -10,8 +11,6 @@ import {
   BreadcrumbSeparator,
 } from "~/components/ui/breadcrumb";
 import { useBreadcrumbsStore } from "~/components/providers/breadcrumbs-store-provider";
-import Link from "next/link";
-import React from "react";
 
 export function Breadcrumbs() {
   const items = useBreadcrumbsStore((state) => state.items);

@@ -2,7 +2,7 @@ import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import type { Doc } from "./_generated/dataModel";
 
-function sortByPosition(a: Doc<"links">, b: Doc<"links">) {
+function sortByPosition(a: Doc<"listItems">, b: Doc<"listItems">) {
   return (a.position ?? 0) - (b.position ?? 0);
 }
 
@@ -16,23 +16,27 @@ export const getFromGroup = query({
       throw new Error("Not authenticated");
     }
 
-    const links = await ctx.db
-      .query("links")
+    const listItems = await ctx.db
+      .query("listItems")
       .withIndex("by_group_user_archived_position", (q) =>
-        q.eq("group", args.group).eq("user", identity.tokenIdentifier)
+        q.eq("group", args.group).eq("user", identity.tokenIdentifier),
       )
       .collect();
 
     return {
-      active: links.filter((link) => !link.archived).sort(sortByPosition),
-      archived: links.filter((link) => link.archived).sort(sortByPosition),
+      active: listItems
+        .filter((listItem) => !listItem.archived)
+        .sort(sortByPosition),
+      archived: listItems
+        .filter((listItem) => listItem.archived)
+        .sort(sortByPosition),
     };
   },
 });
 
 export const getById = query({
   args: {
-    id: v.id("links"),
+    id: v.id("listItems"),
     group: v.id("groups"),
   },
   handler: async (ctx, args) => {
@@ -41,8 +45,8 @@ export const getById = query({
       throw new Error("Not authenticated");
     }
 
-    const link = await ctx.db.get(args.id);
-    if (!link) return null;
+    const listItem = await ctx.db.get(args.id);
+    if (!listItem) return null;
 
     const group = await ctx.db.get(args.group);
     if (!group) return null;
@@ -51,12 +55,12 @@ export const getById = query({
       throw new Error("Not authorized to access this group");
     }
 
-    if (link.user !== identity.tokenIdentifier) {
-      throw new Error("Not authorized to access this link");
+    if (listItem.user !== identity.tokenIdentifier) {
+      throw new Error("Not authorized to access this listItem");
     }
 
     return {
-      ...link,
+      ...listItem,
       group: group,
     };
   },
@@ -65,7 +69,8 @@ export const getById = query({
 export const create = mutation({
   args: {
     group: v.id("groups"),
-    url: v.string(),
+    type: v.union(v.literal("text"), v.literal("url")),
+    value: v.string(),
     description: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
@@ -75,23 +80,24 @@ export const create = mutation({
     }
 
     // Get the highest position in the group
-    const existingLinks = await ctx.db
-      .query("links")
+    const existinglistItems = await ctx.db
+      .query("listItems")
       .withIndex("by_group_user_archived_position", (q) =>
         q
           .eq("group", args.group)
           .eq("user", identity.tokenIdentifier)
-          .eq("archived", false)
+          .eq("archived", false),
       )
       .collect();
 
-    const maxPosition = existingLinks.reduce(
-      (max, link) => Math.max(max, link.position ?? 0),
-      0
+    const maxPosition = existinglistItems.reduce(
+      (max, listItem) => Math.max(max, listItem.position ?? 0),
+      0,
     );
 
-    return await ctx.db.insert("links", {
-      url: args.url,
+    return await ctx.db.insert("listItems", {
+      type: args.type,
+      value: args.value,
       description: args.description,
       group: args.group,
       user: identity.tokenIdentifier,
@@ -104,8 +110,9 @@ export const create = mutation({
 export const update = mutation({
   args: {
     group: v.id("groups"),
-    id: v.id("links"),
-    url: v.string(),
+    id: v.id("listItems"),
+    type: v.union(v.literal("text"), v.literal("url")),
+    value: v.string(),
     description: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
@@ -114,15 +121,16 @@ export const update = mutation({
       throw new Error("Not authenticated");
     }
 
-    const link = await ctx.db.get(args.id);
-    if (!link) return null;
+    const listItem = await ctx.db.get(args.id);
+    if (!listItem) return null;
 
-    if (link.user !== identity.tokenIdentifier) {
-      throw new Error("Not authorized to update this link");
+    if (listItem.user !== identity.tokenIdentifier) {
+      throw new Error("Not authorized to update this listItem");
     }
 
     return await ctx.db.patch(args.id, {
-      url: args.url,
+      type: args.type,
+      value: args.value,
       description: args.description,
     });
   },
@@ -131,7 +139,7 @@ export const update = mutation({
 export const toggleArchive = mutation({
   args: {
     group: v.id("groups"),
-    id: v.id("links"),
+    id: v.id("listItems"),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -139,19 +147,19 @@ export const toggleArchive = mutation({
       throw new Error("Not authenticated");
     }
 
-    const link = await ctx.db.get(args.id);
-    if (!link) return null;
+    const listItem = await ctx.db.get(args.id);
+    if (!listItem) return null;
 
-    if (link.user !== identity.tokenIdentifier) {
-      throw new Error("Not authorized to archive this link");
+    if (listItem.user !== identity.tokenIdentifier) {
+      throw new Error("Not authorized to archive this listItem");
     }
 
-    if (link.group !== args.group) {
-      throw new Error("Not authorized to archive this link");
+    if (listItem.group !== args.group) {
+      throw new Error("Not authorized to archive this listItem");
     }
 
     return await ctx.db.patch(args.id, {
-      archived: !link.archived,
+      archived: !listItem.archived,
     });
   },
 });
@@ -159,9 +167,9 @@ export const toggleArchive = mutation({
 export const reorder = mutation({
   args: {
     group: v.id("groups"),
-    orderedIds: v.array(v.id("links")),
+    orderedIds: v.array(v.id("listItems")),
   },
-  returns: v.array(v.id("links")),
+  returns: v.array(v.id("listItems")),
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
     if (identity === null) {
@@ -178,31 +186,37 @@ export const reorder = mutation({
     }
 
     const results = await Promise.all(
-      args.orderedIds.map(async (linkId, index) => {
-        const existingLink = await ctx.db.get(linkId);
+      args.orderedIds.map(async (listItemId, index) => {
+        const existinglistItem = await ctx.db.get(listItemId);
 
-        if (!existingLink) {
-          console.warn("Link not found:", linkId);
+        if (!existinglistItem) {
+          console.warn("listItem not found:", listItemId);
           return null;
         }
 
-        if (existingLink.user !== identity.tokenIdentifier) {
-          console.warn("Not authorized to update this link:", existingLink._id);
+        if (existinglistItem.user !== identity.tokenIdentifier) {
+          console.warn(
+            "Not authorized to update this listItem:",
+            existinglistItem._id,
+          );
           return null;
         }
 
-        if (existingLink.group !== args.group) {
-          console.warn("Link is not in the correct group:", existingLink._id);
+        if (existinglistItem.group !== args.group) {
+          console.warn(
+            "listItem is not in the correct group:",
+            existinglistItem._id,
+          );
           return null;
         }
 
-        await ctx.db.patch(linkId, {
+        await ctx.db.patch(listItemId, {
           position: (index + 1) * 100,
         });
 
-        // Return the link ID to indicate success
-        return linkId;
-      })
+        // Return the listItem ID to indicate success
+        return listItemId;
+      }),
     );
 
     // Filter out null results and return only successful updates
@@ -210,10 +224,10 @@ export const reorder = mutation({
   },
 });
 
-export const deleteLink = mutation({
+export const deletelistItem = mutation({
   args: {
     group: v.id("groups"),
-    id: v.id("links"),
+    id: v.id("listItems"),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -221,15 +235,15 @@ export const deleteLink = mutation({
       throw new Error("Not authenticated");
     }
 
-    const link = await ctx.db.get(args.id);
-    if (!link) return null;
+    const listItem = await ctx.db.get(args.id);
+    if (!listItem) return null;
 
-    if (link.user !== identity.tokenIdentifier) {
-      throw new Error("Not authorized to delete this link");
+    if (listItem.user !== identity.tokenIdentifier) {
+      throw new Error("Not authorized to delete this listItem");
     }
 
-    if (link.group !== args.group) {
-      throw new Error("Not authorized to delete this link");
+    if (listItem.group !== args.group) {
+      throw new Error("Not authorized to delete this listItem");
     }
 
     return await ctx.db.delete(args.id);

@@ -8,7 +8,7 @@ alwaysApply: true
 
 This project is organized as follows:
 
-- **convex/**: Contains backend logic, including authentication (`auth.config.ts`), group and link logic (`groups.ts`, `links.ts`), and schema definitions (`schema.ts`).
+- **convex/**: Contains backend logic, including authentication (`auth.config.ts`), functions for the schemas (`groups.ts`, `listItems.ts`), and schema definitions (`schema.ts`).
 - **src/app/**: Main Next.js application directory. Contains route groups, pages, and components for the UI.
   - `global-error.tsx`, `layout.tsx`, `loading.tsx`: App-level error, layout, and loading components.
 - **src/components/**: Shared React components, including UI primitives (`ui/`), providers, and store logic.
