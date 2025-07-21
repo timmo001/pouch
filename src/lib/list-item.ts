@@ -1,13 +1,21 @@
 export function getListItemTitle({
+  type,
   description,
   value,
 }: {
+  type: "text" | "url";
   value: string;
   description?: string;
 }) {
-  if (description?.length) {
-    return description;
-  }
+  switch (type) {
+    case "url":
+      if (description?.length) {
+        return description;
+      }
 
-  return value;
+      return value;
+    // case "text":
+    default:
+      return value;
+  }
 }

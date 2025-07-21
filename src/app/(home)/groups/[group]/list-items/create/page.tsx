@@ -45,7 +45,15 @@ export default async function CreateListItemPage({
           { key: "list-items/create", title: "Create List Item" },
         ]}
       />
-      <CreateListItemForm group={group} />
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-row gap-2">
+          <h1 className="flex-grow text-3xl font-bold">
+            Create new List Item in {group.name}
+          </h1>
+        </div>
+
+        <CreateListItemForm group={group} />
+      </div>
     </>
   );
 }

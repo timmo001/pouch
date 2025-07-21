@@ -37,21 +37,17 @@ export const ListItemFormSchema = z
 
 export type ListItemFormType = z.infer<typeof ListItemFormSchema>;
 
-interface ListItemFormProps {
-  type: "create" | "update";
-  initialValues?: Partial<ListItemFormType>;
-  loading?: boolean;
-  onSubmit: (values: ListItemFormType) => void;
-  groupName?: string;
-}
-
 export function ListItemForm({
   type,
   initialValues,
   loading = false,
   onSubmit,
-  groupName,
-}: ListItemFormProps) {
+}: {
+  type: "create" | "update";
+  initialValues?: Partial<ListItemFormType>;
+  loading?: boolean;
+  onSubmit: (values: ListItemFormType) => void;
+}) {
   const form = useForm<ListItemFormType>({
     resolver: zodResolver(ListItemFormSchema),
     defaultValues: {
@@ -67,98 +63,89 @@ export function ListItemForm({
   });
 
   return (
-    <div className="flex flex-col gap-4">
-      <h1 className="text-3xl font-bold">
-        {type === "create"
-          ? `Create List Item${groupName ? ` in ${groupName}` : ""}`
-          : `Update List Item${groupName ? ` in ${groupName}` : ""}`}
-      </h1>
-      <Form {...form}>
-        <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
-          <FormField
-            control={form.control}
-            name="type"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Type</FormLabel>
-                <FormControl>
-                  <ToggleGroup
-                    type="single"
-                    size="lg"
-                    variant="outline"
-                    value={field.value}
-                    onValueChange={field.onChange}
+    <Form {...form}>
+      <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="type"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Type</FormLabel>
+              <FormControl>
+                <ToggleGroup
+                  type="single"
+                  size="lg"
+                  variant="outline"
+                  value={field.value}
+                  onValueChange={field.onChange}
+                >
+                  <ToggleGroupItem
+                    className="px-14"
+                    aria-label="Text"
+                    value="text"
                   >
-                    <ToggleGroupItem
-                      className="px-14"
-                      aria-label="Text"
-                      value="text"
-                    >
-                      Text
-                    </ToggleGroupItem>
-                    <ToggleGroupItem
-                      className="px-14"
-                      aria-label="URL"
-                      value="url"
-                    >
-                      URL
-                    </ToggleGroupItem>
-                  </ToggleGroup>
-                </FormControl>
-                <FormDescription />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="value"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{currentType === "url" ? "URL" : "Title"}</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    placeholder={
-                      currentType === "url"
-                        ? "https://example.com"
-                        : "Do things"
-                    }
-                  />
-                </FormControl>
-                <FormDescription />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Description (optional)</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormDescription />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit" disabled={loading}>
-            {loading ? (
-              <span>
-                {type === "create" ? "Creating" : "Updating"}
-                <Dots count={3} />
-              </span>
-            ) : type === "create" ? (
-              "Create"
-            ) : (
-              "Update"
-            )}
-          </Button>
-        </form>
-      </Form>
-    </div>
+                    Text
+                  </ToggleGroupItem>
+                  <ToggleGroupItem
+                    className="px-14"
+                    aria-label="URL"
+                    value="url"
+                  >
+                    URL
+                  </ToggleGroupItem>
+                </ToggleGroup>
+              </FormControl>
+              <FormDescription />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="value"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{currentType === "url" ? "URL" : "Title"}</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  placeholder={
+                    currentType === "url" ? "https://example.com" : "Do things"
+                  }
+                />
+              </FormControl>
+              <FormDescription />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description (optional)</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormDescription />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit" disabled={loading}>
+          {loading ? (
+            <span>
+              {type === "create" ? "Creating" : "Updating"}
+              <Dots count={3} />
+            </span>
+          ) : type === "create" ? (
+            "Create"
+          ) : (
+            "Update"
+          )}
+        </Button>
+      </form>
+    </Form>
   );
 }

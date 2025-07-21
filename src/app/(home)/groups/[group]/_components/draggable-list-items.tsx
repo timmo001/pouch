@@ -183,6 +183,7 @@ function SortableListItems({
               <div className="flex w-full min-w-0 flex-grow flex-row items-baseline justify-between gap-2">
                 <span className="flex flex-shrink-0 flex-row items-baseline gap-2 text-nowrap">
                   {getListItemTitle({
+                    type: listItem.type,
                     description: listItem.description,
                     value: listItem.value,
                   })}

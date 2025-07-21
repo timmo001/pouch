@@ -45,7 +45,6 @@ export function UpdateListItemForm({
         value: listItemIn.value,
         description: listItemIn.description,
       }}
-      groupName={listItemIn.group.name}
     />
   );
 }

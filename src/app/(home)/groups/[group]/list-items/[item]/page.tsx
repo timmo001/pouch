@@ -77,6 +77,7 @@ export default async function GroupPage({
   }
 
   const title = getListItemTitle({
+    type: listItem.type,
     description: listItem.description,
     value: listItem.value,
   });
@@ -100,7 +101,7 @@ export default async function GroupPage({
       <div className="flex flex-col gap-4">
         <div className="flex flex-row gap-2">
           <h1 className="flex-grow text-3xl font-bold">
-            Update ListItem: {title}
+            Update List Item: {title}
           </h1>
           <ListItemDelete
             listItem={{
@@ -110,6 +111,7 @@ export default async function GroupPage({
             variant="text"
           />
         </div>
+
         <UpdateListItemForm listItem={listItem} />
       </div>
     </>

@@ -41,10 +41,11 @@ export function ListItemArchive({
   const title = useMemo(
     () =>
       getListItemTitle({
+        type: listItem.type,
         description: listItem.description,
         value: listItem.value,
       }),
-    [listItem.description, listItem.value],
+    [listItem.type, listItem.description, listItem.value],
   );
 
   return (

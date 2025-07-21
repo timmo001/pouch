@@ -26,11 +26,6 @@ export function CreateListItemForm({ group }: { group: Doc<"groups"> }) {
   }
 
   return (
-    <ListItemForm
-      type="create"
-      loading={isPending}
-      onSubmit={handleSubmit}
-      groupName={group.name}
-    />
+    <ListItemForm type="create" loading={isPending} onSubmit={handleSubmit} />
   );
 }
