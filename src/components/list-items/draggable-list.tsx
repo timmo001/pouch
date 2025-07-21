@@ -204,7 +204,11 @@ function ListItemURL({ listItem }: { listItem: Doc<"listItems"> }) {
     >
       <div className="flex w-full min-w-0 flex-grow flex-row items-baseline justify-between gap-2">
         <span className="flex flex-shrink-0 flex-row items-baseline gap-2 text-nowrap">
-          {listItem.value}
+          {getListItemTitle({
+            type: listItem.type,
+            description: listItem.description,
+            value: listItem.value,
+          })}
           <ExternalLinkIcon className="size-3.5 flex-shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
         </span>
         <span className="text-muted-foreground min-w-0 flex-shrink truncate text-sm opacity-0 transition-opacity group-hover:opacity-100">
@@ -219,11 +223,7 @@ function ListItemText({ listItem }: { listItem: Doc<"listItems"> }) {
   return (
     <div className="group flex w-full min-w-0 flex-grow flex-row items-baseline justify-between gap-2">
       <span className="flex flex-shrink-0 flex-row items-baseline gap-2 text-nowrap">
-        {getListItemTitle({
-          type: listItem.type,
-          description: listItem.description,
-          value: listItem.value,
-        })}
+        {listItem.value}
       </span>
       <span className="text-muted-foreground min-w-0 flex-shrink truncate text-sm opacity-0 transition-opacity group-hover:opacity-100">
         {listItem.description}
