@@ -5,7 +5,23 @@ import { getAuthToken } from "~/lib/apiAuth";
 import { handleApiError } from "~/lib/apiError";
 import { UpdateGroupNameRequestSchema } from "~/lib/apiSchemas";
 import type { Id } from "~/convex/_generated/dataModel";
+import type z from "zod";
 
+/**
+ * @openapi
+ * /api/groups/{id}/name:
+ *   patch:
+ *     description: Update group name
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Success.
+ */
 // PATCH /api/groups/[id]/name - update group name
 export async function PATCH(
   req: NextRequest,
@@ -13,7 +29,9 @@ export async function PATCH(
 ) {
   try {
     const token = getAuthToken(req);
-    const body = await req.json();
+    const body = (await req.json()) as z.infer<
+      typeof UpdateGroupNameRequestSchema
+    >;
     const parsed = UpdateGroupNameRequestSchema.safeParse(body);
     if (!parsed.success) {
       return NextResponse.json(

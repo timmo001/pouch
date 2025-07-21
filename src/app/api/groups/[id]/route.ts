@@ -5,6 +5,21 @@ import { getAuthToken } from "~/lib/apiAuth";
 import { handleApiError } from "~/lib/apiError";
 import type { Id } from "~/convex/_generated/dataModel";
 
+/**
+ * @openapi
+ * /api/groups/{id}:
+ *   get:
+ *     description: Get group by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: The group object.
+ */
 // GET /api/groups/[id] - get group by id
 export async function GET(
   req: NextRequest,
@@ -24,6 +39,21 @@ export async function GET(
   }
 }
 
+/**
+ * @openapi
+ * /api/groups/{id}:
+ *   delete:
+ *     description: Delete group by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Success.
+ */
 // DELETE /api/groups/[id] - delete group
 export async function DELETE(
   req: NextRequest,

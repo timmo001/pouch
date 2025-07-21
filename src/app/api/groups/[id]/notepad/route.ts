@@ -5,7 +5,23 @@ import { getAuthToken } from "~/lib/apiAuth";
 import { handleApiError } from "~/lib/apiError";
 import { UpdateNotepadRequestSchema } from "~/lib/apiSchemas";
 import type { Id } from "~/convex/_generated/dataModel";
+import type z from "zod";
 
+/**
+ * @openapi
+ * /api/groups/{id}/notepad:
+ *   get:
+ *     description: Get notepad for group
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: The notepad object.
+ */
 // GET /api/groups/[id]/notepad - get notepad for group
 export async function GET(
   req: NextRequest,
@@ -25,6 +41,21 @@ export async function GET(
   }
 }
 
+/**
+ * @openapi
+ * /api/groups/{id}/notepad:
+ *   post:
+ *     description: Create notepad for group
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       201:
+ *         description: The created notepad object.
+ */
 // POST /api/groups/[id]/notepad - create notepad for group
 export async function POST(
   req: NextRequest,
@@ -44,14 +75,36 @@ export async function POST(
   }
 }
 
+/**
+ * @openapi
+ * /api/groups/{id}/notepad:
+ *   put:
+ *     description: Update notepad content
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: groupId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: The updated notepad object.
+ */
 // PUT /api/groups/[id]/notepad - update notepad content
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: { id: string; groupId: string } },
 ) {
   try {
     const token = getAuthToken(req);
-    const body = await req.json();
+    const body = (await req.json()) as z.infer<
+      typeof UpdateNotepadRequestSchema
+    >;
     const parsed = UpdateNotepadRequestSchema.safeParse(body);
     if (!parsed.success) {
       return NextResponse.json(
@@ -64,7 +117,11 @@ export async function PUT(
     }
     const notepad = await fetchMutation(
       api.notepads.update,
-      { ...parsed.data, group: params.id as Id<"groups"> },
+      {
+        ...parsed.data,
+        id: params.id as Id<"notepads">,
+        group: params.groupId as Id<"groups">,
+      },
       { token },
     );
     return NextResponse.json({ data: notepad, error: null });
@@ -74,6 +131,21 @@ export async function PUT(
   }
 }
 
+/**
+ * @openapi
+ * /api/groups/{id}/notepad:
+ *   delete:
+ *     description: Delete notepad for group
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Success.
+ */
 // DELETE /api/groups/[id]/notepad - delete notepad
 export async function DELETE(
   req: NextRequest,

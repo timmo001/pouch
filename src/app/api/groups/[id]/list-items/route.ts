@@ -5,7 +5,23 @@ import { getAuthToken } from "~/lib/apiAuth";
 import { handleApiError } from "~/lib/apiError";
 import { CreateListItemRequestSchema } from "~/lib/apiSchemas";
 import type { Id } from "~/convex/_generated/dataModel";
+import type z from "zod";
 
+/**
+ * @openapi
+ * /api/groups/{id}/list-items:
+ *   get:
+ *     description: List items in group
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: A list of items.
+ */
 // GET /api/groups/[id]/list-items - list items in group
 export async function GET(
   req: NextRequest,
@@ -25,6 +41,21 @@ export async function GET(
   }
 }
 
+/**
+ * @openapi
+ * /api/groups/{id}/list-items:
+ *   post:
+ *     description: Create list item in group
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       201:
+ *         description: The created item ID.
+ */
 // POST /api/groups/[id]/list-items - create list item in group
 export async function POST(
   req: NextRequest,
@@ -32,7 +63,9 @@ export async function POST(
 ) {
   try {
     const token = getAuthToken(req);
-    const body = await req.json();
+    const body = (await req.json()) as z.infer<
+      typeof CreateListItemRequestSchema
+    >;
     const parsed = CreateListItemRequestSchema.safeParse(body);
     if (!parsed.success) {
       return NextResponse.json(

@@ -5,6 +5,26 @@ import { getAuthToken } from "~/lib/apiAuth";
 import { handleApiError } from "~/lib/apiError";
 import type { Id } from "~/convex/_generated/dataModel";
 
+/**
+ * @openapi
+ * /api/groups/{id}/list-items/{itemId}/archive:
+ *   patch:
+ *     description: Toggle archive status for list item
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: itemId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Success.
+ */
 // PATCH /api/groups/[id]/list-items/[itemId]/archive - toggle archive status
 export async function PATCH(
   req: NextRequest,

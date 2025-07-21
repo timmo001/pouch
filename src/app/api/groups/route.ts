@@ -4,7 +4,17 @@ import { fetchQuery, fetchMutation } from "convex/nextjs";
 import { getAuthToken } from "~/lib/apiAuth";
 import { handleApiError } from "~/lib/apiError";
 import { CreateGroupRequestSchema } from "~/lib/apiSchemas";
+import type z from "zod";
 
+/**
+ * @openapi
+ * /api/groups:
+ *   get:
+ *     description: List all groups
+ *     responses:
+ *       200:
+ *         description: A list of groups.
+ */
 // GET /api/groups - list all groups
 export async function GET(req: NextRequest) {
   try {
@@ -17,11 +27,20 @@ export async function GET(req: NextRequest) {
   }
 }
 
+/**
+ * @openapi
+ * /api/groups:
+ *   post:
+ *     description: Create a new group
+ *     responses:
+ *       201:
+ *         description: The created group ID.
+ */
 // POST /api/groups - create a new group
 export async function POST(req: NextRequest) {
   try {
     const token = getAuthToken(req);
-    const body = await req.json();
+    const body = (await req.json()) as z.infer<typeof CreateGroupRequestSchema>;
     const parsed = CreateGroupRequestSchema.safeParse(body);
     if (!parsed.success) {
       return NextResponse.json(

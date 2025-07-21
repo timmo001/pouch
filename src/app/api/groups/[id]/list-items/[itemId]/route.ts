@@ -5,7 +5,28 @@ import { getAuthToken } from "~/lib/apiAuth";
 import { handleApiError } from "~/lib/apiError";
 import { UpdateListItemRequestSchema } from "~/lib/apiSchemas";
 import type { Id } from "~/convex/_generated/dataModel";
+import type z from "zod";
 
+/**
+ * @openapi
+ * /api/groups/{id}/list-items/{itemId}:
+ *   get:
+ *     description: Get list item by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: itemId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: The list item object.
+ */
 // GET /api/groups/[id]/list-items/[itemId] - get list item by id
 export async function GET(
   req: NextRequest,
@@ -28,6 +49,26 @@ export async function GET(
   }
 }
 
+/**
+ * @openapi
+ * /api/groups/{id}/list-items/{itemId}:
+ *   put:
+ *     description: Update list item by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: itemId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Success.
+ */
 // PUT /api/groups/[id]/list-items/[itemId] - update list item
 export async function PUT(
   req: NextRequest,
@@ -35,7 +76,9 @@ export async function PUT(
 ) {
   try {
     const token = getAuthToken(req);
-    const body = await req.json();
+    const body = (await req.json()) as z.infer<
+      typeof UpdateListItemRequestSchema
+    >;
     const parsed = UpdateListItemRequestSchema.safeParse(body);
     if (!parsed.success) {
       return NextResponse.json(
@@ -62,6 +105,26 @@ export async function PUT(
   }
 }
 
+/**
+ * @openapi
+ * /api/groups/{id}/list-items/{itemId}:
+ *   delete:
+ *     description: Delete list item by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: itemId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Success.
+ */
 // DELETE /api/groups/[id]/list-items/[itemId] - delete list item
 export async function DELETE(
   req: NextRequest,
