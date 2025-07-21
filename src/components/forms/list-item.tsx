@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -15,6 +16,7 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
+import { toast } from "sonner";
 
 export const ListItemFormSchema = z
   .object({
@@ -126,7 +128,16 @@ export function ListItemForm({
             <FormItem>
               <FormLabel>Description (optional)</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <div className="flex items-center gap-2">
+                  <Input {...field} />
+                  {currentType === "url" && (
+                    <FetchTitleButton
+                      disabled={loading}
+                      url={form.getValues("value")}
+                      setDescription={field.onChange}
+                    />
+                  )}
+                </div>
               </FormControl>
               <FormDescription />
               <FormMessage />
@@ -147,5 +158,69 @@ export function ListItemForm({
         </Button>
       </form>
     </Form>
+  );
+}
+
+// Helper component for fetching the page title
+function FetchTitleButton({
+  url,
+  setDescription,
+  disabled,
+}: {
+  url: string;
+  setDescription: (desc: string) => void;
+  disabled?: boolean;
+}) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleFetch() {
+    setLoading(true);
+    setError(null);
+    try {
+      let res;
+      if (process.env.NODE_ENV === "development") {
+        // Use a CORS proxy for fetch (for dev only)
+        const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(url);
+        res = await fetch(proxyUrl);
+      } else {
+        res = await fetch(url);
+      }
+      const html = await res.text();
+      const titleRegex = /<title>(.*?)<\/title>/i;
+      const match = titleRegex.exec(html);
+      const title = match?.[1];
+      if (title) {
+        setDescription(title);
+      } else {
+        setError("No title found");
+        toast.warning("No title found");
+      }
+    } catch (e) {
+      console.error("Failed to fetch title:", e);
+      toast.error("Failed to fetch title");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="relative">
+      <Button
+        className="w-full min-w-32"
+        type="button"
+        size="default"
+        variant="secondary"
+        onClick={handleFetch}
+        disabled={loading || !url || disabled}
+      >
+        {loading ? "Fetching..." : "Use Page Title"}
+      </Button>
+      {error && (
+        <span className="absolute right-0 -bottom-6 left-0 w-full text-center text-xs text-amber-500">
+          {error}
+        </span>
+      )}
+    </div>
   );
 }
