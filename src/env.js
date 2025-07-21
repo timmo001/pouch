@@ -12,8 +12,6 @@ export const env = createEnv({
     CLERK_SECRET_KEY: z.string(),
     // Convex
     CONVEX_DEPLOYMENT: z.string(),
-    // API Access Token
-    API_ACCESS_TOKEN: z.string().default("dev-token-123"),
   },
 
   /**
@@ -38,7 +36,6 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
     CONVEX_DEPLOYMENT: process.env.CONVEX_DEPLOYMENT,
-    API_ACCESS_TOKEN: process.env.API_ACCESS_TOKEN,
     NEXT_PUBLIC_CLERK_FRONTEND_API_URL: process.env.NEXT_PUBLIC_CLERK_FRONTEND_API_URL,
     NEXT_PUBLIC_CONVEX_URL: process.env.NEXT_PUBLIC_CONVEX_URL,
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
