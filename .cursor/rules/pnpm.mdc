@@ -24,5 +24,6 @@ This project uses [pnpm](https://pnpm.io/) as its package manager. All dependenc
 - Always check in `pnpm-lock.yaml` with dependency changes.
 - Use workspace features if working with multiple packages.
 - Prefer `pnpm` for all package management tasks, including CI/CD scripts.
+- Do not run `pnpm dev` or `pnpm run dev`. Ask the user to run `pnpm dev` instead.
 
 For more details, see the [pnpm documentation](https://pnpm.io/).
