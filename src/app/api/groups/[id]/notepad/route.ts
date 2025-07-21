@@ -147,12 +147,17 @@ export async function PUT(
 
 /**
  * @openapi
- * /api/groups/{id}/notepad:
+ * /api/groups/{groupId}/notepad/{notepadId}:
  *   delete:
  *     description: Delete notepad for group
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: groupId
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: notepadId
  *         required: true
  *         schema:
  *           type: string
@@ -160,37 +165,22 @@ export async function PUT(
  *       200:
  *         description: Success.
  */
-// DELETE /api/groups/[id]/notepad - delete notepad
+// DELETE /api/groups/[groupId]/notepad/[notepadId] - delete notepad
 export async function DELETE(
   req: NextRequest,
   {
     params,
   }: {
-    params: Promise<{ id: Id<"groups"> }>;
+    params: Promise<{ groupId: Id<"groups">; notepadId: Id<"notepads"> }>;
   },
 ) {
-  const { id } = await params;
+  const { groupId, notepadId } = await params;
   try {
     const token = getAuthToken(req);
 
-    const notepad = await fetchQuery(
-      api.notepads.getFromGroup,
-      { group: id },
-      { token },
-    );
-    if (!notepad) {
-      return NextResponse.json(
-        {
-          data: null,
-          error: { message: "Notepad not found", code: "NOT_FOUND" },
-        },
-        { status: 404 },
-      );
-    }
-
     await fetchMutation(
       api.notepads.deleteNotepad,
-      { id: notepad._id, group: id },
+      { id: notepadId, group: groupId },
       { token },
     );
     return NextResponse.json({ data: true, error: null });
