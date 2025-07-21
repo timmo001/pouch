@@ -25,8 +25,9 @@ import type z from "zod";
 // POST /api/groups/[id]/list-items/reorder - reorder list items
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: Id<"groups"> }> },
 ) {
+  const { id } = await params;
   try {
     const token = getAuthToken(req);
     const body = (await req.json()) as z.infer<
@@ -45,7 +46,7 @@ export async function POST(
     const result = await fetchMutation(
       api.listItems.reorder,
       {
-        group: params.id as Id<"groups">,
+        group: id,
         orderedIds: parsed.data.orderedIds as Id<"listItems">[],
       },
       { token },

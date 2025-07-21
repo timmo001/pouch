@@ -168,7 +168,11 @@ export async function PUT(
 // DELETE /api/groups/[id]/notepad - delete notepad
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string; notepadId?: string }> },
+  {
+    params,
+  }: {
+    params: Promise<{ id: Id<"groups"> }>;
+  },
 ) {
   const { id } = await params;
   try {
@@ -176,7 +180,7 @@ export async function DELETE(
 
     const notepad = await fetchQuery(
       api.notepads.getFromGroup,
-      { group: id as Id<"groups"> },
+      { group: id },
       { token },
     );
     if (!notepad) {
@@ -191,7 +195,7 @@ export async function DELETE(
 
     await fetchMutation(
       api.notepads.deleteNotepad,
-      { id: notepad._id as Id<"notepads">, group: id as Id<"groups"> },
+      { id: notepad._id, group: id },
       { token },
     );
     return NextResponse.json({ data: true, error: null });

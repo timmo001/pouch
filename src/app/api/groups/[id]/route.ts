@@ -28,7 +28,7 @@ export async function GET(
   const { id } = await params;
   try {
     const token = getAuthToken(req);
-    const group = await fetchQuery(api.groups.getById, { id: id }, { token });
+    const group = await fetchQuery(api.groups.getById, { id }, { token });
     return NextResponse.json({ data: group, error: null });
   } catch (error) {
     const { status, body } = handleApiError(error);
@@ -54,16 +54,12 @@ export async function GET(
 // DELETE /api/groups/[id] - delete group
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ id: Id<"groups"> }> },
 ) {
   const { id } = await params;
   try {
     const token = getAuthToken(req);
-    await fetchMutation(
-      api.groups.deleteGroup,
-      { id: id as Id<"groups"> },
-      { token },
-    );
+    await fetchMutation(api.groups.deleteGroup, { id }, { token });
     return NextResponse.json({ data: true, error: null });
   } catch (error) {
     const { status, body } = handleApiError(error);

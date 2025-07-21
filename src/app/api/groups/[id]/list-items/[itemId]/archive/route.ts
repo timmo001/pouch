@@ -28,15 +28,18 @@ import type { Id } from "~/convex/_generated/dataModel";
 // PATCH /api/groups/[id]/list-items/[itemId]/archive - toggle archive status
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string; itemId: string } },
+  {
+    params,
+  }: { params: Promise<{ id: Id<"groups">; itemId: Id<"listItems"> }> },
 ) {
+  const { id, itemId } = await params;
   try {
     const token = getAuthToken(req);
     await fetchMutation(
       api.listItems.toggleArchive,
       {
-        group: params.id as Id<"groups">,
-        id: params.itemId as Id<"listItems">,
+        group: id,
+        id: itemId,
       },
       { token },
     );

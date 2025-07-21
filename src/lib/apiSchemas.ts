@@ -43,7 +43,7 @@ export const UpdateListItemRequestSchema = z.object({
 });
 
 export const ReorderListItemsRequestSchema = z.object({
-  orderedIds: z.array(z.string()), // Will refine to Id<"listItems">
+  orderedIds: z.array(z.string()),
 });
 
 export const CreateNotepadRequestSchema = z.object({

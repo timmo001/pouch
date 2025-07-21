@@ -25,8 +25,9 @@ import type z from "zod";
 // PATCH /api/groups/[id]/description - update group description
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: Id<"groups"> }> },
 ) {
+  const { id } = await params;
   try {
     const token = getAuthToken(req);
     const body = (await req.json()) as z.infer<
@@ -44,7 +45,7 @@ export async function PATCH(
     }
     await fetchMutation(
       api.groups.updateDescription,
-      { id: params.id as Id<"groups">, description: parsed.data.description },
+      { id, description: parsed.data.description },
       { token },
     );
     return NextResponse.json({ data: true, error: null });
