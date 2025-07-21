@@ -18,6 +18,7 @@ import {
 } from "~/components/ui/accordion";
 import { ListItemActions } from "~/app/(home)/groups/[group]/_components/list-item-actions";
 import { Button } from "~/components/ui/button";
+import { cn } from "~/lib/utils";
 
 export function DraggableListItems({
   group,
@@ -117,7 +118,11 @@ export function DraggableListItems({
           </Button>
         </Link>
       </div>
-      <Accordion type="single" collapsible>
+      <Accordion
+        className={cn("hidden", listItems.archived.length && "block")}
+        type="single"
+        collapsible
+      >
         <AccordionItem value="archived">
           <AccordionTrigger className="flex flex-row items-center gap-2 px-3 text-lg font-semibold">
             Archived
@@ -177,29 +182,56 @@ function SortableListItems({
             <div className="drag-handle flex-shrink-0 cursor-grab active:cursor-grabbing">
               <GripVertical className="h-4 w-4" />
             </div>
-            <Link
-              className="group flex min-w-0 flex-grow"
-              href={listItem.value}
-              target="_blank"
-            >
-              <div className="flex w-full min-w-0 flex-grow flex-row items-baseline justify-between gap-2">
-                <span className="flex flex-shrink-0 flex-row items-baseline gap-2 text-nowrap">
-                  {getListItemTitle({
-                    type: listItem.type,
-                    description: listItem.description,
-                    value: listItem.value,
-                  })}
-                  <ExternalLinkIcon className="size-3.5 flex-shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
-                </span>
-                <span className="text-muted-foreground min-w-0 flex-shrink truncate text-sm opacity-0 transition-opacity group-hover:opacity-100">
-                  {listItem.value}
-                </span>
-              </div>
-            </Link>
+            {listItem.type === "url" ? (
+              <ListItemURL listItem={listItem} />
+            ) : (
+              <ListItemText listItem={listItem} />
+            )}
           </div>
           <ListItemActions listItem={listItem} />
         </div>
       ))}
     </ReactSortable>
+  );
+}
+
+function ListItemURL({ listItem }: { listItem: Doc<"listItems"> }) {
+  return (
+    <Link
+      className="group flex min-w-0 flex-grow"
+      href={listItem.value}
+      target="_blank"
+    >
+      <div className="flex w-full min-w-0 flex-grow flex-row items-baseline justify-between gap-2">
+        <span className="flex flex-shrink-0 flex-row items-baseline gap-2 text-nowrap">
+          {getListItemTitle({
+            type: listItem.type,
+            description: listItem.description,
+            value: listItem.value,
+          })}
+          <ExternalLinkIcon className="size-3.5 flex-shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
+        </span>
+        <span className="text-muted-foreground min-w-0 flex-shrink truncate text-sm opacity-0 transition-opacity group-hover:opacity-100">
+          {listItem.value}
+        </span>
+      </div>
+    </Link>
+  );
+}
+
+function ListItemText({ listItem }: { listItem: Doc<"listItems"> }) {
+  return (
+    <div className="group flex w-full min-w-0 flex-grow flex-row items-baseline justify-between gap-2">
+      <span className="flex flex-shrink-0 flex-row items-baseline gap-2 text-nowrap">
+        {getListItemTitle({
+          type: listItem.type,
+          description: listItem.description,
+          value: listItem.value,
+        })}
+      </span>
+      <span className="text-muted-foreground min-w-0 flex-shrink truncate text-sm opacity-0 transition-opacity group-hover:opacity-100">
+        {listItem.description}
+      </span>
+    </div>
   );
 }
