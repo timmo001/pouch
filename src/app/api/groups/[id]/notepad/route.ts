@@ -88,11 +88,6 @@ export async function POST(
  *         required: true
  *         schema:
  *           type: string
- *       - in: path
- *         name: groupId
- *         required: true
- *         schema:
- *           type: string
  *     responses:
  *       200:
  *         description: The updated notepad object.
