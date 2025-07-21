@@ -191,14 +191,9 @@ function FetchTitleButton({
     setLoading(true);
     setError(null);
     try {
-      let res;
-      if (process.env.NODE_ENV === "development") {
-        // Use a CORS proxy for fetch (for dev only)
-        const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(url);
-        res = await fetch(proxyUrl);
-      } else {
-        res = await fetch(url);
-      }
+      // Use a CORS proxy for fetch
+      const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(url);
+      const res = await fetch(proxyUrl);
       const html = await res.text();
       const titleRegex = /<title>(.*?)<\/title>/i;
       const match = titleRegex.exec(html);
