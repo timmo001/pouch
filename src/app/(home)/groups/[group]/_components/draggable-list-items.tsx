@@ -86,7 +86,9 @@ export function DraggableListItems({
   return (
     <>
       {group.description && (
-        <p className="text-muted-foreground text-sm">{group.description}</p>
+        <p className="text-muted-foreground px-2 pt-3 pb-2 text-sm">
+          {group.description}
+        </p>
       )}
       <div className="flex flex-row justify-between gap-2 px-3 pt-3 pb-2">
         <div className="flex w-full flex-row items-center justify-between gap-2">
