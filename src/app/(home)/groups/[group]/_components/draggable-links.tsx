@@ -82,35 +82,35 @@ export function DraggableLinks({
 
   return (
     <>
-      <div className="flex flex-row justify-between gap-2 px-3 pt-3 pb-2">
-        {group.description && (
-          <p className="text-muted-foreground text-sm">{group.description}</p>
-        )}
-        <div className="flex w-full flex-row items-center justify-between gap-2">
-          <span className="text-muted-foreground text-sm">
+      {group.description && (
+        <p className="text-sm text-muted-foreground">{group.description}</p>
+      )}
+      <div className="flex flex-row gap-2 justify-between px-3 pt-3 pb-2">
+        <div className="flex flex-row gap-2 justify-between items-center w-full">
+          <span className="text-sm text-muted-foreground">
             Total: {links?.active.length + links?.archived.length}
           </span>
-          <span className="text-muted-foreground text-sm">
+          <span className="text-sm text-muted-foreground">
             {links?.active.length} active, {links?.archived.length} archived
           </span>
         </div>
       </div>
       <SortableLinks links={links.active} onSort={(l) => onSort("active", l)} />
-      <div className="flex w-full flex-row items-center justify-between gap-2 px-2">
+      <div className="flex flex-row gap-2 justify-between items-center px-2 w-full">
         <Link
           className="w-full"
           href={`/groups/${group._id}/links/create`}
           passHref
         >
           <Button className="w-full" size="lg" variant="secondary">
-            <PlusIcon className="h-4 w-4" />
+            <PlusIcon className="w-4 h-4" />
             Create new
           </Button>
         </Link>
       </div>
       <Accordion type="single" collapsible>
         <AccordionItem value="archived">
-          <AccordionTrigger className="flex flex-row items-center gap-2 px-3 text-lg font-semibold">
+          <AccordionTrigger className="flex flex-row gap-2 items-center px-3 text-lg font-semibold">
             Archived
           </AccordionTrigger>
           <AccordionContent>
@@ -148,7 +148,7 @@ function SortableLinks({
 
   return (
     <ReactSortable
-      className="divide-border/60 flex flex-col divide-y"
+      className="flex flex-col divide-y divide-border/60"
       animation={150}
       handle=".drag-handle"
       list={links}
@@ -164,24 +164,24 @@ function SortableLinks({
           key={link._id}
           className="flex min-w-0 flex-row items-center justify-between gap-2 px-2 py-1.5"
         >
-          <div className="flex min-w-0 flex-grow flex-row items-center gap-2">
-            <div className="drag-handle flex-shrink-0 cursor-grab active:cursor-grabbing">
-              <GripVertical className="h-4 w-4" />
+          <div className="flex flex-row flex-grow gap-2 items-center min-w-0">
+            <div className="flex-shrink-0 drag-handle cursor-grab active:cursor-grabbing">
+              <GripVertical className="w-4 h-4" />
             </div>
             <Link
-              className="group flex min-w-0 flex-grow"
+              className="flex flex-grow min-w-0 group"
               href={link.url}
               target="_blank"
             >
-              <div className="flex w-full min-w-0 flex-grow flex-row items-baseline justify-between gap-2">
-                <span className="flex flex-shrink-0 flex-row items-baseline gap-2 text-nowrap">
+              <div className="flex flex-row flex-grow gap-2 justify-between items-baseline w-full min-w-0">
+                <span className="flex flex-row flex-shrink-0 gap-2 items-baseline text-nowrap">
                   {getLinkTitle({
                     description: link.description,
                     url: link.url,
                   })}
                   <ExternalLinkIcon className="size-3.5 flex-shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
                 </span>
-                <span className="text-muted-foreground min-w-0 flex-shrink truncate text-sm opacity-0 transition-opacity group-hover:opacity-100">
+                <span className="flex-shrink min-w-0 text-sm truncate opacity-0 transition-opacity text-muted-foreground group-hover:opacity-100">
                   {link.url}
                 </span>
               </div>
