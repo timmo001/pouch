@@ -6,6 +6,47 @@ function sortByPosition(a: Doc<"listItems">, b: Doc<"listItems">) {
   return (a.position ?? 0) - (b.position ?? 0);
 }
 
+export const create = mutation({
+  args: {
+    group: v.id("groups"),
+    type: v.union(v.literal("text"), v.literal("url")),
+    value: v.string(),
+    description: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (identity === null) {
+      throw new Error("Not authenticated");
+    }
+
+    // Get the highest position in the group
+    const existinglistItems = await ctx.db
+      .query("listItems")
+      .withIndex("by_group_user_archived_position", (q) =>
+        q
+          .eq("group", args.group)
+          .eq("user", identity.tokenIdentifier)
+          .eq("archived", false),
+      )
+      .collect();
+
+    const maxPosition = existinglistItems.reduce(
+      (max, listItem) => Math.max(max, listItem.position ?? 0),
+      0,
+    );
+
+    return await ctx.db.insert("listItems", {
+      type: args.type,
+      value: args.value,
+      description: args.description,
+      group: args.group,
+      user: identity.tokenIdentifier,
+      archived: false,
+      position: maxPosition + 1,
+    });
+  },
+});
+
 export const getFromGroup = query({
   args: {
     group: v.id("groups"),
@@ -63,47 +104,6 @@ export const getById = query({
       ...listItem,
       group: group,
     };
-  },
-});
-
-export const create = mutation({
-  args: {
-    group: v.id("groups"),
-    type: v.union(v.literal("text"), v.literal("url")),
-    value: v.string(),
-    description: v.optional(v.string()),
-  },
-  handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (identity === null) {
-      throw new Error("Not authenticated");
-    }
-
-    // Get the highest position in the group
-    const existinglistItems = await ctx.db
-      .query("listItems")
-      .withIndex("by_group_user_archived_position", (q) =>
-        q
-          .eq("group", args.group)
-          .eq("user", identity.tokenIdentifier)
-          .eq("archived", false),
-      )
-      .collect();
-
-    const maxPosition = existinglistItems.reduce(
-      (max, listItem) => Math.max(max, listItem.position ?? 0),
-      0,
-    );
-
-    return await ctx.db.insert("listItems", {
-      type: args.type,
-      value: args.value,
-      description: args.description,
-      group: args.group,
-      user: identity.tokenIdentifier,
-      archived: false,
-      position: maxPosition + 1,
-    });
   },
 });
 

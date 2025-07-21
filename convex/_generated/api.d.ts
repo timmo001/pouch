@@ -15,6 +15,7 @@ import type {
 } from "convex/server";
 import type * as groups from "../groups.js";
 import type * as listItems from "../listItems.js";
+import type * as notepads from "../notepads.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -27,6 +28,7 @@ import type * as listItems from "../listItems.js";
 declare const fullApi: ApiFromModules<{
   groups: typeof groups;
   listItems: typeof listItems;
+  notepads: typeof notepads;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

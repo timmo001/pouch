@@ -9,6 +9,7 @@ import { GroupEditName } from "~/components/groups/group/edit-name";
 import { GroupEditDescription } from "~/components/groups/group/edit-description";
 import { GroupDelete } from "~/components/groups/group/delete";
 import { DraggableListItems } from "~/components/list-items/draggable-list";
+import { NotepadView } from "~/components/notepads/notepad/view";
 
 export async function generateMetadata({
   params,
@@ -79,6 +80,18 @@ export default async function GroupPage({
     return null;
   });
 
+  const preloadedNotepad = await preloadQuery(
+    api.notepads.getFromGroup,
+    { group: group._id },
+    { token },
+  ).catch((error) => {
+    console.warn(
+      "[groups/[group]/page] Error fetching notepad from api.notepads.getFromGroup",
+      error,
+    );
+    return null;
+  });
+
   return (
     <>
       <BreadcrumbsSetter
@@ -100,6 +113,12 @@ export default async function GroupPage({
           <DraggableListItems
             group={group}
             preloadedListItems={preloadedListItems}
+          />
+        )}
+        {preloadedNotepad && (
+          <NotepadView
+            groupId={group._id}
+            preloadedNotepad={preloadedNotepad}
           />
         )}
       </div>

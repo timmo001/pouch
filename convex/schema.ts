@@ -7,7 +7,7 @@ export default defineSchema({
     description: v.optional(v.string()),
     user: v.string(),
     archived: v.boolean(),
-  }),
+  }).index("by_user_archived", ["user", "archived"]),
 
   listItems: defineTable({
     type: v.union(v.literal("text"), v.literal("url")),
@@ -23,4 +23,11 @@ export default defineSchema({
     "archived",
     "position",
   ]),
+
+  notepads: defineTable({
+    content: v.string(),
+    group: v.id("groups"),
+    user: v.string(),
+    updatedAt: v.number(),
+  }).index("by_group_user", ["group", "user"]),
 });
