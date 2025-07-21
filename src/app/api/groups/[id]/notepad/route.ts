@@ -114,11 +114,27 @@ export async function PUT(
       );
     }
 
+    const currentNotepad = await fetchQuery(
+      api.notepads.getFromGroup,
+      { group: id },
+      { token },
+    );
+    if (!currentNotepad) {
+      return NextResponse.json(
+        {
+          data: null,
+          error: { message: "Notepad not found", code: "NOT_FOUND" },
+        },
+        { status: 404 },
+      );
+    }
+
     const notepad = await fetchMutation(
       api.notepads.update,
       {
         ...parsed.data,
-        id, // Use the notepad ID directly
+        id: currentNotepad._id,
+        group: currentNotepad.group,
       },
       { token },
     );
