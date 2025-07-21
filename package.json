@@ -6,7 +6,9 @@
   "scripts": {
     "build": "next build",
     "check": "next lint && tsc --noEmit",
-    "dev": "next dev --turbo",
+    "dev": "concurrently \"pnpm run dev:nextjs\" \"pnpm run dev:convex\"",
+    "dev:nextjs": "next dev --turbo",
+    "dev:convex": "pnpm dlx convex dev",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
     "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
     "lint": "next lint",
@@ -58,6 +60,7 @@
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "babel-plugin-react-compiler": "^19.1.0-rc.2",
+    "concurrently": "^9.2.0",
     "eslint": "^9.31.0",
     "eslint-config-next": "^15.4.2",
     "postcss": "^8.5.6",
