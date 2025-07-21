@@ -64,6 +64,11 @@ export function ListItemForm({
     name: "type",
   });
 
+  const currentValue = useWatch({
+    control: form.control,
+    name: "value",
+  });
+
   return (
     <Form {...form}>
       <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
@@ -133,7 +138,7 @@ export function ListItemForm({
                   {currentType === "url" && (
                     <FetchTitleButton
                       disabled={loading}
-                      url={form.getValues("value")}
+                      url={currentValue}
                       setDescription={field.onChange}
                     />
                   )}
