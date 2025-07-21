@@ -1,9 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { api } from "~/convex/_generated/api";
 import { fetchQuery, fetchMutation } from "convex/nextjs";
-import { getAuthToken } from "~/lib/apiAuth";
-import { handleApiError } from "~/lib/apiError";
-import { UpdateListItemRequestSchema } from "~/lib/apiSchemas";
+import { getAuthToken } from "~/lib/api/auth";
+import { handleApiError } from "~/lib/api/error";
+import { UpdateListItemRequestSchema } from "~/lib/api/schemas";
 import type { Id } from "~/convex/_generated/dataModel";
 import type z from "zod";
 

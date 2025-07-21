@@ -1,8 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { api } from "~/convex/_generated/api";
 import { fetchMutation } from "convex/nextjs";
-import { getAuthToken } from "~/lib/apiAuth";
-import { handleApiError } from "~/lib/apiError";
+import { getAuthToken } from "~/lib/api/auth";
+import { handleApiError } from "~/lib/api/error";
 import type { Id } from "~/convex/_generated/dataModel";
 
 /**
