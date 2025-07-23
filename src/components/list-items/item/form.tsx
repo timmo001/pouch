@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { api } from "~/convex/_generated/api";
+import { type api } from "~/convex/_generated/api";
 import { Dots } from "~/components/ui/dots";
 import { Button } from "~/components/ui/button";
 import {
@@ -29,9 +29,9 @@ import { usePreloadedQuery, type Preloaded } from "convex/react";
 
 export const ListItemFormSchema = z
   .object({
-    group: z.string().optional(),
+    group: z.string().min(1, "Group is required"),
     type: z.union([z.literal("text"), z.literal("url")]),
-    value: z.string().min(1),
+    value: z.string().min(1, "Value is required"),
     description: z.string().optional(),
   })
   .refine(
