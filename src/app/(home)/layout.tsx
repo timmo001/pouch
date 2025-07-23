@@ -122,7 +122,7 @@ export default function HomeLayout({
         <main className="container mx-auto flex flex-1 flex-col p-4">
           <Authenticated>{children}</Authenticated>
           <Unauthenticated>
-            <div className="flex h-full w-full flex-col items-center justify-center gap-4">
+            <div className="flex h-full w-full flex-row items-center justify-center gap-4">
               <div className="flex flex-1 flex-col items-center justify-center gap-2">
                 <p className="text-center text-2xl font-bold lg:text-4xl">
                   Sign in to continue
