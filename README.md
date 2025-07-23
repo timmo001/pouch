@@ -59,6 +59,10 @@ pnpm build
 pnpm start
 ```
 
+## Deployment
+
+This project is deployed to [Vercel](https://vercel.com) which also handles production Convex deployment.
+
 ## API
 
 - RESTful API endpoints under `/api/` (see `/src/app/api/`)
