@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { api } from "~/convex/_generated/api";
 import { Dots } from "~/components/ui/dots";
 import { Button } from "~/components/ui/button";
 import {
@@ -16,10 +17,19 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
 import { toast } from "sonner";
+import { usePreloadedQuery, type Preloaded } from "convex/react";
 
 export const ListItemFormSchema = z
   .object({
+    group: z.string().optional(),
     type: z.union([z.literal("text"), z.literal("url")]),
     value: z.string().min(1),
     description: z.string().optional(),
@@ -42,17 +52,22 @@ export type ListItemFormType = z.infer<typeof ListItemFormSchema>;
 export function ListItemForm({
   type,
   initialValues,
+  preloadedGroups,
   loading = false,
   onSubmit,
 }: {
   type: "create" | "update";
   initialValues?: Partial<ListItemFormType>;
+  preloadedGroups: Preloaded<typeof api.groups.getAll>;
   loading?: boolean;
   onSubmit: (values: ListItemFormType) => void;
 }) {
+  const groups = usePreloadedQuery(preloadedGroups);
+
   const form = useForm<ListItemFormType>({
     resolver: zodResolver(ListItemFormSchema),
     defaultValues: {
+      group: initialValues?.group ?? undefined,
       type: initialValues?.type ?? "url",
       value: initialValues?.value ?? "",
       description: initialValues?.description ?? "",
@@ -72,6 +87,36 @@ export function ListItemForm({
   return (
     <Form {...form}>
       <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
+        {type === "create" && !initialValues?.group && (
+          <FormField
+            control={form.control}
+            name="group"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Group</FormLabel>
+                <FormControl>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a group" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {groups.map((group) => (
+                        <SelectItem key={group._id} value={group._id}>
+                          {group.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormDescription>
+                  This is the group that the list item will be added to.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+
         <FormField
           control={form.control}
           name="type"
@@ -137,7 +182,7 @@ export function ListItemForm({
             <FormItem>
               <FormLabel>Description (optional)</FormLabel>
               <FormControl>
-                <div className="flex items-center gap-2">
+                <div className="flex gap-2 items-center">
                   <Input {...field} />
                   {currentType === "url" && (
                     <FetchTitleButton
@@ -225,7 +270,7 @@ function FetchTitleButton({
         {loading ? "Fetching..." : "Use Page Title"}
       </Button>
       {error && (
-        <span className="absolute right-0 -bottom-6 left-0 w-full text-center text-xs text-amber-500">
+        <span className="absolute right-0 left-0 -bottom-6 w-full text-xs text-center text-amber-500">
           {error}
         </span>
       )}

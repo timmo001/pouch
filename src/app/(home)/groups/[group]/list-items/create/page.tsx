@@ -1,6 +1,6 @@
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { fetchQuery } from "convex/nextjs";
+import { fetchQuery, preloadQuery } from "convex/nextjs";
 import { api } from "~/convex/_generated/api";
 import { type Id } from "~/convex/_generated/dataModel";
 import { getAuthToken } from "~/server/auth";
@@ -32,6 +32,22 @@ export default async function CreateListItemPage({
     notFound();
   });
 
+  const preloadedGroups = await preloadQuery(
+    api.groups.getAll,
+    {},
+    { token },
+  ).catch((error) => {
+    console.warn(
+      "[create/page] Error fetching groups from api.groups.getAll",
+      error,
+    );
+    return null;
+  });
+
+  if (!preloadedGroups) {
+    return <div>Error fetching groups</div>;
+  }
+
   return (
     <>
       <BreadcrumbsSetter
@@ -51,7 +67,7 @@ export default async function CreateListItemPage({
           </h1>
         </div>
 
-        <CreateListItemForm group={group} />
+        <CreateListItemForm preloadedGroups={preloadedGroups} group={group} />
       </div>
     </>
   );

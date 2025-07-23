@@ -31,7 +31,7 @@ export default function manifest(): MetadataRoute.Manifest {
       },
     ],
     share_target: {
-      action: "/share",
+      action: "/create",
       method: "GET",
       enctype: "application/x-www-form-urlencoded",
       params: {

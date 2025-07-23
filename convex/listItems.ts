@@ -13,6 +13,16 @@ export const create = mutation({
     value: v.string(),
     description: v.optional(v.string()),
   },
+  returns: v.object({
+    id: v.id("listItems"),
+    group: v.id("groups"),
+    type: v.union(v.literal("text"), v.literal("url")),
+    value: v.string(),
+    description: v.optional(v.string()),
+    user: v.string(),
+    archived: v.boolean(),
+    position: v.number(),
+  }),
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
     if (identity === null) {
@@ -35,7 +45,7 @@ export const create = mutation({
       0,
     );
 
-    return await ctx.db.insert("listItems", {
+    const newListItem = {
       type: args.type,
       value: args.value,
       description: args.description,
@@ -43,7 +53,14 @@ export const create = mutation({
       user: identity.tokenIdentifier,
       archived: false,
       position: maxPosition + 1,
-    });
+    };
+
+    const newId = await ctx.db.insert("listItems", newListItem);
+
+    return {
+      id: newId,
+      ...newListItem,
+    };
   },
 });
 
