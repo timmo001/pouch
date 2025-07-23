@@ -1,6 +1,11 @@
 import { type MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
+  const icons = [
+    { src: "/logo.svg", sizes: "any", type: "image/svg+xml" },
+    { src: "/icon", sizes: "32x32", type: "image/png" },
+  ];
+
   return {
     name: "Pouch",
     short_name: "Pouch",
@@ -12,10 +17,7 @@ export default function manifest(): MetadataRoute.Manifest {
     display: "standalone",
     background_color: "#1e1e2e",
     theme_color: "#1e1e2e",
-    icons: [
-      { src: "/logo.svg", sizes: "any", type: "image/svg+xml" },
-      { src: "/icon", sizes: "32x32", type: "image/png" },
-    ],
+    icons,
     screenshots: [
       {
         src: "/screenshots/desktop.png",
@@ -35,7 +37,7 @@ export default function manifest(): MetadataRoute.Manifest {
         name: "Create new List Item",
         description: "Create a new list item",
         url: "/create",
-        icons: [{ src: "/icon", sizes: "32x32", type: "image/png" }],
+        icons,
       },
     ],
     share_target: {
