@@ -24,16 +24,19 @@ export default function HomeLayout({
   const { theme, setTheme } = useTheme();
   const deferredPromptRef = useRef<BeforeInstallPromptEvent | null>(null);
   const hasPromptedRef = useRef(false);
+  const dismissedRef = useRef(false);
 
   useEffect(() => {
     function handler(e: Event) {
       // Only handle if it's a BeforeInstallPromptEvent
       if (typeof (e as BeforeInstallPromptEvent).prompt !== "function") return;
       e.preventDefault();
-      if (hasPromptedRef.current) return;
+      if (hasPromptedRef.current || dismissedRef.current) return;
       deferredPromptRef.current = e as BeforeInstallPromptEvent;
       hasPromptedRef.current = true;
       toast("Install Pouch as a PWA for a better experience!", {
+        dismissible: true,
+        closeButton: true,
         action: {
           label: "Install",
           onClick: () => {
@@ -44,7 +47,6 @@ export default function HomeLayout({
             }
           },
         },
-        duration: 10000,
       });
     }
     window.addEventListener("beforeinstallprompt", handler as EventListener, {
