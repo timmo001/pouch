@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import { Authenticated } from "convex/react";
 import {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -18,7 +19,7 @@ export function Breadcrumbs() {
 
   const homeLink = (
     <BreadcrumbItem>
-      <BreadcrumbLink className="flex gap-2 items-center" asChild>
+      <BreadcrumbLink className="flex items-center gap-2" asChild>
         <Link href="/">
           <Logo />
           Pouch
@@ -32,10 +33,12 @@ export function Breadcrumbs() {
       <Breadcrumb>
         <BreadcrumbList>
           {homeLink}
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbEllipsis />
-          </BreadcrumbItem>
+          <Authenticated>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbEllipsis />
+            </BreadcrumbItem>
+          </Authenticated>
         </BreadcrumbList>
       </Breadcrumb>
     );
