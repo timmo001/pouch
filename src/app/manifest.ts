@@ -32,8 +32,8 @@ export default function manifest(): MetadataRoute.Manifest {
     ],
     shortcuts: [
       {
-        name: "Create",
-        description: "Create a new item",
+        name: "Create new List Item",
+        description: "Create a new list item",
         url: "/create",
         icons: [{ src: "/icon", sizes: "32x32", type: "image/png" }],
       },
