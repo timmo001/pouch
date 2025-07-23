@@ -103,3 +103,11 @@ Example response:
 ## License
 
 This project is licensed under the [Apache License 2.0](LICENSE).
+
+## Contributing
+
+You are welcome to contribute to this project. You can also fork it and use it as a template for your own projects according to the [Apache License 2.0](LICENSE).
+
+To run your own instance, you will need to setup your own Convex and Clerk projects. Follow the official documentation to get started.
+
+The required environment variables for the project can be found in the [env.js](src/env.js) file.
