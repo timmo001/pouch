@@ -6,7 +6,7 @@ Store your favorite things.
 
 ## Overview
 
-Pouch is a modern, full-stack web application for organizing and storing your favorite things. Sortable lists, added to groups, automatically synchronized across your devices. Built with [Next.js (App Router)](https://nextjs.org/docs/app), [Convex](https://www.convex.dev), [Clerk](https://clerk.com), and [Sentry](https://sentry.io), Pouch is designed for speed, reliability, and a ease of use.
+Pouch is a modern, full-stack web application for organizing and storing your favorite things. Sortable lists, added to groups, automatically synchronized across your devices. Built with [Next.js (App Router)](https://nextjs.org/docs/app), [Convex](https://www.convex.dev), [Clerk](https://clerk.com), and [Sentry](https://sentry.io), Pouch is designed for speed, reliability, and ease of use.
 
 ## Features
 
