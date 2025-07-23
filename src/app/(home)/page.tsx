@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import { PlusIcon } from "lucide-react";
 import { fetchQuery } from "convex/nextjs";
@@ -36,11 +37,11 @@ export default async function HomePage() {
           {groups?.map((group) => (
             <Link key={group._id} href={`/groups/${group._id}`} passHref>
               <Button
-                className="flex h-32 w-full flex-col items-start gap-2 p-6 text-4xl"
+                className="flex h-32 w-full flex-col items-start gap-2 p-6"
                 size="lg"
                 variant="secondary"
               >
-                <div>{group.name}</div>
+                <span className="text-2xl font-bold">{group.name}</span>
                 <div className="text-muted-foreground flex flex-grow items-center gap-2 text-sm">
                   Created:{" "}
                   <DateLocale
@@ -54,12 +55,12 @@ export default async function HomePage() {
           ))}
           <Link href="/groups/create" passHref>
             <Button
-              className="flex h-32 w-full flex-row items-center gap-2 p-6 text-4xl"
+              className="flex h-32 w-full flex-row items-center justify-start gap-1 p-6"
               size="lg"
               variant="outline"
             >
-              <PlusIcon className="size-10" />
-              Create new
+              <PlusIcon className="size-6" />
+              <span className="text-2xl font-bold">Create new</span>
             </Button>
           </Link>
         </div>
