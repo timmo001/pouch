@@ -67,7 +67,7 @@ export function ListItemForm({
   const form = useForm<ListItemFormType>({
     resolver: zodResolver(ListItemFormSchema),
     defaultValues: {
-      group: initialValues?.group ?? undefined,
+      group: initialValues?.group,
       type: initialValues?.type ?? "url",
       value: initialValues?.value ?? "",
       description: initialValues?.description ?? "",

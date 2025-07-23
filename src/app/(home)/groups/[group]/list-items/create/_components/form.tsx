@@ -33,18 +33,17 @@ export function CreateListItemForm({
   });
 
   function handleSubmit(values: ListItemFormType) {
-    if (!group && !(values.group as Id<"groups">)) {
-      console.error("No group provided");
-      toast.error("No group provided");
-      return;
-    }
-
     const data = {
       ...values,
       group: group?._id ?? (values.group as Id<"groups">),
     };
 
     console.log("Creating list item:", data);
+    if (data.group === undefined) {
+      console.error("No group provided");
+      toast.error("No group provided");
+      return;
+    }
 
     mutate(data);
   }
