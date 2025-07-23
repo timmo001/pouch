@@ -1,3 +1,4 @@
+import { type Metadata } from "next";
 import { type SearchParams } from "nuqs/server";
 import { preloadQuery } from "convex/nextjs";
 import { api } from "~/convex/_generated/api";
@@ -5,6 +6,23 @@ import { getAuthToken } from "~/server/auth";
 import { BreadcrumbsSetter } from "~/components/breadcrumbs/setter";
 import { CreateListItemForm } from "~/app/(home)/groups/[group]/list-items/create/_components/form";
 import { loadSearchParams } from "~/app/(home)/create/searchParams";
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}): Promise<Metadata> {
+  const { title, text, url } = await loadSearchParams(searchParams);
+
+  const value = url?.length ? url : text;
+
+  return {
+    title: `Create new List Item${title || value ? ` from ${title ?? value}` : ""}`,
+    description: "Create a new list item",
+  };
+}
+
+export const dynamic = "force-dynamic";
 
 export default async function CreatePage({
   searchParams,
