@@ -82,7 +82,7 @@ export async function POST(
       api.listItems.create,
       { group: id, ...parsed.data },
       { token },
-    )) as string;
+    )) as unknown as string;
     return NextResponse.json({ data: newId, error: null }, { status: 201 });
   } catch (error) {
     const { status, body } = handleApiError(error);
