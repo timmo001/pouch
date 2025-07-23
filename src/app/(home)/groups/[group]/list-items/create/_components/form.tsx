@@ -39,7 +39,14 @@ export function CreateListItemForm({
       return;
     }
 
-    mutate({ ...values, group: group?._id ?? (values.group as Id<"groups">) });
+    const data = {
+      ...values,
+      group: group?._id ?? (values.group as Id<"groups">),
+    };
+
+    console.log("Creating list item:", data);
+
+    mutate(data);
   }
 
   return (
