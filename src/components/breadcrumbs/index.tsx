@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { Authenticated } from "convex/react";
 import {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -33,12 +32,10 @@ export function Breadcrumbs() {
       <Breadcrumb>
         <BreadcrumbList>
           {homeLink}
-          <Authenticated>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbEllipsis />
-            </BreadcrumbItem>
-          </Authenticated>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbEllipsis />
+          </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
     );

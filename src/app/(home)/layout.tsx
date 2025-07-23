@@ -1,8 +1,8 @@
 "use client";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Authenticated, Unauthenticated } from "convex/react";
-import { SignInButton, SignUpButton, UserButton, useUser } from "@clerk/nextjs";
+import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
@@ -28,11 +28,25 @@ export default function HomeLayout({
   const pathname = usePathname();
   const { isSignedIn } = useUser();
 
+  const headerContainerRef = useRef<HTMLDivElement>(null);
   const deferredPromptRef = useRef<BeforeInstallPromptEvent | null>(null);
   const hasPromptedRef = useRef<boolean>(false);
   const dismissedRef = useRef<boolean>(false);
 
   const isHomePage = useMemo(() => pathname === "/", [pathname]);
+
+  const [isAtTop, setIsAtTop] = useState(true);
+  useEffect(() => {
+    function handleScroll() {
+      setIsAtTop(window.scrollY === 0);
+    }
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    // Set initial state in case not at top on mount
+    handleScroll();
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     if (!isSignedIn) {
@@ -98,20 +112,31 @@ export default function HomeLayout({
 
   return (
     <BreadcrumbsStoreProvider>
-      <div className="relative flex h-screen w-screen max-w-screen flex-col">
+      <div
+        ref={headerContainerRef}
+        className="relative flex h-screen w-screen max-w-screen flex-col"
+      >
         <header
           className={cn(
-            "bg-background/50 fixed top-0 right-0 left-0 z-50 w-screen border-b backdrop-blur-sm",
+            "bg-background/50 fixed top-0 right-0 left-0 z-50 w-screen backdrop-blur-sm",
+            (!isAtTop || isSignedIn) && "border-b",
             !isSignedIn && "bg-transparent",
           )}
         >
           <div className="container mx-auto flex h-14 flex-shrink-0 items-center px-4">
             <div className="mr-auto text-lg font-semibold">
-              <Breadcrumbs />
+              <Authenticated>
+                <Breadcrumbs />
+              </Authenticated>
             </div>
             <div className="flex items-center gap-2">
               {isHomePage ? (
-                <Link href="https://github.com/timmo001/pouch" target="_blank">
+                <Link
+                  href="https://github.com/timmo001/pouch"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  passHref
+                >
                   <Button
                     className="data-[state=open]:bg-accent data-[state=open]:text-accent-foreground"
                     variant="ghost"
