@@ -84,7 +84,7 @@ Example response:
 
 ## Tech Stack
 
-- **Frontend**: Next.js (App Router), React, Tailwind CSS, Catppuccin theme - Built using [Create T3 App](https://create.t3.gg/) initially.
+- **Frontend**: Next.js (App Router), React, Tailwind CSS, Catppuccin theme. Initially built using [Create T3 App](https://create.t3.gg/).
 - **Backend**: Convex (serverless database & functions)
 - **Clerk**: Authentication.
 - **Sentry**: Error tracking and monitoring.
