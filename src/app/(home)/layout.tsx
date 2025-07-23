@@ -6,6 +6,8 @@ import { Button } from "~/components/ui/button";
 import { ThemeToggle } from "~/components/ui/theme-toggle";
 import { Breadcrumbs } from "~/components/breadcrumbs";
 import { BreadcrumbsStoreProvider } from "~/components/providers/breadcrumbs-store-provider";
+import { useEffect, useRef } from "react";
+import { toast } from "sonner";
 
 export default function HomeLayout({
   children,
@@ -13,6 +15,41 @@ export default function HomeLayout({
   children: React.ReactNode;
 }) {
   const { theme, setTheme } = useTheme();
+  const deferredPromptRef = useRef<Event | null>(null);
+  const hasPromptedRef = useRef(false);
+
+  useEffect(() => {
+    function handler(e: Event) {
+      e.preventDefault();
+      if (hasPromptedRef.current) return;
+      deferredPromptRef.current = e;
+      hasPromptedRef.current = true;
+      toast(
+        "Install Pouch as a PWA for a better experience!",
+        {
+          action: {
+            label: "Install",
+            onClick: async () => {
+              if (
+                deferredPromptRef.current &&
+                typeof (deferredPromptRef.current as any).prompt === "function"
+              ) {
+                await (deferredPromptRef.current as any).prompt();
+                deferredPromptRef.current = null;
+              }
+            },
+          },
+          duration: 10000,
+        }
+      );
+    }
+    window.addEventListener("beforeinstallprompt", handler as EventListener, {
+      once: true,
+    });
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handler as EventListener);
+    };
+  }, []);
 
   return (
     <BreadcrumbsStoreProvider>
