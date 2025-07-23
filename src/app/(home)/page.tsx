@@ -13,6 +13,10 @@ export const dynamic = "force-dynamic";
 export default async function HomePage() {
   const token = await getAuthToken();
 
+  if (!token || token.length === 0) {
+    return redirect("/welcome");
+  }
+
   const groups = await fetchQuery(api.groups.getAll, {}, { token }).catch(
     (error) => {
       console.warn(

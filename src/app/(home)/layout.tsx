@@ -1,14 +1,14 @@
 "use client";
 import { useEffect, useMemo, useRef } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { Authenticated, Unauthenticated } from "convex/react";
-import { SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
+import { SignInButton, SignUpButton, UserButton, useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { ThemePicker } from "~/components/ui/theme-picker";
 import { Breadcrumbs } from "~/components/breadcrumbs";
 import { BreadcrumbsStoreProvider } from "~/components/providers/breadcrumbs-store-provider";
-import { usePathname } from "next/navigation";
 
 // Add BeforeInstallPromptEvent type if not available
 // See: https://developer.mozilla.org/en-US/docs/Web/API/BeforeInstallPromptEvent
@@ -22,7 +22,9 @@ export default function HomeLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const router = useRouter();
   const pathname = usePathname();
+  const { isSignedIn } = useUser();
 
   const deferredPromptRef = useRef<BeforeInstallPromptEvent | null>(null);
   const hasPromptedRef = useRef<boolean>(false);
@@ -34,8 +36,22 @@ export default function HomeLayout({
   );
 
   useEffect(() => {
-    // Check if the user has already dismissed the prompt in localStorage
+    if (!isSignedIn) {
+      localStorage.setItem("pwaPromptDismissed", "false");
+      dismissedRef.current = false;
+
+      // If not signed in and not on the welcome page, redirect to welcome page
+      if (pathname === "/") {
+        console.log("Redirecting to welcome page");
+        router.replace("/welcome");
+      }
+    }
+  }, [isSignedIn, pathname, router]);
+
+  useEffect(() => {
+    // Check if the user is logged in and has already dismissed the prompt in localStorage
     if (
+      isSignedIn &&
       typeof window !== "undefined" &&
       localStorage.getItem("pwaPromptDismissed") === "true"
     ) {
