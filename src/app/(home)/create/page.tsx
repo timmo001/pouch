@@ -1,15 +1,10 @@
-import { createLoader, parseAsString, type SearchParams } from "nuqs/server";
+import { type SearchParams } from "nuqs/server";
+import { preloadQuery } from "convex/nextjs";
 import { api } from "~/convex/_generated/api";
 import { getAuthToken } from "~/server/auth";
 import { BreadcrumbsSetter } from "~/components/breadcrumbs/setter";
-import { preloadQuery } from "convex/nextjs";
 import { CreateListItemForm } from "~/app/(home)/groups/[group]/list-items/create/_components/form";
-
-export const loadSearchParams = createLoader({
-  title: parseAsString,
-  text: parseAsString,
-  url: parseAsString,
-});
+import { loadSearchParams } from "~/app/(home)/create/searchParams";
 
 export default async function CreatePage({
   searchParams,
