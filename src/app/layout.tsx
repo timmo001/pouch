@@ -15,6 +15,7 @@ export const metadata: Metadata = {
   },
   description: "Store your favorite things",
   icons: [{ rel: "icon", url: "/icon" }],
+  manifest: "/manifest.webmanifest",
 };
 
 const geist = Geist({
