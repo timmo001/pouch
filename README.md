@@ -8,22 +8,18 @@ Store your favorite things.
 
 ## Overview
 
-Pouch is a modern, full-stack web application for organizing and storing your favorite things. It features group-based organization, collaborative notepads, sortable lists, and robust authentication. Built with Next.js (App Router), Convex, Clerk, and Sentry, Pouch is designed for speed, reliability, and a delightful user experience.
-
----
+Pouch is a modern, full-stack web application for organizing and storing your favorite things. Sortable lists, added to groups, automatically syncronized across your devices. Built with [Next.js (App Router)](https://nextjs.org/docs/app), [Convex](https://www.convex.dev), [Clerk](https://clerk.com), and [Sentry](https://sentry.io), Pouch is designed for speed, reliability, and a ease of use.
 
 ## Features
 
-- **Groups**: Organize your items into groups, each with a name and description.
-- **List Items**: Add, edit, delete, and reorder text or URL items within groups. Drag-and-drop supported.
-- **Notepad**: Each group has a collaborative notepad for freeform notes, with real-time syncing and edit status.
-- **Authentication**: Secure OAuth login via Clerk, with Bearer token and `?token` query param support for API access.
-- **API**: RESTful API with OpenAPI/Swagger documentation at `/api/swagger`.
+- **Groups**: Organize your lists and notepads into groups, each with a name and description.
+- **Lists**: Add, edit, delete, and reorder text or URL items within groups. Drag-and-drop supported.
+- **Notepads**: Each group has a collaborative notepad for freeform notes, with real-time syncing and live updates.
+- **Authentication**: Secure OAuth login via Clerk with Bearer token support for API access.
+- **API**: RESTful API with OpenAPI/Swagger documentation available at `/api/swagger`.
 - **Breadcrumb Navigation**: Context-aware breadcrumbs for easy navigation.
-- **Dark/Light Theme**: Catppuccin-inspired theming with automatic dark/light mode.
-- **Sentry Integration**: Error tracking, performance monitoring, and structured logging.
-
----
+- **Dark/Light Theme**: Catppuccin based themes with dark and light mode.
+- **Sentry Integration**: Error tracking and monitoring with Sentry.
 
 ## Project Structure
 
@@ -37,14 +33,12 @@ public/           # Static assets (logo, screenshots)
 sentry.*.ts       # Sentry instrumentation (client, server, edge)
 ```
 
----
-
 ## Getting Started
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (v18+ recommended)
-- [pnpm](https://pnpm.io/) (used for all package management)
+- [Node.js](https://nodejs.org/)
+- [pnpm](https://pnpm.io/)
 
 ### Installation
 
@@ -55,24 +49,25 @@ pnpm install
 ### Development
 
 - Start the development server (Next.js + Convex):
-  - **Note:** Do not run `pnpm dev` from the assistant. Please run it manually.
+
+```sh
+pnpm dev
+```
 
 ### Build & Preview
 
 ```sh
 pnpm build
-pnpm preview
+pnpm start
 ```
-
----
 
 ## API
 
 - RESTful API endpoints under `/api/` (see `/src/app/api/`)
 - OpenAPI/Swagger docs: [GET /api/swagger](http://localhost:3000/api/swagger)
-- Consistent JSON response structure, validated with Zod
+- Consistent JSON response structure with Zod validation
 - Standard HTTP error codes and error format
-- Auth via Bearer token or `?token` query param
+- Authentication via Bearer token or `?token` query parameters.
 
 Example response:
 
@@ -85,45 +80,23 @@ Example response:
 }
 ```
 
----
-
-## Authentication
-
-- OAuth via Clerk
-- API requests require a Bearer token or `?token` query param
-- See [`src/lib/api/auth.ts`](src/lib/api/auth.ts) for extraction logic
-
----
-
 ## Tech Stack
 
-- **Frontend**: Next.js (App Router), React, Tailwind CSS, Catppuccin theme
+- **Frontend**: Next.js (App Router), React, Tailwind CSS, Catppuccin theme - Built using [Create T3 App](https://create.t3.gg/) initially.
 - **Backend**: Convex (serverless database & functions)
-- **Auth**: Clerk
-- **API Validation**: Zod
-- **Drag & Drop**: SortableJS
-- **State Management**: Zustand, TanStack Query
-- **Error Tracking**: Sentry
-
----
-
-## Sentry & Logging
-
-- Sentry is configured for client, server, and edge (see `src/instrumentation-client.ts`, `sentry.server.config.ts`, `sentry.edge.config.ts`)
-- Logs, errors, and performance traces are sent to Sentry
-- Use `Sentry.captureException(error)` for error reporting
-- Use `Sentry.startSpan` for custom performance spans
-- See [Sentry documentation](https://docs.sentry.io/platforms/javascript/guides/nextjs/) for more
-
----
+- **Clerk**: Authentication.
+- **Sentry**: Error tracking and monitoring.
+- **SortableJS**: Drag & Drop for list items.
+- **TanStack Query**: Queries and mutations.
+- **Zod**: Used throughout the project for both API and client-side form validation.
+- **Zustand**: State management.
 
 ## Theming
 
 - Catppuccin Latte (light) and Mocha (dark) themes
-- Automatic theme switching based on system preference
-- Customizable via Tailwind and CSS variables in `src/styles/globals.css`
-
----
+- Automatic theme switching based on system preference using next-themes with a theme switcher.
+- Customizable via Tailwind and CSS variables in `src/styles/globals.css`.
+- Based on [Shadcn UI](https://ui.shadcn.com/docs/themes) and [Catppuccin](https://github.com/catppuccin/catppuccin) themes.
 
 ## License
 
