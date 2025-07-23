@@ -1,4 +1,10 @@
+import { type Metadata } from "next";
 import { Dots } from "~/components/ui/dots";
+
+export const metadata: Metadata = {
+  title: "Loading",
+  description: "This may take a few seconds.",
+};
 
 export default function Loading() {
   return (

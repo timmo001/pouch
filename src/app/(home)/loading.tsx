@@ -1,5 +1,11 @@
+import { type Metadata } from "next";
 import { Dots } from "~/components/ui/dots";
 import { BreadcrumbsSetter } from "~/components/breadcrumbs/setter";
+
+export const metadata: Metadata = {
+  title: "Loading",
+  description: "This may take a few seconds.",
+};
 
 export default function Loading() {
   return (
