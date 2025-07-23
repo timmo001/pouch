@@ -2,6 +2,7 @@ import "~/styles/globals.css";
 
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { ThemeProvider } from "~/components/ui/theme-provider";
 import { Toaster } from "~/components/ui/sonner";
 import { ClerkProvider } from "~/components/providers/clerk";
@@ -40,16 +41,18 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geist.variable}`} suppressHydrationWarning>
       <body className="bg-background text-foreground">
-        <ThemeProvider attribute="class">
-          <ClerkProvider>
-            <ConvexClientProvider>
-              <TanstackQueryProvider>
-                {children}
-                <Toaster />
-              </TanstackQueryProvider>
-            </ConvexClientProvider>
-          </ClerkProvider>
-        </ThemeProvider>
+        <NuqsAdapter>
+          <ThemeProvider attribute="class">
+            <ClerkProvider>
+              <ConvexClientProvider>
+                <TanstackQueryProvider>
+                  {children}
+                  <Toaster />
+                </TanstackQueryProvider>
+              </ConvexClientProvider>
+            </ClerkProvider>
+          </ThemeProvider>
+        </NuqsAdapter>
       </body>
     </html>
   );

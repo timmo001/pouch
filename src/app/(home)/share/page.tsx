@@ -1,6 +1,18 @@
 "use client";
+import { useEffect } from "react";
+import { parseAsString, useQueryStates } from "nuqs";
 
 export default function SharePage() {
+  const [query] = useQueryStates({
+    title: parseAsString.withDefault(""),
+    text: parseAsString.withDefault(""),
+    url: parseAsString.withDefault(""),
+  });
+
+  useEffect(() => {
+    console.log("query:", query);
+  }, [query]);
+
   return (
     <pre>
       {JSON.stringify(
