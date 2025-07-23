@@ -1,4 +1,4 @@
-# Pouch ![Pouch Logo](public/logo.svg)
+# ![Pouch Logo](public/logo.svg) Pouch
 
 Store your favorite things.
 
