@@ -22,7 +22,7 @@ export default function manifest(): MetadataRoute.Manifest {
         sizes: "3456x1779",
         type: "image/png",
         form_factor: "wide",
-      },    
+      },
       {
         src: "/screenshots/mobile.png",
         sizes: "729x1577",
@@ -30,5 +30,15 @@ export default function manifest(): MetadataRoute.Manifest {
         form_factor: "narrow",
       },
     ],
+    share_target: {
+      action: "/share",
+      method: "GET",
+      enctype: "application/x-www-form-urlencoded",
+      params: {
+        title: "title",
+        text: "text",
+        url: "url",
+      },
+    },
   };
 }
