@@ -46,7 +46,7 @@ pnpm install
 
 ### Development
 
-- Start the development server (Next.js + Convex):
+Start the development server (Next.js + Convex):
 
 ```sh
 pnpm dev
