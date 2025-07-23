@@ -26,9 +26,9 @@ export default async function HomePage() {
     <>
       <BreadcrumbsSetter items={[{ key: "home", title: "Home" }]} />
       <div className="flex flex-col gap-4">
-        <div className="flex flex-row gap-2 justify-between items-center px-2">
+        <div className="flex flex-row items-center justify-between gap-2 px-2">
           <h1 className="text-3xl font-bold">Groups</h1>
-          <p className="text-sm text-center text-muted-foreground">
+          <p className="text-muted-foreground text-center text-sm">
             Total: {groups?.length}
           </p>
         </div>
@@ -36,12 +36,12 @@ export default async function HomePage() {
           {groups?.map((group) => (
             <Link key={group._id} href={`/groups/${group._id}`} passHref>
               <Button
-                className="flex flex-col gap-2 items-start p-6 w-full h-32 text-4xl"
+                className="flex h-32 w-full flex-col items-start gap-2 p-6 text-4xl"
                 size="lg"
                 variant="secondary"
               >
                 <div>{group.name}</div>
-                <div className="flex flex-grow gap-2 items-center text-sm text-muted-foreground">
+                <div className="text-muted-foreground flex flex-grow items-center gap-2 text-sm">
                   Created:{" "}
                   <DateLocale
                     date={new Date(group._creationTime)}
@@ -54,7 +54,7 @@ export default async function HomePage() {
           ))}
           <Link href="/groups/create" passHref>
             <Button
-              className="flex flex-row gap-2 items-center p-6 w-full h-32 text-4xl"
+              className="flex h-32 w-full flex-row items-center gap-2 p-6 text-4xl"
               size="lg"
               variant="outline"
             >
