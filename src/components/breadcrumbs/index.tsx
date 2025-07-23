@@ -12,7 +12,7 @@ import {
   BreadcrumbSeparator,
 } from "~/components/ui/breadcrumb";
 import { useBreadcrumbsStore } from "~/components/providers/breadcrumbs-store-provider";
-import Logo from "~/components/assets/logo";
+import { Logo } from "~/components/assets/logo";
 
 export function Breadcrumbs() {
   const items = useBreadcrumbsStore((state) => state.items);
