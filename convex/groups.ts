@@ -11,6 +11,7 @@ export const getAll = query({
 
     return await ctx.db
       .query("groups")
+      .withIndex("by_user_name")
       .filter((q) =>
         q.and(
           q.eq(q.field("user"), identity.tokenIdentifier),

@@ -7,7 +7,9 @@ export default defineSchema({
     description: v.optional(v.string()),
     user: v.string(),
     archived: v.boolean(),
-  }).index("by_user_archived", ["user", "archived"]),
+  })
+    .index("by_user_archived", ["user", "archived"])
+    .index("by_user_name", ["user", "name"]),
 
   listItems: defineTable({
     type: v.union(v.literal("text"), v.literal("url")),
