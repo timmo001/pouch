@@ -1,7 +1,6 @@
-# Pouch
+# Pouch ![Pouch Logo](public/logo.svg)
 
 Store your favorite things.
-![Pouch Logo](public/logo.svg)
 
 [![Pouch Desktop Screenshot](public/screenshots/desktop.png)](public/screenshots)
 
