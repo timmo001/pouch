@@ -91,7 +91,6 @@ export default async function NotepadPage({
     <>
       <BreadcrumbsSetter
         items={[
-          { key: "home", title: "Pouch", href: "/" },
           {
             key: `groups/${group._id}`,
             title: group.name,

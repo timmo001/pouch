@@ -10,7 +10,6 @@ export default function Loading() {
     <>
       <BreadcrumbsSetter
         items={[
-          { key: "home", title: "Pouch", href: "/" },
           { key: "not-found", title: "Not Found" },
         ]}
       />

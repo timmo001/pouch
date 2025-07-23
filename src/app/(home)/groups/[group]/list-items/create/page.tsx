@@ -36,7 +36,6 @@ export default async function CreateListItemPage({
     <>
       <BreadcrumbsSetter
         items={[
-          { key: "home", title: "Pouch", href: "/" },
           {
             key: `groups/${group._id}`,
             title: group.name,

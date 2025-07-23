@@ -86,7 +86,6 @@ export default async function GroupPage({
     <>
       <BreadcrumbsSetter
         items={[
-          { key: "home", title: "Pouch", href: "/" },
           {
             key: `groups/${groupId}`,
             title: listItem.group.name,

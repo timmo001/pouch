@@ -11,19 +11,27 @@ import {
   BreadcrumbSeparator,
 } from "~/components/ui/breadcrumb";
 import { useBreadcrumbsStore } from "~/components/providers/breadcrumbs-store-provider";
+import Logo from "~/components/assets/logo";
 
 export function Breadcrumbs() {
   const items = useBreadcrumbsStore((state) => state.items);
+
+  const homeLink = (
+    <BreadcrumbItem>
+      <BreadcrumbLink className="flex gap-2 items-center" asChild>
+        <Link href="/">
+          <Logo />
+          Pouch
+        </Link>
+      </BreadcrumbLink>
+    </BreadcrumbItem>
+  );
 
   if (items === null) {
     return (
       <Breadcrumb>
         <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link href="/">Pouch</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
+          {homeLink}
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbEllipsis />
@@ -40,8 +48,10 @@ export function Breadcrumbs() {
   return (
     <Breadcrumb>
       <BreadcrumbList>
+        {homeLink}
         {items.map((item, index) => (
           <React.Fragment key={item.key}>
+            <BreadcrumbSeparator />
             <BreadcrumbItem>
               {index === items.length - 1 ? (
                 <BreadcrumbPage>{item.title}</BreadcrumbPage>

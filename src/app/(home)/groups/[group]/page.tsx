@@ -96,14 +96,13 @@ export default async function GroupPage({
     <>
       <BreadcrumbsSetter
         items={[
-          { key: "home", title: "Pouch", href: "/" },
           { key: `groups/${group._id}`, title: group.name },
         ]}
       />
       <div className="flex flex-col gap-4">
-        <div className="flex w-full flex-row items-center justify-between gap-2 px-2">
+        <div className="flex flex-row gap-2 justify-between items-center px-2 w-full">
           <h1 className="text-3xl font-bold text-wrap">{group.name}</h1>
-          <div className="flex flex-grow flex-row flex-wrap justify-end gap-2">
+          <div className="flex flex-row flex-wrap flex-grow gap-2 justify-end">
             <GroupEditName group={group} />
             <GroupEditDescription group={group} />
             <GroupDelete group={group} />

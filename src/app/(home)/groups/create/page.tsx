@@ -14,7 +14,6 @@ export default async function CreateGroupPage() {
     <>
       <BreadcrumbsSetter
         items={[
-          { key: "home", title: "Pouch", href: "/" },
           { key: "groups/create", title: "Create Group" },
         ]}
       />
