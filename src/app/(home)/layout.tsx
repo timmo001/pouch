@@ -27,6 +27,15 @@ export default function HomeLayout({
   const dismissedRef = useRef(false);
 
   useEffect(() => {
+    // Check if the user has already dismissed the prompt in localStorage
+    if (
+      typeof window !== "undefined" &&
+      localStorage.getItem("pwaPromptDismissed") === "true"
+    ) {
+      dismissedRef.current = true;
+      return;
+    }
+
     function handler(e: Event) {
       // Only handle if it's a BeforeInstallPromptEvent
       if (typeof (e as BeforeInstallPromptEvent).prompt !== "function") return;
@@ -34,9 +43,12 @@ export default function HomeLayout({
       if (hasPromptedRef.current || dismissedRef.current) return;
       deferredPromptRef.current = e as BeforeInstallPromptEvent;
       hasPromptedRef.current = true;
-      toast("Install Pouch as a PWA for a better experience!", {
+      toast("Install Pouch to get a better experience!", {
+        description: "Share URLs/text to Pouch, shortcuts and more",
         dismissible: true,
         closeButton: true,
+        duration: 120000, // 2 minutes
+        position: "bottom-center",
         action: {
           label: "Install",
           onClick: () => {
@@ -46,6 +58,14 @@ export default function HomeLayout({
               deferredPromptRef.current = null;
             }
           },
+        },
+        // onAutoClose: () => {
+        //   localStorage.setItem("pwaPromptDismissed", "false");
+        //   dismissedRef.current = false;
+        // },
+        onDismiss: () => {
+          localStorage.setItem("pwaPromptDismissed", "true");
+          dismissedRef.current = true;
         },
       });
     }
