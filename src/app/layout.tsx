@@ -16,6 +16,17 @@ export const metadata: Metadata = {
   description: "Store your favorite things",
   icons: [{ rel: "icon", url: "/icon" }],
   manifest: "/manifest.webmanifest",
+  metadataBase: new URL("https://pouch.timmo.dev"),
+  openGraph: {
+    images: [
+      {
+        alt: "Pouch",
+        url: "/api/og",
+      },
+    ],
+    siteName: "Pouch",
+    url: "https://pouch.timmo.dev",
+  },
 };
 
 const geist = Geist({
