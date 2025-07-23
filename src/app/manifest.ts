@@ -30,6 +30,14 @@ export default function manifest(): MetadataRoute.Manifest {
         form_factor: "narrow",
       },
     ],
+    shortcuts: [
+      {
+        name: "Create",
+        description: "Create a new item",
+        url: "/create",
+        icons: [{ src: "/icon", sizes: "32x32", type: "image/png" }],
+      },
+    ],
     share_target: {
       action: "/create",
       method: "GET",
