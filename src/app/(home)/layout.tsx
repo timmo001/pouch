@@ -1,7 +1,6 @@
 "use client";
 import { Authenticated, Unauthenticated } from "convex/react";
 import { SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
-import { useTheme } from "next-themes";
 import { Button } from "~/components/ui/button";
 import { ThemePicker } from "~/components/ui/theme-picker";
 import { Breadcrumbs } from "~/components/breadcrumbs";
@@ -21,7 +20,6 @@ export default function HomeLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { theme, setTheme } = useTheme();
   const deferredPromptRef = useRef<BeforeInstallPromptEvent | null>(null);
   const hasPromptedRef = useRef(false);
   const dismissedRef = useRef(false);
