@@ -127,7 +127,7 @@ export default function HomeLayout({
                 <p className="text-center text-2xl font-bold lg:text-4xl">
                   Sign in to continue
                 </p>
-                <Button size="default" variant="default" asChild>
+                <Button size="lg" variant="default" asChild>
                   <SignInButton mode="modal" />
                 </Button>
               </div>
@@ -135,7 +135,7 @@ export default function HomeLayout({
                 <p className="text-center text-2xl font-bold lg:text-4xl">
                   New here?
                 </p>
-                <Button size="default" variant="default" asChild>
+                <Button size="lg" variant="default" asChild>
                   <SignUpButton mode="modal" />
                 </Button>
               </div>
