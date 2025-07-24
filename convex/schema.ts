@@ -9,7 +9,8 @@ export default defineSchema({
     archived: v.boolean(),
   })
     .index("by_user_archived", ["user", "archived"])
-    .index("by_user_name", ["user", "name"]),
+    .index("by_user_archived_name", ["user", "archived", "name"])
+    .index("by_user_archived_created", ["user", "archived", "_creationTime"]),
 
   listItems: defineTable({
     type: v.union(v.literal("text"), v.literal("url")),

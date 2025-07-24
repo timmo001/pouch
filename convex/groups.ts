@@ -11,13 +11,14 @@ export const getAll = query({
 
     return await ctx.db
       .query("groups")
-      .withIndex("by_user_name")
+      .withIndex("by_user_archived_created")
       .filter((q) =>
         q.and(
           q.eq(q.field("user"), identity.tokenIdentifier),
           q.eq(q.field("archived"), false),
         ),
       )
+      .order("desc")
       .collect();
   },
 });
