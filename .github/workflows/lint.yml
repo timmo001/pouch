@@ -1,0 +1,60 @@
+---
+name: Lint
+
+# yamllint disable-line rule:truthy
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+    types:
+      - opened
+      - reopened
+      - synchronize
+  workflow_dispatch:
+
+concurrency:
+  group: lint-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-eslint:
+    name: 👕 ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⤵️ Check out code from GitHub
+        uses: actions/checkout@v4.2.2
+        with:
+          ref: ${{ github.head_ref }}
+      - name: 🏗️ Setup PNPM
+        uses: ./.github/actions/setup-app
+        with:
+          cache-build: false
+      - name: 👕 Run ESLint
+        run: pnpm lint
+        env:
+          SKIP_ENV_VALIDATION: true
+  lint-prettier:
+    name: 🎨 Prettier
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⤵️ Check out code from GitHub
+        uses: actions/checkout@v4.2.2
+        with:
+          ref: ${{ github.head_ref }}
+      - name: 🏗️ Setup PNPM
+        uses: ./.github/actions/setup-app
+        with:
+          cache-build: false
+      - name: 🎨 Run Prettier
+        run: pnpm check-format
+        env:
+          SKIP_ENV_VALIDATION: true
+  lint-markdown-links:
+    uses: timmo001/workflows/.github/workflows/lint-markdown-links.yml@master
+  lint-markdownlint:
+    uses: timmo001/workflows/.github/workflows/lint-markdownlint.yml@master
+  lint-yamllint:
+    uses: timmo001/workflows/.github/workflows/lint-yamllint.yml@master
