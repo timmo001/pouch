@@ -1,10 +1,12 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
+  --font-sans:
+    var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
@@ -124,4 +126,47 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* BlockNote theme overrides for Catppuccin + global styles */
+.bn-shadcn.dark,
+.bn-shadcn.light {
+  --background: var(--background);
+  --foreground: var(--foreground);
+  --card: var(--card);
+  --card-foreground: var(--card-foreground);
+  --popover: var(--popover);
+  --popover-foreground: var(--popover-foreground);
+  --primary: var(--primary);
+  --primary-foreground: var(--primary-foreground);
+  --secondary: var(--secondary);
+  --secondary-foreground: var(--secondary-foreground);
+  --muted: var(--muted);
+  --muted-foreground: var(--muted-foreground);
+  --accent: var(--accent);
+  --accent-foreground: var(--accent-foreground);
+  --destructive: var(--destructive);
+  --destructive-foreground: var(--destructive-foreground);
+  --border: var(--border);
+  --input: var(--input);
+  --ring: var(--ring);
+  --radius: var(--radius);
+
+  --bn-colors-editor-text: var(--color-foreground);
+  --bn-colors-editor-background: var(--color-background);
+  --bn-colors-menu-text: var(--color-foreground);
+  --bn-colors-menu-background: var(--color-card);
+  --bn-colors-tooltip-text: var(--color-foreground);
+  --bn-colors-tooltip-background: var(--color-popover);
+  --bn-colors-hovered-text: var(--color-foreground);
+  --bn-colors-hovered-background: var(--color-muted);
+  --bn-colors-selected-text: var(--color-primary-foreground);
+  --bn-colors-selected-background: var(--color-primary);
+  --bn-colors-disabled-text: var(--color-muted-foreground);
+  --bn-colors-disabled-background: var(--color-muted);
+  --bn-colors-shadow: var(--color-border);
+  --bn-colors-border: var(--color-border);
+  --bn-colors-side-menu: var(--color-muted-foreground);
+  --bn-font-family: var(--font-sans);
+  --bn-border-radius: var(--radius);
 }

@@ -27,7 +27,7 @@ export default defineSchema({
   ]),
 
   notepads: defineTable({
-    content: v.string(),
+    content: v.optional(v.string()), // Prosemirror will cover this in its own tables. Leaving for prosperity.
     group: v.id("groups"),
     user: v.string(),
     updatedAt: v.number(),

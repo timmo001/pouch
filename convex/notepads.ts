@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { prosemirrorSync } from "./prosemirror";
 
 export const create = mutation({
   args: {
@@ -31,12 +32,16 @@ export const create = mutation({
       return existingNotepad;
     }
 
-    return await ctx.db.insert("notepads", {
+    const notepadId = await ctx.db.insert("notepads", {
       content: "",
       group: args.group,
       user: identity.tokenIdentifier,
       updatedAt: Date.now(),
     });
+
+    await prosemirrorSync.create(ctx, notepadId, { type: "doc", content: [] });
+
+    return notepadId;
   },
 });
 

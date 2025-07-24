@@ -14,6 +14,9 @@ const config = {
     // Speed up build times, we handle these in the lint pipeline anyway
     ignoreDuringBuilds: true,
   },
+  // Blocknote is not compatible with reactStrictMode
+  // https://www.blocknotejs.org/docs/getting-started/nextjs#react-19--next-15-strictmode
+  reactStrictMode: false,
 };
 
 const sentryConfig = withSentryConfig(config, {

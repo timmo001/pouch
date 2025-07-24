@@ -1,5 +1,5 @@
 import { type Metadata } from "next";
-import { fetchQuery, preloadQuery } from "convex/nextjs";
+import { fetchQuery } from "convex/nextjs";
 import { notFound } from "next/navigation";
 import { api } from "~/convex/_generated/api";
 import { type Id } from "~/convex/_generated/dataModel";
@@ -68,24 +68,6 @@ export default async function NotepadPage({
     console.warn("[groups/[group]/page] Group not found from fetchQuery");
     notFound();
   }
-  const preloadedNotepad = await preloadQuery(
-    api.notepads.getFromGroup,
-    { group: group._id },
-    { token },
-  ).catch((error) => {
-    console.warn(
-      "[groups/[group]/page] Error fetching notepad from api.notepads.getFromGroup",
-      error,
-    );
-    return null;
-  });
-
-  if (!preloadedNotepad) {
-    console.warn(
-      "[groups/[group]/notepads/[notepad]/page] Notepad not found from preloadQuery",
-    );
-    return notFound();
-  }
 
   return (
     <>
@@ -109,7 +91,7 @@ export default async function NotepadPage({
           </h1>
         </div>
 
-        <NotepadEditor group={group} preloadedNotepad={preloadedNotepad} />
+        <NotepadEditor group={group} />
       </div>
     </>
   );
