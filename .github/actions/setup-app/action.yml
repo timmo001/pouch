@@ -1,0 +1,46 @@
+---
+name: "Setup Application"
+description: "Setup application with caching and dependencies"
+
+inputs:
+  cache-build:
+    description: "Cache build output"
+    required: true
+    default: "false"
+  cache-opennext:
+    description: "Cache OpenNext build output"
+    required: true
+    default: "false"
+
+runs:
+  using: composite
+  steps:
+    - name: ⤵️ Check out code from GitHub
+      uses: actions/checkout@v4.2.2
+      with:
+        ref: ${{ github.head_ref }}
+    - name: 🍎 Install pnpm
+      uses: pnpm/action-setup@v4.0.0
+      with:
+        run_install: false # Defer installation
+    - name: 🏗️ Set up Node.js (pnpm)
+      uses: actions/setup-node@v4.1.0
+      with:
+        cache-dependency-path: pnpm-lock.yaml
+        cache: pnpm
+        node-version: 20.x
+    - name: 📦 Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          **/node_modules
+          ~/.pnpm-store
+          ${{ inputs.cache-build == 'true' && format('{0}/.next/cache', github.workspace) || '' }}
+          ${{ inputs.cache-opennext == 'true' && format('{0}/.open-next/cache', github.workspace) || '' }}
+        key: ${{ runner.os }}-deps-${{ hashFiles('**/pnpm-lock.yaml') }}${{ inputs.cache-build == 'true' && format('-{0}', hashFiles('**/*.{js,jsx,ts,tsx}')) || '' }}
+        restore-keys: |
+          ${{ runner.os }}-deps-${{ hashFiles('**/pnpm-lock.yaml') }}-
+          ${{ runner.os }}-deps-
+    - name: ⤵️ Install dependencies
+      shell: bash
+      run: pnpm install --frozen-lockfile --prefer-offline
