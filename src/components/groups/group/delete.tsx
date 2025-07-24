@@ -1,7 +1,5 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { Trash2Icon } from "lucide-react";
-import { Button } from "~/components/ui/button";
 import { Confirmation } from "~/components/ui/confirmation";
 import { Dots } from "~/components/ui/dots";
 import { type Doc } from "~/convex/_generated/dataModel";
@@ -9,8 +7,19 @@ import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { api } from "~/convex/_generated/api";
+import { useState } from "react";
 
-export function GroupDelete({ group }: { group: Doc<"groups"> }) {
+export function GroupDelete({
+  group,
+  open: controlledOpen,
+  onOpenChange: controlledOnOpenChange,
+  trigger,
+}: {
+  group: Doc<"groups">;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  trigger?: React.ReactNode;
+}) {
   const router = useRouter();
 
   const { mutate, isPending } = useMutation({
@@ -24,6 +33,10 @@ export function GroupDelete({ group }: { group: Doc<"groups"> }) {
       toast.error("Failed to delete group");
     },
   });
+
+  const [localOpen, setLocalOpen] = useState(false);
+  const isOpen = controlledOpen ?? localOpen;
+  const setIsOpen = controlledOnOpenChange ?? setLocalOpen;
 
   return (
     <Confirmation
@@ -43,19 +56,9 @@ export function GroupDelete({ group }: { group: Doc<"groups"> }) {
           mutate({ id: group._id });
         },
       }}
-      trigger={
-        <Button type="button" size="lg" variant="destructive">
-          <Trash2Icon />
-          {isPending ? (
-            <>
-              Deleting group
-              <Dots count={3} />
-            </>
-          ) : (
-            "Delete group"
-          )}
-        </Button>
-      }
+      open={controlledOpen}
+      onOpenChange={controlledOnOpenChange}
+      trigger={trigger}
     />
   );
 }

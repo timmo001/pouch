@@ -18,10 +18,12 @@ export function Confirmation({
   trigger,
   cancel = { text: "Cancel", variant: "outline" },
   confirm = { text: "Confirm", variant: "default" },
+  open: controlledOpen,
+  onOpenChange: controlledOnOpenChange,
 }: {
   title: string;
   description: string;
-  trigger: React.ReactNode;
+  trigger?: React.ReactNode;
   cancel?: {
     text: string;
     variant: "outline" | "secondary";
@@ -33,23 +35,32 @@ export function Confirmation({
     isPending?: boolean;
     onConfirm?: () => void;
   };
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }) {
   const [open, setOpen] = useState(false);
   const [wasPending, setWasPending] = useState(false);
 
+  // Use controlled open state if provided
+  const isOpen = controlledOpen ?? open;
+  const setIsOpen = controlledOnOpenChange ?? setOpen;
+
   useEffect(() => {
     if (confirm.isPending) {
-      setOpen(true);
+      setIsOpen(true);
       setWasPending(true);
     } else if (wasPending) {
-      setOpen(false);
+      setIsOpen(false);
       setWasPending(false);
     }
-  }, [confirm.isPending, wasPending]);
+  }, [confirm.isPending, wasPending, setIsOpen]);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      {/* Only render DialogTrigger if trigger is provided and not using controlled open */}
+      {trigger && !controlledOpen && !controlledOnOpenChange && (
+        <DialogTrigger asChild>{trigger}</DialogTrigger>
+      )}
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>

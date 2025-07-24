@@ -5,11 +5,9 @@ import { api } from "~/convex/_generated/api";
 import { getAuthToken } from "~/server/auth";
 import { type Id } from "~/convex/_generated/dataModel";
 import { BreadcrumbsSetter } from "~/components/breadcrumbs/setter";
-import { GroupEditName } from "~/components/groups/group/edit-name";
-import { GroupEditDescription } from "~/components/groups/group/edit-description";
-import { GroupDelete } from "~/components/groups/group/delete";
 import { DraggableListItems } from "~/components/list-items/draggable-list";
 import { NotepadEditor } from "~/components/notepads/notepad/editor";
+import { GroupActions } from "~/components/groups/group/actions";
 
 export async function generateMetadata({
   params,
@@ -89,11 +87,7 @@ export default async function GroupPage({
         <div className="flex flex-col gap-4">
           <div className="flex w-full flex-row items-center justify-between gap-2 px-2">
             <h1 className="text-3xl font-bold text-wrap">{group.name}</h1>
-            <div className="flex flex-grow flex-row flex-wrap justify-end gap-2">
-              <GroupEditName group={group} />
-              <GroupEditDescription group={group} />
-              <GroupDelete group={group} />
-            </div>
+            <GroupActions group={group} />
           </div>
           {preloadedListItems && (
             <DraggableListItems

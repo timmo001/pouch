@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { PencilRulerIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -37,12 +36,18 @@ type UpdateGroupDescription = z.infer<typeof UpdateGroupDescriptionSchema>;
 
 export function GroupEditDescription({
   group: groupIn,
+  open: controlledOpen,
+  onOpenChange: controlledOnOpenChange,
 }: {
   group: Doc<"groups">;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }) {
   const router = useRouter();
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [localOpen, setLocalOpen] = useState(false);
+  const isOpen = controlledOpen ?? localOpen;
+  const setIsOpen = controlledOnOpenChange ?? setLocalOpen;
 
   const { mutate, isPending } = useMutation({
     mutationFn: useConvexMutation(api.groups.updateDescription),
@@ -72,12 +77,6 @@ export function GroupEditDescription({
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button size="lg" variant="secondary">
-          <PencilRulerIcon />
-          Edit description
-        </Button>
-      </DialogTrigger>
       <DialogContent>
         <Form {...form}>
           <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
