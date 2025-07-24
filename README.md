@@ -21,7 +21,7 @@ Pouch is a modern web application for organizing and storing your favorite thing
 
 ## Project Structure
 
-```
+```text
 convex/           # Backend logic, Convex schema, auth config
 src/app/          # Next.js App Router, pages, API routes
 src/components/   # Shared React components (UI, providers, features)
