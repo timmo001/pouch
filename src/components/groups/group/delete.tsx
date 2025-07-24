@@ -7,7 +7,6 @@ import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { api } from "~/convex/_generated/api";
-import { useState } from "react";
 
 export function GroupDelete({
   group,
@@ -33,10 +32,6 @@ export function GroupDelete({
       toast.error("Failed to delete group");
     },
   });
-
-  const [localOpen, setLocalOpen] = useState(false);
-  const isOpen = controlledOpen ?? localOpen;
-  const setIsOpen = controlledOnOpenChange ?? setLocalOpen;
 
   return (
     <Confirmation
