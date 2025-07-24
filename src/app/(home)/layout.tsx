@@ -60,6 +60,8 @@ export default function HomeLayout({
     if (
       isSignedIn &&
       typeof window !== "undefined" &&
+      (window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1") &&
       localStorage.getItem("pwaPromptDismissed") === "true"
     ) {
       dismissedRef.current = true;
