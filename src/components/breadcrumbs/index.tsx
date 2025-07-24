@@ -63,7 +63,6 @@ export function Breadcrumbs() {
                 <span className="text-muted-foreground">{item.title}</span>
               )}
             </BreadcrumbItem>
-            {index < items.length - 1 && <BreadcrumbSeparator />}
           </React.Fragment>
         ))}
       </BreadcrumbList>
