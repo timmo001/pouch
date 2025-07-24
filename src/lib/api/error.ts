@@ -21,7 +21,10 @@ function isObjectWithCode(obj: unknown): obj is { code: string | number } {
 /**
  * Maps common error types to HTTP status codes.
  */
-function getStatusCode(error: unknown): { status: number; code?: string | number } {
+function getStatusCode(error: unknown): {
+  status: number;
+  code?: string | number;
+} {
   if (isObjectWithStatus(error)) {
     return { status: error.status };
   }

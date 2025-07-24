@@ -30,7 +30,9 @@ import type z from "zod";
 // GET /api/groups/[id]/list-items/[itemId] - get list item by id
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: Id<"groups">; itemId: Id<"listItems"> }> },
+  {
+    params,
+  }: { params: Promise<{ id: Id<"groups">; itemId: Id<"listItems"> }> },
 ) {
   const { id, itemId } = await params;
   try {
@@ -70,7 +72,9 @@ export async function GET(
 // PUT /api/groups/[id]/list-items/[itemId] - update list item
 export async function PUT(
   req: NextRequest,
-  { params }: { params: Promise<{ id: Id<"groups">; itemId: Id<"listItems"> }> },
+  {
+    params,
+  }: { params: Promise<{ id: Id<"groups">; itemId: Id<"listItems"> }> },
 ) {
   const { id, itemId } = await params;
   try {
@@ -127,7 +131,9 @@ export async function PUT(
 // DELETE /api/groups/[id]/list-items/[itemId] - delete list item
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: Promise<{ id: Id<"groups">; itemId: Id<"listItems"> }> },
+  {
+    params,
+  }: { params: Promise<{ id: Id<"groups">; itemId: Id<"listItems"> }> },
 ) {
   const { id, itemId } = await params;
   try {

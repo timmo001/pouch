@@ -44,7 +44,7 @@ function BreadcrumbLink({
   return (
     <Comp
       data-slot="breadcrumb-link"
-      className={cn("transition-colors hover:text-foreground", className)}
+      className={cn("hover:text-foreground transition-colors", className)}
       {...props}
     />
   );
@@ -57,7 +57,7 @@ function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
       role="link"
       aria-disabled="true"
       aria-current="page"
-      className={cn("font-normal text-foreground", className)}
+      className={cn("text-foreground font-normal", className)}
       {...props}
     />
   );
@@ -90,11 +90,11 @@ function BreadcrumbEllipsis({
       data-slot="breadcrumb-ellipsis"
       role="presentation"
       aria-hidden="true"
-      className={cn("flex justify-center items-center size-9", className)}
+      className={cn("flex size-9 items-center justify-center", className)}
       {...props}
     >
       <Dots
-        className="-mt-2 text-xl font-bold text-muted-foreground"
+        className="text-muted-foreground -mt-2 text-xl font-bold"
         count={3}
       />
       <span className="sr-only">More</span>

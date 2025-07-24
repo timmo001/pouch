@@ -95,14 +95,12 @@ export default async function GroupPage({
   return (
     <>
       <BreadcrumbsSetter
-        items={[
-          { key: `groups/${group._id}`, title: group.name },
-        ]}
+        items={[{ key: `groups/${group._id}`, title: group.name }]}
       />
       <div className="flex flex-col gap-4">
-        <div className="flex flex-row gap-2 justify-between items-center px-2 w-full">
+        <div className="flex w-full flex-row items-center justify-between gap-2 px-2">
           <h1 className="text-3xl font-bold text-wrap">{group.name}</h1>
-          <div className="flex flex-row flex-wrap flex-grow gap-2 justify-end">
+          <div className="flex flex-grow flex-row flex-wrap justify-end gap-2">
             <GroupEditName group={group} />
             <GroupEditDescription group={group} />
             <GroupDelete group={group} />

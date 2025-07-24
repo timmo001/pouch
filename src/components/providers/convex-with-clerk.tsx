@@ -11,11 +11,7 @@ if (!env.NEXT_PUBLIC_CONVEX_URL) {
 
 const convex = new ConvexReactClient(env.NEXT_PUBLIC_CONVEX_URL);
 
-export function ConvexClientProvider({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export function ConvexClientProvider({ children }: { children: ReactNode }) {
   return (
     <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
       {children}

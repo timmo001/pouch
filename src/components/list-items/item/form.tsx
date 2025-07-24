@@ -182,7 +182,7 @@ export function ListItemForm({
             <FormItem>
               <FormLabel>Description (optional)</FormLabel>
               <FormControl>
-                <div className="flex gap-2 items-center">
+                <div className="flex items-center gap-2">
                   <Input {...field} />
                   {currentType === "url" && (
                     <FetchTitleButton
@@ -270,7 +270,7 @@ function FetchTitleButton({
         {loading ? "Fetching..." : "Use Page Title"}
       </Button>
       {error && (
-        <span className="absolute right-0 left-0 -bottom-6 w-full text-xs text-center text-amber-500">
+        <span className="absolute right-0 -bottom-6 left-0 w-full text-center text-xs text-amber-500">
           {error}
         </span>
       )}

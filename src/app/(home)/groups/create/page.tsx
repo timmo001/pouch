@@ -13,9 +13,7 @@ export default async function CreateGroupPage() {
   return (
     <>
       <BreadcrumbsSetter
-        items={[
-          { key: "groups/create", title: "Create Group" },
-        ]}
+        items={[{ key: "groups/create", title: "Create Group" }]}
       />
 
       <CreateGroupForm />
