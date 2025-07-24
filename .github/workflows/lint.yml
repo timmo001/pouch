@@ -49,7 +49,7 @@ jobs:
         with:
           cache-build: false
       - name: 🎨 Run Prettier
-        run: pnpm check-format
+        run: pnpm format:check
         env:
           SKIP_ENV_VALIDATION: true
   lint-markdown-links:
