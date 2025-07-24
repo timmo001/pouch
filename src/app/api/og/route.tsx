@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import Logo from "~/components/assets/logo";
+import { Logo } from "~/components/assets/logo";
 
 // Create the OpenGraph image for the app, found at /api/og and linked in the layout manifest
 // This is used by social applications to display a preview of the app when shared
