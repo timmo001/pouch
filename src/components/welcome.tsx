@@ -1,4 +1,8 @@
+"use client";
+import Link from "next/link";
 import { SignInButton, SignUpButton } from "@clerk/nextjs";
+import { useCreateBlockNote } from "@blocknote/react";
+import { BlockNoteView } from "@blocknote/shadcn";
 import { Button } from "~/components/ui/button";
 import {
   SlideInContainer,
@@ -6,9 +10,8 @@ import {
 } from "~/components/ui/animations/containers";
 import { Logo } from "~/components/assets/logo";
 import { Github } from "~/components/assets/github";
-import Link from "next/link";
 
-export async function Welcome() {
+export function Welcome() {
   return (
     <>
       <div className="from-muted to-background w-screen bg-linear-to-b">
@@ -89,8 +92,16 @@ export async function Welcome() {
             </div>
           </div>
 
+          {/* Notepad editor demo section */}
+          <NotepadEditorDemo />
+
           {/* GitHub link section */}
-          <div className="mt-4 flex flex-col items-center">
+          <div className="mt-24 flex flex-col items-center gap-2">
+            <h4 className="text-2xl font-semibold">Source Code</h4>
+            <p className="text-foreground mb-2 text-center">
+              Pouch is fully open source under the Apache 2.0 license. You can
+              view the source code on GitHub.
+            </p>
             <Link
               aria-label="View Pouch on GitHub"
               href="https://github.com/timmo001/pouch"
@@ -108,33 +119,167 @@ export async function Welcome() {
               </Button>
             </Link>
           </div>
+
+          <div className="mt-32 flex w-full flex-col gap-8">
+            <h3 className="text-center text-4xl font-semibold">
+              Ready to get started?
+            </h3>
+          </div>
+
+          <div className="mt-32 mb-48 flex h-full w-full flex-row items-center justify-center gap-4">
+            <div className="flex flex-1 flex-col items-center justify-center gap-2">
+              <p className="text-center text-2xl font-bold lg:text-4xl">
+                Sign in to continue
+              </p>
+              <Button size="lg" variant="default" asChild>
+                <SignInButton mode="modal" />
+              </Button>
+            </div>
+            <div className="flex flex-1 flex-col items-center justify-center gap-2">
+              <p className="text-center text-2xl font-bold lg:text-4xl">
+                New here?
+              </p>
+              <Button size="lg" variant="default" asChild>
+                <SignUpButton mode="modal" />
+              </Button>
+            </div>
+          </div>
         </StaggerContainer>
-
-        <div className="mt-32 flex w-full flex-col gap-8">
-          <h3 className="text-center text-4xl font-semibold">
-            Ready to get started?
-          </h3>
-        </div>
-
-        <div className="mt-32 mb-48 flex h-full w-full flex-row items-center justify-center gap-4">
-          <div className="flex flex-1 flex-col items-center justify-center gap-2">
-            <p className="text-center text-2xl font-bold lg:text-4xl">
-              Sign in to continue
-            </p>
-            <Button size="lg" variant="default" asChild>
-              <SignInButton mode="modal" />
-            </Button>
-          </div>
-          <div className="flex flex-1 flex-col items-center justify-center gap-2">
-            <p className="text-center text-2xl font-bold lg:text-4xl">
-              New here?
-            </p>
-            <Button size="lg" variant="default" asChild>
-              <SignUpButton mode="modal" />
-            </Button>
-          </div>
-        </div>
       </main>
     </>
+  );
+}
+
+function NotepadEditorDemo() {
+  const editor = useCreateBlockNote({
+    initialContent: [
+      {
+        type: "paragraph",
+        content: "This is a demo of the Notepad editor. You can type here!",
+      },
+      {
+        type: "paragraph",
+        content: "Try using commands by using the `/` key.",
+      },
+      {
+        type: "paragraph",
+        content:
+          "If you are familiar with markdown, the editor will automatically convert the syntax to the correct format for you.",
+      },
+      {
+        type: "paragraph",
+        content: "",
+      },
+      {
+        type: "heading",
+        props: {
+          level: 3,
+        },
+        content: "Bullet Point List",
+      },
+      {
+        type: "bulletListItem",
+        content: "Item 1",
+      },
+      {
+        type: "bulletListItem",
+        content: "Item 2",
+      },
+      {
+        type: "bulletListItem",
+        content: "Item 3",
+      },
+      {
+        type: "paragraph",
+        content: "",
+      },
+      {
+        type: "heading",
+        props: {
+          level: 3,
+        },
+        content: "Numbered List",
+      },
+      {
+        type: "numberedListItem",
+        content: "Item 1",
+      },
+      {
+        type: "numberedListItem",
+        content: "Item 2",
+      },
+      {
+        type: "numberedListItem",
+        content: "Item 3",
+      },
+      {
+        type: "paragraph",
+        content: "",
+      },
+      {
+        type: "heading",
+        props: {
+          level: 3,
+        },
+        content: "Checklist",
+      },
+      {
+        type: "checkListItem",
+        content: "Item 1",
+      },
+      {
+        type: "checkListItem",
+        content: "Item 2",
+      },
+      {
+        type: "checkListItem",
+        content: "Item 3",
+      },
+      {
+        type: "paragraph",
+        content: "",
+      },
+      {
+        type: "heading",
+        props: {
+          level: 3,
+        },
+        content: "Code Block",
+      },
+      {
+        type: "codeBlock",
+        content: "console.log('Hello, world!');",
+      },
+      {
+        type: "paragraph",
+        content: "",
+      },
+      {
+        type: "heading",
+        props: {
+          level: 3,
+        },
+        content: "Quote",
+      },
+      {
+        type: "quote",
+        content: "This is a quote.",
+      },
+      {
+        type: "paragraph",
+        content: "",
+      },
+    ],
+  });
+  if (typeof window === "undefined") return null;
+  return (
+    <div className="mt-24 flex w-full max-w-4xl flex-col items-center gap-4">
+      <h3 className="text-center text-4xl font-semibold">
+        Try the notepad editor
+      </h3>
+      <div className="bg-card w-full overflow-hidden rounded-lg border px-2 py-4">
+        <BlockNoteView editor={editor} theme="light" />
+      </div>
+    </div>
   );
 }
