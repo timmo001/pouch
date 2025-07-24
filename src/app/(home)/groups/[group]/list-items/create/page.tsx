@@ -7,6 +7,41 @@ import { getAuthToken } from "~/server/auth";
 import { BreadcrumbsSetter } from "~/components/breadcrumbs/setter";
 import { CreateListItemForm } from "~/app/(home)/groups/[group]/list-items/create/_components/form";
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ group: Id<"groups"> }>;
+}): Promise<Metadata> {
+  const { group: groupId } = await params;
+
+  const token = await getAuthToken();
+
+  const group = await fetchQuery(
+    api.groups.getById,
+    { id: groupId },
+    { token },
+  ).catch((error) => {
+    console.warn(
+      "[groups/[group]/list-items/create/generateMetadata] Error fetching group from api.groups.getById",
+      error,
+    );
+    notFound();
+  });
+
+  if (!group) {
+    console.warn(
+      "[groups/[group]/list-items/create/generateMetadata] Group not found from fetchQuery",
+    );
+    notFound();
+  }
+
+  const titles = ["Create List Item", group.name];
+  return {
+    title: titles.join(" | "),
+    description: titles.join(" for "),
+  };
+}
+
 export const metadata: Metadata = {
   title: "Create List Item",
   description: "Create a new list item",
@@ -57,7 +92,12 @@ export default async function CreateListItemPage({
             title: group.name,
             href: `/groups/${group._id}`,
           },
-          { key: "list-items/create", title: "Create List Item" },
+          {
+            key: "list-items",
+            title: "List Items",
+            href: `/groups/${group._id}/list-items`,
+          },
+          { key: "create", title: "Create" },
         ]}
       />
       <div className="flex flex-col gap-4">

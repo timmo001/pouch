@@ -39,11 +39,12 @@ export async function generateMetadata({
 
   const titles = [
     listItem.description?.length ? listItem.description : listItem.value,
+    "List Items",
     listItem.group.name,
   ];
   return {
     title: titles.join(" | "),
-    description: titles.join(" - "),
+    description: `${titles[0]} in ${titles[1]} for ${titles[2]}`,
   };
 }
 
@@ -106,6 +107,11 @@ export default async function GroupPage({
             key: `groups/${groupId}`,
             title: listItem.group.name,
             href: `/groups/${groupId}`,
+          },
+          {
+            key: `list-items`,
+            title: "List Items",
+            href: `/groups/${groupId}/list-items`,
           },
           {
             key: `list-items/${itemId}`,
