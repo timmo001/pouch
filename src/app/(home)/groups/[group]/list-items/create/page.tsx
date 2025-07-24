@@ -42,11 +42,6 @@ export async function generateMetadata({
   };
 }
 
-export const metadata: Metadata = {
-  title: "Create List Item",
-  description: "Create a new list item",
-};
-
 export const dynamic = "force-dynamic";
 
 export default async function CreateListItemPage({
