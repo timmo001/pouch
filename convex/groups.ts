@@ -11,7 +11,8 @@ export const getAll = query({
 
     return await ctx.db
       .query("groups")
-      .withIndex("by_user_archived_created")
+      // _creationTime is automatically added to the end of each index
+      .withIndex("by_user_archived")
       .filter((q) =>
         q.and(
           q.eq(q.field("user"), identity.tokenIdentifier),
