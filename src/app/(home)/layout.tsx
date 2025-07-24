@@ -58,11 +58,10 @@ export default function HomeLayout({
   useEffect(() => {
     // Check if the user is logged in and has already dismissed the prompt in localStorage
     if (
-      isSignedIn &&
-      typeof window !== "undefined" &&
-      (window.location.hostname === "localhost" ||
-        window.location.hostname === "127.0.0.1") &&
-      localStorage.getItem("pwaPromptDismissed") === "true"
+      (typeof window !== "undefined" &&
+        window.location.hostname === "localhost") ||
+      window.location.hostname === "127.0.0.1" ||
+      (isSignedIn && localStorage.getItem("pwaPromptDismissed") === "true")
     ) {
       dismissedRef.current = true;
       return;
