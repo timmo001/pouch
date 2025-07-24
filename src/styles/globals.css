@@ -170,3 +170,12 @@
   --bn-font-family: var(--font-sans);
   --bn-border-radius: var(--radius);
 }
+
+.bn-suggestion-menu {
+  background: var(--color-card) !important;
+  border-radius: var(--radius-md) !important;
+}
+
+.bn-suggestion-menu-item:hover {
+  background: var(--color-muted) !important;
+}
