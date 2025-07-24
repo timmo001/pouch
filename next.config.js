@@ -10,6 +10,10 @@ const config = {
   experimental: {
     reactCompiler: true,
   },
+  eslint: {
+    // Speed up build times, we handle these in the lint pipeline anyway
+    ignoreDuringBuilds: true,
+  },
 };
 
 const sentryConfig = withSentryConfig(config, {

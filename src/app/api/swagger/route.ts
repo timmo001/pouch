@@ -2,7 +2,6 @@ import { createSwaggerSpec } from "next-swagger-doc";
 
 export async function GET() {
   return Response.json(
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     createSwaggerSpec({
       apiFolder: "src/app/api",
       definition: {
