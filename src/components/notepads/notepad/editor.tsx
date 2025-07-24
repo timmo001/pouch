@@ -26,7 +26,12 @@ export function NotepadEditor({ group }: { group: Doc<"groups"> }) {
     );
   }
 
-  return <Editor notepadId={notepad._id} />;
+  return (
+    <>
+      <h2 className="text-2xl font-bold">Notepad</h2>
+      <Editor notepadId={notepad._id} />
+    </>
+  );
 }
 
 function Editor({ notepadId }: { notepadId: Id<"notepads"> }) {

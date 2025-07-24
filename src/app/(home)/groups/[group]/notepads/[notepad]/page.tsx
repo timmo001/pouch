@@ -84,14 +84,16 @@ export default async function NotepadPage({
           },
         ]}
       />
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-row gap-2">
-          <h1 className="flex-grow text-3xl font-bold">
-            Update Notepad for {group.name}
-          </h1>
-        </div>
+      <div className="container mx-auto max-w-screen-lg">
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-row gap-2">
+            <h1 className="flex-grow text-3xl font-bold">
+              Update Notepad for {group.name}
+            </h1>
+          </div>
 
-        <NotepadEditor group={group} />
+          <NotepadEditor group={group} />
+        </div>
       </div>
     </>
   );

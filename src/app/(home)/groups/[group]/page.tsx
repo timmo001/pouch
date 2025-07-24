@@ -9,7 +9,7 @@ import { GroupEditName } from "~/components/groups/group/edit-name";
 import { GroupEditDescription } from "~/components/groups/group/edit-description";
 import { GroupDelete } from "~/components/groups/group/delete";
 import { DraggableListItems } from "~/components/list-items/draggable-list";
-import { NotepadView } from "~/components/notepads/notepad/view";
+import { NotepadEditor } from "~/components/notepads/notepad/editor";
 
 export async function generateMetadata({
   params,
@@ -80,44 +80,29 @@ export default async function GroupPage({
     return null;
   });
 
-  const preloadedNotepad = await preloadQuery(
-    api.notepads.getFromGroup,
-    { group: group._id },
-    { token },
-  ).catch((error) => {
-    console.warn(
-      "[groups/[group]/page] Error fetching notepad from api.notepads.getFromGroup",
-      error,
-    );
-    return null;
-  });
-
   return (
     <>
       <BreadcrumbsSetter
         items={[{ key: `groups/${group._id}`, title: group.name }]}
       />
-      <div className="flex flex-col gap-4">
-        <div className="flex w-full flex-row items-center justify-between gap-2 px-2">
-          <h1 className="text-3xl font-bold text-wrap">{group.name}</h1>
-          <div className="flex flex-grow flex-row flex-wrap justify-end gap-2">
-            <GroupEditName group={group} />
-            <GroupEditDescription group={group} />
-            <GroupDelete group={group} />
+      <div className="container mx-auto max-w-screen-lg">
+        <div className="flex flex-col gap-4">
+          <div className="flex w-full flex-row items-center justify-between gap-2 px-2">
+            <h1 className="text-3xl font-bold text-wrap">{group.name}</h1>
+            <div className="flex flex-grow flex-row flex-wrap justify-end gap-2">
+              <GroupEditName group={group} />
+              <GroupEditDescription group={group} />
+              <GroupDelete group={group} />
+            </div>
           </div>
+          {preloadedListItems && (
+            <DraggableListItems
+              group={group}
+              preloadedListItems={preloadedListItems}
+            />
+          )}
+          <NotepadEditor group={group} />
         </div>
-        {preloadedListItems && (
-          <DraggableListItems
-            group={group}
-            preloadedListItems={preloadedListItems}
-          />
-        )}
-        {preloadedNotepad && (
-          <NotepadView
-            groupId={group._id}
-            preloadedNotepad={preloadedNotepad}
-          />
-        )}
       </div>
     </>
   );
