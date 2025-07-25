@@ -47,14 +47,14 @@ export default function RootLayout({
       <body className="bg-background text-foreground" suppressHydrationWarning>
         <ThemeProvider>
           <ClerkProvider>
-            <ConvexClientProvider>
-              <TanstackQueryProvider>
-                <NuqsAdapter>
+            <NuqsAdapter>
+              <ConvexClientProvider>
+                <TanstackQueryProvider>
                   {children}
                   <Toaster />
-                </NuqsAdapter>
-              </TanstackQueryProvider>
-            </ConvexClientProvider>
+                </TanstackQueryProvider>
+              </ConvexClientProvider>
+            </NuqsAdapter>
           </ClerkProvider>
         </ThemeProvider>
       </body>
