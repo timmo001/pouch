@@ -7,6 +7,7 @@ import { getAuthToken } from "~/server/auth";
 import { Button } from "~/components/ui/button";
 import { DateLocale } from "~/components/ui/date-locale";
 import { BreadcrumbsSetter } from "~/components/breadcrumbs/setter";
+import { Welcome } from "~/components/welcome";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +15,7 @@ export default async function HomePage() {
   const token = await getAuthToken();
 
   if (!token || token.length === 0) {
-    return redirect("/welcome");
+    return <Welcome />;
   }
 
   const groups = await fetchQuery(api.groups.getAll, {}, { token }).catch(
