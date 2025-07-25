@@ -50,6 +50,7 @@ export default function HomeLayout({
 
   useEffect(() => {
     if (!isSignedIn) {
+      console.log("User is not signed in");
       localStorage.setItem("pwaPromptDismissed", "false");
       dismissedRef.current = false;
     }
