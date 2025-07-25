@@ -5,6 +5,7 @@ import Link from "next/link";
 import { type Doc } from "~/convex/_generated/dataModel";
 import { getListItemTitle } from "~/lib/list-item";
 import { motion, AnimatePresence } from "motion/react";
+import { useEffect, useRef } from "react";
 
 export function ListItemURL({ listItem }: { listItem: Doc<"listItems"> }) {
   return (
@@ -52,7 +53,14 @@ function ListItemTextContainers({
   };
 }) {
   const [isHovered, setIsHovered] = useState<boolean>(false);
-  const collapsedHeight = 24;
+  const [collapsedHeight, setCollapsedHeight] = useState<number>(0);
+  const titleHeightRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (titleHeightRef.current) {
+      setCollapsedHeight(titleHeightRef.current.offsetHeight);
+    }
+  }, [content.title]);
 
   return (
     <div
@@ -63,15 +71,18 @@ function ListItemTextContainers({
       <AnimatePresence>
         <motion.div
           key="desc-container"
-          className="group flex w-full flex-row flex-wrap items-baseline justify-between gap-2 overflow-hidden"
+          className="group flex w-full min-w-0 flex-row flex-wrap items-baseline justify-between gap-2 overflow-hidden"
           initial={{ height: collapsedHeight, opacity: 0 }}
           animate={{ height: isHovered ? "auto" : collapsedHeight, opacity: 1 }}
           exit={{ height: collapsedHeight, opacity: 0 }}
           transition={{ duration: 0.2, ease: "easeInOut" }}
         >
-          <span className="flex flex-shrink-0 flex-row items-baseline gap-2 text-wrap">
+          <div
+            className="text-foreground flex min-w-0 flex-shrink flex-row items-center gap-2 text-wrap break-words transition-all"
+            ref={titleHeightRef}
+          >
             {content.title}
-          </span>
+          </div>
           {content.description && isHovered && (
             <motion.span
               key={
@@ -79,7 +90,7 @@ function ListItemTextContainers({
                   ? content.description
                   : undefined
               }
-              className="text-muted-foreground min-w-0 flex-shrink text-sm text-wrap transition-all"
+              className="text-muted-foreground min-w-0 flex-shrink text-sm text-wrap break-words transition-all"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
