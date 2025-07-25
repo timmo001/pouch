@@ -248,14 +248,14 @@ function ListItemTextContainers({
     description: ReactNode | string;
   };
 }) {
-  const [isHovered, setIsHovered] = useState(false);
-  const collapsedHeight = 24; // px, adjust as needed
+  const [isHovered, setIsHovered] = useState<boolean>(false);
+  const collapsedHeight = 24;
 
   return (
     <div
+      className="w-full"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      style={{ width: "100%" }}
     >
       <AnimatePresence>
         <motion.div
@@ -264,7 +264,7 @@ function ListItemTextContainers({
           initial={{ height: collapsedHeight, opacity: 0 }}
           animate={{ height: isHovered ? "auto" : collapsedHeight, opacity: 1 }}
           exit={{ height: collapsedHeight, opacity: 0 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.2, ease: "easeInOut" }}
         >
           <span className="flex flex-shrink-0 flex-row items-baseline gap-2 text-wrap">
             {content.value}
@@ -280,7 +280,7 @@ function ListItemTextContainers({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2, delay: 0.05 }}
+              transition={{ duration: 0.4, ease: "easeInOut" }}
             >
               {content.description}
             </motion.span>
