@@ -15,7 +15,7 @@ export function ListItemURL({ listItem }: { listItem: Doc<"listItems"> }) {
     >
       <ListItemTextContainers
         content={{
-          value: (
+          title: (
             <>
               {getListItemTitle({
                 type: listItem.type,
@@ -36,7 +36,7 @@ export function ListItemText({ listItem }: { listItem: Doc<"listItems"> }) {
   return (
     <ListItemTextContainers
       content={{
-        value: listItem.value,
+        title: listItem.value,
         description: listItem.description,
       }}
     />
@@ -47,7 +47,7 @@ function ListItemTextContainers({
   content,
 }: {
   content: {
-    value: ReactNode | string;
+    title: ReactNode | string;
     description: ReactNode | string;
   };
 }) {
@@ -70,7 +70,7 @@ function ListItemTextContainers({
           transition={{ duration: 0.2, ease: "easeInOut" }}
         >
           <span className="flex flex-shrink-0 flex-row items-baseline gap-2 text-wrap">
-            {content.value}
+            {content.title}
           </span>
           {content.description && isHovered && (
             <motion.span
