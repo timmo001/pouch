@@ -45,18 +45,18 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geist.variable}`} suppressHydrationWarning>
       <body className="bg-background text-foreground" suppressHydrationWarning>
-        <NuqsAdapter>
-          <ThemeProvider attribute="class">
-            <ClerkProvider>
-              <ConvexClientProvider>
-                <TanstackQueryProvider>
+        <ThemeProvider>
+          <ClerkProvider>
+            <ConvexClientProvider>
+              <TanstackQueryProvider>
+                <NuqsAdapter>
                   {children}
                   <Toaster />
-                </TanstackQueryProvider>
-              </ConvexClientProvider>
-            </ClerkProvider>
-          </ThemeProvider>
-        </NuqsAdapter>
+                </NuqsAdapter>
+              </TanstackQueryProvider>
+            </ConvexClientProvider>
+          </ClerkProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

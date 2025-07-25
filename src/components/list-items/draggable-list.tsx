@@ -202,8 +202,8 @@ function ListItemURL({ listItem }: { listItem: Doc<"listItems"> }) {
       href={listItem.value}
       target="_blank"
     >
-      <div className="group flex w-full min-w-0 flex-grow flex-row items-baseline justify-between gap-2">
-        <span className="flex flex-shrink-0 flex-row items-baseline gap-2 text-nowrap">
+      <div className="group flex w-full min-w-0 flex-grow flex-row flex-wrap items-baseline justify-between gap-2 overflow-x-hidden">
+        <span className="flex flex-shrink-0 flex-row items-baseline gap-2 text-wrap">
           {getListItemTitle({
             type: listItem.type,
             description: listItem.description,
@@ -211,7 +211,7 @@ function ListItemURL({ listItem }: { listItem: Doc<"listItems"> }) {
           })}
           <ExternalLinkIcon className="size-3.5 flex-shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
         </span>
-        <span className="text-muted-foreground min-w-0 flex-shrink truncate text-sm opacity-0 transition-opacity group-hover:opacity-100">
+        <span className="text-muted-foreground min-w-0 flex-shrink text-sm text-wrap opacity-0 transition-opacity group-hover:opacity-100">
           {listItem.value}
         </span>
       </div>
@@ -221,11 +221,11 @@ function ListItemURL({ listItem }: { listItem: Doc<"listItems"> }) {
 
 function ListItemText({ listItem }: { listItem: Doc<"listItems"> }) {
   return (
-    <div className="group flex w-full min-w-0 flex-grow flex-row items-baseline justify-between gap-2">
-      <span className="flex flex-shrink-0 flex-row items-baseline gap-2 text-nowrap">
+    <div className="group flex w-full min-w-0 flex-grow flex-row flex-nowrap items-baseline justify-between gap-2 overflow-x-hidden hover:flex-wrap">
+      <span className="flex flex-shrink-0 flex-row items-baseline gap-2 text-wrap">
         {listItem.value}
       </span>
-      <span className="text-muted-foreground min-w-0 flex-shrink truncate text-sm opacity-0 transition-opacity group-hover:opacity-100">
+      <span className="text-muted-foreground min-w-0 flex-shrink text-sm text-wrap opacity-0 transition-opacity group-hover:opacity-100">
         {listItem.description}
       </span>
     </div>

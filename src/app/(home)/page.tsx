@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import Link from "next/link";
 import { PlusIcon } from "lucide-react";
 import { fetchQuery } from "convex/nextjs";
@@ -14,7 +13,7 @@ export default async function HomePage() {
   const token = await getAuthToken();
 
   if (!token || token.length === 0) {
-    return redirect("/welcome");
+    return null;
   }
 
   const groups = await fetchQuery(api.groups.getAll, {}, { token }).catch(
