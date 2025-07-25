@@ -248,25 +248,28 @@ function ListItemTextContainers({
     description: ReactNode | string;
   };
 }) {
-  const [showSpan, setShowSpan] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const collapsedHeight = 24; // px, adjust as needed
 
   return (
-    <>
+    <div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      style={{ width: "100%" }}
+    >
       <AnimatePresence>
         <motion.div
           key="desc-container"
           className="group flex w-full flex-row flex-wrap items-baseline justify-between gap-2 overflow-hidden"
-          initial={{ height: 0, opacity: 0 }}
-          animate={{ height: "auto", opacity: 1 }}
-          exit={{ height: 0, opacity: 0 }}
+          initial={{ height: collapsedHeight, opacity: 0 }}
+          animate={{ height: isHovered ? "auto" : collapsedHeight, opacity: 1 }}
+          exit={{ height: collapsedHeight, opacity: 0 }}
           transition={{ duration: 0.3 }}
-          onHoverStart={() => setShowSpan(true)}
-          onHoverEnd={() => setShowSpan(false)}
         >
           <span className="flex flex-shrink-0 flex-row items-baseline gap-2 text-wrap">
             {content.value}
           </span>
-          {content.description && showSpan && (
+          {content.description && isHovered && (
             <motion.span
               key={
                 typeof content.description === "string"
@@ -274,9 +277,9 @@ function ListItemTextContainers({
                   : undefined
               }
               className="text-muted-foreground min-w-0 flex-shrink text-sm text-wrap transition-all"
-              initial={{ opacity: 0, x: 10 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 10 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               transition={{ duration: 0.2, delay: 0.05 }}
             >
               {content.description}
@@ -284,6 +287,6 @@ function ListItemTextContainers({
           )}
         </motion.div>
       </AnimatePresence>
-    </>
+    </div>
   );
 }
