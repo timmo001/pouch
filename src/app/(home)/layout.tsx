@@ -49,14 +49,6 @@ export default function HomeLayout({
   }, []);
 
   useEffect(() => {
-    if (!isSignedIn) {
-      console.log("User is not signed in");
-      localStorage.setItem("pwaPromptDismissed", "false");
-      dismissedRef.current = false;
-    }
-  }, [isSignedIn, pathname]);
-
-  useEffect(() => {
     // Check if the user is logged in and has already dismissed the prompt in localStorage
     if (
       (typeof window !== "undefined" &&
