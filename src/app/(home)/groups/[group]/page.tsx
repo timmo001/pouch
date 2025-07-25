@@ -83,21 +83,17 @@ export default async function GroupPage({
       <BreadcrumbsSetter
         items={[{ key: `groups/${group._id}`, title: group.name }]}
       />
-      <div className="container mx-auto max-w-screen-lg">
-        <div className="flex flex-col gap-4">
-          <div className="flex w-full flex-row items-center justify-between gap-2 px-2">
-            <h1 className="text-3xl font-bold text-wrap">{group.name}</h1>
-            <GroupActions group={group} />
-          </div>
-          {preloadedListItems && (
-            <DraggableListItems
-              group={group}
-              preloadedListItems={preloadedListItems}
-            />
-          )}
-          <NotepadEditor group={group} />
-        </div>
+      <div className="flex w-full flex-row items-center justify-between gap-2 px-2">
+        <h1 className="text-3xl font-bold text-wrap">{group.name}</h1>
+        <GroupActions group={group} />
       </div>
+      {preloadedListItems && (
+        <DraggableListItems
+          group={group}
+          preloadedListItems={preloadedListItems}
+        />
+      )}
+      <NotepadEditor group={group} />
     </>
   );
 }

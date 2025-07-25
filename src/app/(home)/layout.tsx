@@ -108,7 +108,7 @@ export default function HomeLayout({
     <BreadcrumbsStoreProvider>
       <div
         ref={headerContainerRef}
-        className="relative flex h-screen w-screen max-w-screen flex-col"
+        className="relative flex min-h-screen flex-col"
       >
         <header
           className={cn(
@@ -155,7 +155,7 @@ export default function HomeLayout({
         </header>
         <Authenticated>
           <div className="min-h-14" />
-          <main className="container mx-auto flex flex-1 flex-col p-4">
+          <main className="container mx-auto flex flex-1 flex-col gap-4 p-4">
             {children}
           </main>
         </Authenticated>
