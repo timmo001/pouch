@@ -3,7 +3,7 @@ import { useMemo, useState, useEffect, useCallback, useRef } from "react";
 import { type Preloaded, usePreloadedQuery } from "convex/react";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
-import { GripVertical, PlusIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import { ReactSortable } from "react-sortablejs";
 import { toast } from "sonner";
 import Link from "next/link";
@@ -15,10 +15,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "~/components/ui/accordion";
-import { ListItemActions } from "~/components/list-items/item/actions";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
-import { ListItemText, ListItemURL } from "~/components/list-items/item";
+import { ListItem } from "~/components/list-items/item";
 
 export function DraggableListItems({
   group,
@@ -174,22 +173,7 @@ function SortableListItems({
       }}
     >
       {listItems.map((listItem) => (
-        <div
-          key={listItem._id}
-          className="flex min-w-0 flex-row items-center justify-between gap-2 px-2 py-1.5"
-        >
-          <div className="flex min-w-0 flex-grow flex-row items-center gap-2">
-            <div className="drag-handle flex-shrink-0 cursor-grab active:cursor-grabbing">
-              <GripVertical className="h-4 w-4" />
-            </div>
-            {listItem.type === "url" ? (
-              <ListItemURL listItem={listItem} />
-            ) : (
-              <ListItemText listItem={listItem} />
-            )}
-          </div>
-          <ListItemActions listItem={listItem} />
-        </div>
+        <ListItem key={listItem._id} listItem={listItem} />
       ))}
     </ReactSortable>
   );

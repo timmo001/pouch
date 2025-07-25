@@ -1,13 +1,34 @@
 "use client";
-import { useState, type ReactNode } from "react";
-import { ExternalLinkIcon } from "lucide-react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { ExternalLinkIcon, GripVertical } from "lucide-react";
 import Link from "next/link";
 import { type Doc } from "~/convex/_generated/dataModel";
 import { getListItemTitle } from "~/lib/list-item";
 import { motion, AnimatePresence } from "motion/react";
-import { useEffect, useRef } from "react";
+import { ListItemActions } from "~/components/list-items/item/actions";
 
-export function ListItemURL({ listItem }: { listItem: Doc<"listItems"> }) {
+export function ListItem({ listItem }: { listItem: Doc<"listItems"> }) {
+  return (
+    <div
+      key={listItem._id}
+      className="flex min-w-0 flex-row items-center justify-between gap-2 px-2 py-1.5"
+    >
+      <div className="flex min-w-0 flex-grow flex-row items-center gap-2">
+        <div className="drag-handle flex-shrink-0 cursor-grab active:cursor-grabbing">
+          <GripVertical className="h-4 w-4" />
+        </div>
+        {listItem.type === "url" ? (
+          <ListItemURL listItem={listItem} />
+        ) : (
+          <ListItemText listItem={listItem} />
+        )}
+      </div>
+      <ListItemActions listItem={listItem} />
+    </div>
+  );
+}
+
+function ListItemURL({ listItem }: { listItem: Doc<"listItems"> }) {
   return (
     <Link
       className="group flex min-w-0 flex-grow"
@@ -33,7 +54,7 @@ export function ListItemURL({ listItem }: { listItem: Doc<"listItems"> }) {
   );
 }
 
-export function ListItemText({ listItem }: { listItem: Doc<"listItems"> }) {
+function ListItemText({ listItem }: { listItem: Doc<"listItems"> }) {
   return (
     <ListItemTextContainers
       content={{
