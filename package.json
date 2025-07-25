@@ -21,7 +21,7 @@
     "@blocknote/core": "^0.34.0",
     "@blocknote/react": "^0.34.0",
     "@blocknote/shadcn": "^0.34.0",
-    "@clerk/nextjs": "^6.25.5",
+    "@clerk/nextjs": "^6.26.0",
     "@clerk/themes": "^2.4.0",
     "@convex-dev/prosemirror-sync": "^0.1.26",
     "@convex-dev/react-query": "^0.0.0-alpha.11",
@@ -66,7 +66,7 @@
   },
   "devDependencies": {
     "@catppuccin/tailwindcss": "^0.1.6",
-    "@clerk/types": "^4.69.0",
+    "@clerk/types": "^4.70.0",
     "@eslint/eslintrc": "^3.3.1",
     "@tailwindcss/postcss": "^4.1.11",
     "@tanstack/eslint-plugin-query": "^5.81.2",
