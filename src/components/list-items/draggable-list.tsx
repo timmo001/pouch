@@ -1,5 +1,12 @@
 "use client";
-import { useMemo, useState, useEffect, useCallback, useRef } from "react";
+import {
+  useMemo,
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  type ReactNode,
+} from "react";
 import { type Preloaded, usePreloadedQuery } from "convex/react";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
@@ -19,6 +26,7 @@ import {
 import { ListItemActions } from "~/components/list-items/item/actions";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
+import { motion, AnimatePresence } from "motion/react";
 
 export function DraggableListItems({
   group,
@@ -202,32 +210,80 @@ function ListItemURL({ listItem }: { listItem: Doc<"listItems"> }) {
       href={listItem.value}
       target="_blank"
     >
-      <div className="group flex w-full min-w-0 flex-grow flex-row flex-wrap items-baseline justify-between gap-2 overflow-x-hidden">
-        <span className="flex flex-shrink-0 flex-row items-baseline gap-2 text-wrap">
-          {getListItemTitle({
-            type: listItem.type,
-            description: listItem.description,
-            value: listItem.value,
-          })}
-          <ExternalLinkIcon className="size-3.5 flex-shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
-        </span>
-        <span className="text-muted-foreground min-w-0 flex-shrink text-sm text-wrap opacity-0 transition-opacity group-hover:opacity-100">
-          {listItem.value}
-        </span>
-      </div>
+      <ListItemTextContainers
+        content={{
+          value: (
+            <>
+              {getListItemTitle({
+                type: listItem.type,
+                description: listItem.description,
+                value: listItem.value,
+              })}
+              <ExternalLinkIcon className="size-3.5 flex-shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
+            </>
+          ),
+          description: listItem.value,
+        }}
+      />
     </Link>
   );
 }
 
 function ListItemText({ listItem }: { listItem: Doc<"listItems"> }) {
   return (
-    <div className="group flex w-full min-w-0 flex-grow flex-row flex-nowrap items-baseline justify-between gap-2 overflow-x-hidden hover:flex-wrap">
-      <span className="flex flex-shrink-0 flex-row items-baseline gap-2 text-wrap">
-        {listItem.value}
-      </span>
-      <span className="text-muted-foreground min-w-0 flex-shrink text-sm text-wrap opacity-0 transition-opacity group-hover:opacity-100">
-        {listItem.description}
-      </span>
-    </div>
+    <ListItemTextContainers
+      content={{
+        value: listItem.value,
+        description: listItem.description,
+      }}
+    />
+  );
+}
+
+function ListItemTextContainers({
+  content,
+}: {
+  content: {
+    value: ReactNode | string;
+    description: ReactNode | string;
+  };
+}) {
+  const [showSpan, setShowSpan] = useState(false);
+
+  return (
+    <>
+      <AnimatePresence>
+        <motion.div
+          key="desc-container"
+          className="group flex w-full flex-row flex-wrap items-baseline justify-between gap-2 overflow-hidden"
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: "auto", opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          onHoverStart={() => setShowSpan(true)}
+          onHoverEnd={() => setShowSpan(false)}
+        >
+          <span className="flex flex-shrink-0 flex-row items-baseline gap-2 text-wrap">
+            {content.value}
+          </span>
+          {content.description && showSpan && (
+            <motion.span
+              key={
+                typeof content.description === "string"
+                  ? content.description
+                  : undefined
+              }
+              className="text-muted-foreground min-w-0 flex-shrink text-sm text-wrap transition-all"
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 10 }}
+              transition={{ duration: 0.2, delay: 0.05 }}
+            >
+              {content.description}
+            </motion.span>
+          )}
+        </motion.div>
+      </AnimatePresence>
+    </>
   );
 }
