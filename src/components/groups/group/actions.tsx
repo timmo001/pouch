@@ -62,15 +62,27 @@ export function GroupActions({ group }: { group: Doc<"groups"> }) {
 
       {/* Desktop */}
       <div className="hidden flex-grow flex-row flex-wrap justify-end gap-2 md:flex">
-        <Button size="lg" variant="secondary" onClick={() => setEditNameOpen(true)}>
+        <Button
+          size="lg"
+          variant="secondary"
+          onClick={() => setEditNameOpen(true)}
+        >
           <PencilLineIcon />
           Edit name
         </Button>
-        <Button size="lg" variant="secondary" onClick={() => setEditDescriptionOpen(true)}>
+        <Button
+          size="lg"
+          variant="secondary"
+          onClick={() => setEditDescriptionOpen(true)}
+        >
           <PencilRulerIcon />
           Edit description
         </Button>
-        <Button size="lg" variant="destructive" onClick={() => setDeleteOpen(true)}>
+        <Button
+          size="lg"
+          variant="destructive"
+          onClick={() => setDeleteOpen(true)}
+        >
           <Trash2Icon />
           Delete group
         </Button>
