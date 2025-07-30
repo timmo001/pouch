@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { motion } from "motion/react";
+import { cn } from "~/lib/utils";
 
 export function FadeInContainer({
   children,
@@ -134,7 +135,10 @@ export function StaggerContainer({
 
   return (
     <motion.div
-      className={className}
+      className={cn("w-full", className)}
+      style={{
+        width: "100%",
+      }}
       variants={container}
       initial="hidden"
       whileInView="visible"

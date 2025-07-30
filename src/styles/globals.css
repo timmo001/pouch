@@ -122,6 +122,9 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    scrollbar-gutter: stable;
+    scrollbar-width: auto;
+    scrollbar-color: var(--primary) var(--card);
   }
   body {
     @apply bg-background text-foreground;

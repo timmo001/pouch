@@ -126,9 +126,9 @@ export function Welcome() {
             </h3>
           </div>
 
-          <div className="mt-32 mb-48 flex h-full w-full flex-row items-center justify-center gap-4">
+          <div className="mt-32 mb-48 flex h-full w-xl max-w-full flex-row items-center justify-center gap-64">
             <div className="flex flex-1 flex-col items-center justify-center gap-2">
-              <p className="text-center text-2xl font-bold lg:text-4xl">
+              <p className="text-center text-3xl font-bold text-nowrap">
                 Sign in to continue
               </p>
               <Button size="lg" variant="default" asChild>
@@ -136,7 +136,7 @@ export function Welcome() {
               </Button>
             </div>
             <div className="flex flex-1 flex-col items-center justify-center gap-2">
-              <p className="text-center text-2xl font-bold lg:text-4xl">
+              <p className="text-center text-3xl font-bold text-nowrap">
                 New here?
               </p>
               <Button size="lg" variant="default" asChild>

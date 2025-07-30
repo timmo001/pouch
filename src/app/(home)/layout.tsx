@@ -108,7 +108,7 @@ export default function HomeLayout({
     <BreadcrumbsStoreProvider>
       <div
         ref={headerContainerRef}
-        className="relative flex min-h-screen flex-col"
+        className="relative flex min-h-screen overflow-y-auto overflow-x-hidden flex-col"
       >
         <header
           className={cn(
