@@ -1,5 +1,4 @@
 import type { UserIdentity } from "convex/server";
-import { api } from "./_generated/api";
 import type { QueryCtx, MutationCtx } from "./_generated/server";
 
 /**
