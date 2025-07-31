@@ -49,7 +49,6 @@ export function UserSettings() {
 
   function handleCopyApiAccessToken() {
     if (user?.apiAccessToken) {
-      if (navigator?.clipboard) {
       try {
         if (!navigator?.clipboard) {
           throw new Error("Clipboard is not supported");
