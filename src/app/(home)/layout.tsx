@@ -4,7 +4,11 @@ import { BreadcrumbsStoreProvider } from "~/components/providers/breadcrumbs-sto
 import { Header } from "~/components/header";
 import { Welcome } from "~/components/welcome";
 
-export default function HomeLayout({ children }: { children: React.ReactNode }) {
+export default function HomeLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <BreadcrumbsStoreProvider>
       <div className="relative flex min-h-screen flex-col overflow-x-hidden overflow-y-auto">
