@@ -49,8 +49,13 @@ export function UserSettings() {
 
   function handleCopyApiAccessToken() {
     if (user?.apiAccessToken) {
-      void navigator?.clipboard?.writeText(user.apiAccessToken);
-      toast.success("API Access Token copied!");
+      try {
+        void navigator?.clipboard?.writeText(user.apiAccessToken);
+        toast.success("API Access Token copied!");
+      } catch (error) {
+        console.error("Failed to copy API Access Token:", error);
+        toast.error("Failed to copy API Access Token. Please try again.");
+      }
     }
   }
 
