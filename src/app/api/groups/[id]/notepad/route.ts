@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { api } from "~/convex/_generated/api";
 import { fetchQuery, fetchMutation } from "convex/nextjs";
-import { getAuthToken } from "~/lib/api/auth";
+import { getApiToken } from "~/lib/api/auth";
 import { handleApiError } from "~/lib/api/error";
 import { UpdateNotepadRequestSchema } from "~/lib/api/schemas";
 import type { Id } from "~/convex/_generated/dataModel";
@@ -29,12 +29,11 @@ export async function GET(
 ) {
   const { id } = await params;
   try {
-    const token = getAuthToken(req);
-    const notepad = await fetchQuery(
-      api.notepads.getFromGroup,
-      { group: id },
-      { token },
-    );
+    const apiAccessToken = getApiToken(req);
+    const notepad = await fetchQuery(api.notepads.getFromGroup, {
+      group: id,
+      apiAccessToken,
+    });
     return NextResponse.json({ data: notepad, error: null });
   } catch (error) {
     const { status, body } = handleApiError(error);
@@ -64,12 +63,11 @@ export async function POST(
 ) {
   const { id } = await params;
   try {
-    const token = getAuthToken(req);
-    const notepad = await fetchMutation(
-      api.notepads.create,
-      { group: id },
-      { token },
-    );
+    const apiAccessToken = getApiToken(req);
+    const notepad = await fetchMutation(api.notepads.create, {
+      group: id,
+      apiAccessToken,
+    });
     return NextResponse.json({ data: notepad, error: null }, { status: 201 });
   } catch (error) {
     const { status, body } = handleApiError(error);
@@ -99,7 +97,7 @@ export async function PUT(
 ) {
   const { id } = await params;
   try {
-    const token = getAuthToken(req);
+    const apiAccessToken = getApiToken(req);
     const body = (await req.json()) as z.infer<
       typeof UpdateNotepadRequestSchema
     >;
@@ -114,11 +112,10 @@ export async function PUT(
       );
     }
 
-    const currentNotepad = await fetchQuery(
-      api.notepads.getFromGroup,
-      { group: id },
-      { token },
-    );
+    const currentNotepad = await fetchQuery(api.notepads.getFromGroup, {
+      group: id,
+      apiAccessToken,
+    });
     if (!currentNotepad) {
       return NextResponse.json(
         {
@@ -129,15 +126,12 @@ export async function PUT(
       );
     }
 
-    const notepad = await fetchMutation(
-      api.notepads.update,
-      {
-        ...parsed.data,
-        id: currentNotepad._id,
-        group: currentNotepad.group,
-      },
-      { token },
-    );
+    const notepad = await fetchMutation(api.notepads.update, {
+      ...parsed.data,
+      id: currentNotepad._id,
+      group: currentNotepad.group,
+      apiAccessToken,
+    });
     return NextResponse.json({ data: notepad, error: null });
   } catch (error) {
     const { status, body } = handleApiError(error);
@@ -167,13 +161,12 @@ export async function DELETE(
 ) {
   const { id } = await params;
   try {
-    const token = getAuthToken(req);
+    const apiAccessToken = getApiToken(req);
     // Fetch the notepad for the group
-    const notepad = await fetchQuery(
-      api.notepads.getFromGroup,
-      { group: id },
-      { token },
-    );
+    const notepad = await fetchQuery(api.notepads.getFromGroup, {
+      group: id,
+      apiAccessToken,
+    });
     if (!notepad) {
       return NextResponse.json(
         {
@@ -184,11 +177,11 @@ export async function DELETE(
       );
     }
 
-    await fetchMutation(
-      api.notepads.deleteNotepad,
-      { id: notepad._id, group: id },
-      { token },
-    );
+    await fetchMutation(api.notepads.deleteNotepad, {
+      id: notepad._id,
+      group: id,
+      apiAccessToken,
+    });
     return NextResponse.json({ data: true, error: null });
   } catch (error) {
     const { status, body } = handleApiError(error);

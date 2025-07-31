@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { api } from "~/convex/_generated/api";
 import { fetchMutation } from "convex/nextjs";
-import { getAuthToken } from "~/lib/api/auth";
+import { getApiToken } from "~/lib/api/auth";
 import { handleApiError } from "~/lib/api/error";
 import type { Id } from "~/convex/_generated/dataModel";
 
@@ -34,15 +34,12 @@ export async function PATCH(
 ) {
   const { id, itemId } = await params;
   try {
-    const token = getAuthToken(req);
-    await fetchMutation(
-      api.listItems.toggleArchive,
-      {
-        group: id,
-        id: itemId,
-      },
-      { token },
-    );
+    const apiAccessToken = getApiToken(req);
+    await fetchMutation(api.listItems.toggleArchive, {
+      group: id,
+      id: itemId,
+      apiAccessToken,
+    });
     return NextResponse.json({ data: true, error: null });
   } catch (error) {
     const { status, body } = handleApiError(error);

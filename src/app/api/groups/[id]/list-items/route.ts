@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { api } from "~/convex/_generated/api";
 import { fetchQuery, fetchMutation } from "convex/nextjs";
-import { getAuthToken } from "~/lib/api/auth";
+import { getApiToken } from "~/lib/api/auth";
 import { handleApiError } from "~/lib/api/error";
 import { CreateListItemRequestSchema } from "~/lib/api/schemas";
 import type { Id } from "~/convex/_generated/dataModel";
@@ -29,12 +29,11 @@ export async function GET(
 ) {
   const { id } = await params;
   try {
-    const token = getAuthToken(req);
-    const items = await fetchQuery(
-      api.listItems.getFromGroup,
-      { group: id },
-      { token },
-    );
+    const apiAccessToken = getApiToken(req);
+    const items = await fetchQuery(api.listItems.getFromGroup, {
+      group: id,
+      apiAccessToken,
+    });
     return NextResponse.json({ data: items, error: null });
   } catch (error) {
     const { status, body } = handleApiError(error);
@@ -64,7 +63,7 @@ export async function POST(
 ) {
   const { id } = await params;
   try {
-    const token = getAuthToken(req);
+    const apiAccessToken = getApiToken(req);
     const body = (await req.json()) as z.infer<
       typeof CreateListItemRequestSchema
     >;
@@ -78,11 +77,11 @@ export async function POST(
         { status: 400 },
       );
     }
-    const newId = (await fetchMutation(
-      api.listItems.create,
-      { group: id, ...parsed.data },
-      { token },
-    )) as unknown as string;
+    const newId = (await fetchMutation(api.listItems.create, {
+      group: id,
+      ...parsed.data,
+      apiAccessToken,
+    })) as unknown as string;
     return NextResponse.json({ data: newId, error: null }, { status: 201 });
   } catch (error) {
     const { status, body } = handleApiError(error);

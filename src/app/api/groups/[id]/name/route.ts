@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { api } from "~/convex/_generated/api";
 import { fetchMutation } from "convex/nextjs";
-import { getAuthToken } from "~/lib/api/auth";
+import { getApiToken } from "~/lib/api/auth";
 import { handleApiError } from "~/lib/api/error";
 import { UpdateGroupNameRequestSchema } from "~/lib/api/schemas";
 import type { Id } from "~/convex/_generated/dataModel";
@@ -29,7 +29,7 @@ export async function PATCH(
 ) {
   const { id } = await params;
   try {
-    const token = getAuthToken(req);
+    const apiAccessToken = getApiToken(req);
     const body = (await req.json()) as z.infer<
       typeof UpdateGroupNameRequestSchema
     >;
@@ -43,11 +43,11 @@ export async function PATCH(
         { status: 400 },
       );
     }
-    await fetchMutation(
-      api.groups.updateName,
-      { id, name: parsed.data.name },
-      { token },
-    );
+    await fetchMutation(api.groups.updateName, {
+      id,
+      name: parsed.data.name,
+      apiAccessToken,
+    });
     return NextResponse.json({ data: true, error: null });
   } catch (error) {
     const { status, body } = handleApiError(error);

@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { api } from "~/convex/_generated/api";
 import { fetchQuery, fetchMutation } from "convex/nextjs";
-import { getAuthToken } from "~/lib/api/auth";
+import { getApiToken } from "~/lib/api/auth";
 import { handleApiError } from "~/lib/api/error";
 import { CreateGroupRequestSchema } from "~/lib/api/schemas";
 import type z from "zod";
@@ -18,8 +18,10 @@ import type z from "zod";
 // GET /api/groups - list all groups
 export async function GET(req: NextRequest) {
   try {
-    const token = getAuthToken(req);
-    const groups = await fetchQuery(api.groups.getAll, {}, { token });
+    const apiAccessToken = getApiToken(req);
+    const groups = await fetchQuery(api.groups.getAll, {
+      apiAccessToken,
+    });
     return NextResponse.json({ data: groups, error: null });
   } catch (error) {
     const { status, body } = handleApiError(error);
@@ -39,7 +41,7 @@ export async function GET(req: NextRequest) {
 // POST /api/groups - create a new group
 export async function POST(req: NextRequest) {
   try {
-    const token = getAuthToken(req);
+    const apiAccessToken = getApiToken(req);
     const body = (await req.json()) as z.infer<typeof CreateGroupRequestSchema>;
     const parsed = CreateGroupRequestSchema.safeParse(body);
     if (!parsed.success) {
@@ -51,8 +53,9 @@ export async function POST(req: NextRequest) {
         { status: 400 },
       );
     }
-    const newId = (await fetchMutation(api.groups.create, parsed.data, {
-      token,
+    const newId = (await fetchMutation(api.groups.create, {
+      ...parsed.data,
+      apiAccessToken,
     })) as string;
     return NextResponse.json({ data: newId, error: null }, { status: 201 });
   } catch (error) {
