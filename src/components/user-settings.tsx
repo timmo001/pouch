@@ -1,16 +1,14 @@
 "use client";
+import { useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
 import { useConvexMutation } from "@convex-dev/react-query";
 import { useMutation } from "@tanstack/react-query";
-import { api } from "~/convex/_generated/api";
-import { Button } from "./ui/button";
-import { Input } from "~/components/ui/input";
 import { useQuery } from "convex/react";
-import { Dots } from "~/components/ui/dots";
-import { useEffect } from "react";
 import { CopyIcon, KeyIcon } from "lucide-react";
-import { FormControl, FormField, FormLabel } from "~/components/ui/form";
+import { api } from "~/convex/_generated/api";
+import { Button } from "~/components/ui/button";
+import { Dots } from "~/components/ui/dots";
 import { Label } from "~/components/ui/label";
 
 export function UserSettings() {
