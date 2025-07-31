@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { api } from "~/convex/_generated/api";
 import { fetchQuery, fetchMutation } from "convex/nextjs";
-import { getAuthToken } from "~/lib/api/auth";
+import { getApiToken } from "~/lib/api/auth";
 import { handleApiError } from "~/lib/api/error";
 import type { Id } from "~/convex/_generated/dataModel";
 
@@ -27,8 +27,11 @@ export async function GET(
 ) {
   const { id } = await params;
   try {
-    const token = getAuthToken(req);
-    const group = await fetchQuery(api.groups.getById, { id }, { token });
+    const apiAccessToken = getApiToken(req);
+    const group = await fetchQuery(api.groups.getById, {
+      id,
+      apiAccessToken,
+    });
     return NextResponse.json({ data: group, error: null });
   } catch (error) {
     const { status, body } = handleApiError(error);
@@ -58,8 +61,8 @@ export async function DELETE(
 ) {
   const { id } = await params;
   try {
-    const token = getAuthToken(req);
-    await fetchMutation(api.groups.deleteGroup, { id }, { token });
+    const apiAccessToken = getApiToken(req);
+    await fetchMutation(api.groups.deleteGroup, { id, apiAccessToken });
     return NextResponse.json({ data: true, error: null });
   } catch (error) {
     const { status, body } = handleApiError(error);

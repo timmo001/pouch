@@ -1,10 +1,16 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { getUserIdentityFromApiToken } from "./auth";
 
 export const getAll = query({
-  args: {},
-  handler: async (ctx) => {
-    const identity = await ctx.auth.getUserIdentity();
+  args: {
+    apiAccessToken: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const identity = args.apiAccessToken
+      ? await getUserIdentityFromApiToken(ctx, args.apiAccessToken)
+      : await ctx.auth.getUserIdentity();
+
     if (identity === null) {
       throw new Error("Not authenticated");
     }
@@ -23,9 +29,13 @@ export const getAll = query({
 export const getById = query({
   args: {
     id: v.id("groups"),
+    apiAccessToken: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
+    const identity = args.apiAccessToken
+      ? await getUserIdentityFromApiToken(ctx, args.apiAccessToken)
+      : await ctx.auth.getUserIdentity();
+
     if (identity === null) {
       throw new Error("Not authenticated");
     }
@@ -47,9 +57,13 @@ export const create = mutation({
   args: {
     name: v.string(),
     description: v.optional(v.string()),
+    apiAccessToken: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
+    const identity = args.apiAccessToken
+      ? await getUserIdentityFromApiToken(ctx, args.apiAccessToken)
+      : await ctx.auth.getUserIdentity();
+
     if (identity === null) {
       throw new Error("Not authenticated");
     }
@@ -67,9 +81,13 @@ export const updateName = mutation({
   args: {
     id: v.id("groups"),
     name: v.string(),
+    apiAccessToken: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
+    const identity = args.apiAccessToken
+      ? await getUserIdentityFromApiToken(ctx, args.apiAccessToken)
+      : await ctx.auth.getUserIdentity();
+
     if (identity === null) {
       throw new Error("Not authenticated");
     }
@@ -93,9 +111,13 @@ export const updateDescription = mutation({
   args: {
     id: v.id("groups"),
     description: v.optional(v.string()),
+    apiAccessToken: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
+    const identity = args.apiAccessToken
+      ? await getUserIdentityFromApiToken(ctx, args.apiAccessToken)
+      : await ctx.auth.getUserIdentity();
+
     if (identity === null) {
       throw new Error("Not authenticated");
     }
@@ -118,9 +140,13 @@ export const updateDescription = mutation({
 export const deleteGroup = mutation({
   args: {
     id: v.id("groups"),
+    apiAccessToken: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
+    const identity = args.apiAccessToken
+      ? await getUserIdentityFromApiToken(ctx, args.apiAccessToken)
+      : await ctx.auth.getUserIdentity();
+
     if (identity === null) {
       throw new Error("Not authenticated");
     }

@@ -8,10 +8,12 @@
  * @module
  */
 
+import type * as auth from "../auth.js";
 import type * as groups from "../groups.js";
 import type * as listItems from "../listItems.js";
 import type * as notepads from "../notepads.js";
 import type * as prosemirror from "../prosemirror.js";
+import type * as users from "../users.js";
 
 import type {
   ApiFromModules,
@@ -28,10 +30,12 @@ import type {
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  auth: typeof auth;
   groups: typeof groups;
   listItems: typeof listItems;
   notepads: typeof notepads;
   prosemirror: typeof prosemirror;
+  users: typeof users;
 }>;
 declare const fullApiWithMounts: typeof fullApi;
 

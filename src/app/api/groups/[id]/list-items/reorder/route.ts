@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { api } from "~/convex/_generated/api";
 import { fetchMutation } from "convex/nextjs";
-import { getAuthToken } from "~/lib/api/auth";
+import { getApiToken } from "~/lib/api/auth";
 import { handleApiError } from "~/lib/api/error";
 import { ReorderListItemsRequestSchema } from "~/lib/api/schemas";
 import type { Id } from "~/convex/_generated/dataModel";
@@ -29,7 +29,7 @@ export async function POST(
 ) {
   const { id } = await params;
   try {
-    const token = getAuthToken(req);
+    const apiAccessToken = getApiToken(req);
     const body = (await req.json()) as z.infer<
       typeof ReorderListItemsRequestSchema
     >;
@@ -43,14 +43,11 @@ export async function POST(
         { status: 400 },
       );
     }
-    const result = await fetchMutation(
-      api.listItems.reorder,
-      {
-        group: id,
-        orderedIds: parsed.data.orderedIds as Id<"listItems">[],
-      },
-      { token },
-    );
+    const result = await fetchMutation(api.listItems.reorder, {
+      group: id,
+      orderedIds: parsed.data.orderedIds as Id<"listItems">[],
+      apiAccessToken,
+    });
     return NextResponse.json({ data: result, error: null });
   } catch (error) {
     const { status, body } = handleApiError(error);
