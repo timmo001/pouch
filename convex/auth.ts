@@ -21,11 +21,8 @@ export async function getUserIdentityFromApiToken(
   // Return a UserIdentity-compatible object for API token users
   return {
     tokenIdentifier: user.tokenIdentifier,
-    subject: "",
-    issuer: "",
-    name: "",
-    email: "",
-    pictureUrl: "",
+    subject: "N/A",
+    issuer: "API Token",
     emailVerified: false,
   };
 }
