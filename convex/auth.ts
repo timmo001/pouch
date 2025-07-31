@@ -10,9 +10,10 @@ export async function getUserIdentityFromApiToken(
   ctx: QueryCtx | MutationCtx,
   apiToken: string,
 ): Promise<UserIdentity> {
-  const user = await ctx.runQuery(api.users.getUserByApiAccessToken, {
-    apiAccessToken: apiToken,
-  });
+  const user = await ctx.db
+    .query("users")
+    .withIndex("by_api_access_token", (q) => q.eq("apiAccessToken", apiToken))
+    .first();
 
   if (!user) {
     throw new Error("Invalid API token");
