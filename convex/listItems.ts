@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import type { Doc } from "./_generated/dataModel";
+import { getUserIdentityFromApiToken } from "./auth";
 
 function sortByPosition(a: Doc<"listItems">, b: Doc<"listItems">) {
   return (a.position ?? 0) - (b.position ?? 0);
@@ -12,6 +13,7 @@ export const create = mutation({
     type: v.union(v.literal("text"), v.literal("url")),
     value: v.string(),
     description: v.optional(v.string()),
+    apiAccessToken: v.optional(v.string()),
   },
   returns: v.object({
     id: v.id("listItems"),
@@ -24,7 +26,9 @@ export const create = mutation({
     position: v.number(),
   }),
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
+    const identity = args.apiAccessToken
+      ? await getUserIdentityFromApiToken(ctx, args.apiAccessToken)
+      : await ctx.auth.getUserIdentity();
     if (identity === null) {
       throw new Error("Not authenticated");
     }
@@ -67,9 +71,12 @@ export const create = mutation({
 export const getFromGroup = query({
   args: {
     group: v.id("groups"),
+    apiAccessToken: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
+    const identity = args.apiAccessToken
+      ? await getUserIdentityFromApiToken(ctx, args.apiAccessToken)
+      : await ctx.auth.getUserIdentity();
     if (identity === null) {
       throw new Error("Not authenticated");
     }
@@ -96,9 +103,12 @@ export const getById = query({
   args: {
     id: v.id("listItems"),
     group: v.id("groups"),
+    apiAccessToken: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
+    const identity = args.apiAccessToken
+      ? await getUserIdentityFromApiToken(ctx, args.apiAccessToken)
+      : await ctx.auth.getUserIdentity();
     if (identity === null) {
       throw new Error("Not authenticated");
     }
@@ -131,9 +141,12 @@ export const update = mutation({
     type: v.union(v.literal("text"), v.literal("url")),
     value: v.string(),
     description: v.optional(v.string()),
+    apiAccessToken: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
+    const identity = args.apiAccessToken
+      ? await getUserIdentityFromApiToken(ctx, args.apiAccessToken)
+      : await ctx.auth.getUserIdentity();
     if (identity === null) {
       throw new Error("Not authenticated");
     }
@@ -157,9 +170,12 @@ export const toggleArchive = mutation({
   args: {
     group: v.id("groups"),
     id: v.id("listItems"),
+    apiAccessToken: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
+    const identity = args.apiAccessToken
+      ? await getUserIdentityFromApiToken(ctx, args.apiAccessToken)
+      : await ctx.auth.getUserIdentity();
     if (identity === null) {
       throw new Error("Not authenticated");
     }
@@ -185,10 +201,13 @@ export const reorder = mutation({
   args: {
     group: v.id("groups"),
     orderedIds: v.array(v.id("listItems")),
+    apiAccessToken: v.optional(v.string()),
   },
   returns: v.array(v.id("listItems")),
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
+    const identity = args.apiAccessToken
+      ? await getUserIdentityFromApiToken(ctx, args.apiAccessToken)
+      : await ctx.auth.getUserIdentity();
     if (identity === null) {
       throw new Error("Not authenticated");
     }
@@ -245,9 +264,12 @@ export const deleteListItem = mutation({
   args: {
     group: v.id("groups"),
     id: v.id("listItems"),
+    apiAccessToken: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
+    const identity = args.apiAccessToken
+      ? await getUserIdentityFromApiToken(ctx, args.apiAccessToken)
+      : await ctx.auth.getUserIdentity();
     if (identity === null) {
       throw new Error("Not authenticated");
     }

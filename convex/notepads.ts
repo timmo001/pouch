@@ -1,13 +1,17 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { prosemirrorSync } from "./prosemirror";
+import { getUserIdentityFromApiToken } from "./auth";
 
 export const create = mutation({
   args: {
     group: v.id("groups"),
+    apiAccessToken: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
+    const identity = args.apiAccessToken
+      ? await getUserIdentityFromApiToken(ctx, args.apiAccessToken)
+      : await ctx.auth.getUserIdentity();
     if (identity === null) {
       throw new Error("Not authenticated");
     }
@@ -48,9 +52,12 @@ export const create = mutation({
 export const getFromGroup = query({
   args: {
     group: v.id("groups"),
+    apiAccessToken: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
+    const identity = args.apiAccessToken
+      ? await getUserIdentityFromApiToken(ctx, args.apiAccessToken)
+      : await ctx.auth.getUserIdentity();
     if (identity === null) {
       throw new Error("Not authenticated");
     }
@@ -69,9 +76,12 @@ export const update = mutation({
     id: v.id("notepads"),
     group: v.id("groups"),
     content: v.string(),
+    apiAccessToken: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
+    const identity = args.apiAccessToken
+      ? await getUserIdentityFromApiToken(ctx, args.apiAccessToken)
+      : await ctx.auth.getUserIdentity();
     if (identity === null) {
       throw new Error("Not authenticated");
     }
@@ -98,9 +108,12 @@ export const deleteNotepad = mutation({
   args: {
     id: v.id("notepads"),
     group: v.id("groups"),
+    apiAccessToken: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
+    const identity = args.apiAccessToken
+      ? await getUserIdentityFromApiToken(ctx, args.apiAccessToken)
+      : await ctx.auth.getUserIdentity();
     if (identity === null) {
       throw new Error("Not authenticated");
     }
