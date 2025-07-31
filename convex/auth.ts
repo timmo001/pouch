@@ -23,6 +23,5 @@ export async function getUserIdentityFromApiToken(
     tokenIdentifier: user.tokenIdentifier,
     subject: "N/A",
     issuer: "API Token",
-    emailVerified: false,
   };
 }
