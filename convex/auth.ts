@@ -3,20 +3,6 @@ import { api } from "./_generated/api";
 import type { QueryCtx, MutationCtx } from "./_generated/server";
 
 /**
- * Gets user identity from Clerk authentication.
- * This is the standard way for web clients.
- */
-export async function getUserIdentity(
-  ctx: QueryCtx | MutationCtx,
-): Promise<UserIdentity> {
-  const identity = await ctx.auth.getUserIdentity();
-  if (identity === null) {
-    throw new Error("Not authenticated");
-  }
-  return identity;
-}
-
-/**
  * Gets user identity from API token.
  * This is for API clients using API tokens.
  */
