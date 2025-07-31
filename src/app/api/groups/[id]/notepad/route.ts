@@ -36,8 +36,7 @@ export async function GET(
     });
     return NextResponse.json({ data: notepad, error: null });
   } catch (error) {
-    const { status, body } = handleApiError(error);
-    return NextResponse.json(body, { status });
+    return handleApiError(error);
   }
 }
 
@@ -70,8 +69,7 @@ export async function POST(
     });
     return NextResponse.json({ data: notepad, error: null }, { status: 201 });
   } catch (error) {
-    const { status, body } = handleApiError(error);
-    return NextResponse.json(body, { status });
+    return handleApiError(error);
   }
 }
 
@@ -134,8 +132,7 @@ export async function PUT(
     });
     return NextResponse.json({ data: notepad, error: null });
   } catch (error) {
-    const { status, body } = handleApiError(error);
-    return NextResponse.json(body, { status });
+    return handleApiError(error);
   }
 }
 
@@ -184,7 +181,6 @@ export async function DELETE(
     });
     return NextResponse.json({ data: true, error: null });
   } catch (error) {
-    const { status, body } = handleApiError(error);
-    return NextResponse.json(body, { status });
+    return handleApiError(error);
   }
 }

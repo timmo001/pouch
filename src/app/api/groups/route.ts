@@ -24,8 +24,7 @@ export async function GET(req: NextRequest) {
     });
     return NextResponse.json({ data: groups, error: null });
   } catch (error) {
-    const { status, body } = handleApiError(error);
-    return NextResponse.json(body, { status });
+    return handleApiError(error);
   }
 }
 
@@ -59,7 +58,6 @@ export async function POST(req: NextRequest) {
     })) as string;
     return NextResponse.json({ data: newId, error: null }, { status: 201 });
   } catch (error) {
-    const { status, body } = handleApiError(error);
-    return NextResponse.json(body, { status });
+    return handleApiError(error);
   }
 }

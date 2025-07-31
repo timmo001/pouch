@@ -1,11 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { api } from "~/convex/_generated/api";
+import type z from "zod";
 import { fetchMutation } from "convex/nextjs";
+import { api } from "~/convex/_generated/api";
+import type { Id } from "~/convex/_generated/dataModel";
 import { getApiToken } from "~/lib/api/auth";
 import { handleApiError } from "~/lib/api/error";
 import { UpdateGroupNameRequestSchema } from "~/lib/api/schemas";
-import type { Id } from "~/convex/_generated/dataModel";
-import type z from "zod";
 
 /**
  * @openapi
@@ -50,7 +50,6 @@ export async function PATCH(
     });
     return NextResponse.json({ data: true, error: null });
   } catch (error) {
-    const { status, body } = handleApiError(error);
-    return NextResponse.json(body, { status });
+    return handleApiError(error);
   }
 }

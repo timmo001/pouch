@@ -34,8 +34,7 @@ export async function GET(
     });
     return NextResponse.json({ data: group, error: null });
   } catch (error) {
-    const { status, body } = handleApiError(error);
-    return NextResponse.json(body, { status });
+    return handleApiError(error);
   }
 }
 
@@ -65,7 +64,6 @@ export async function DELETE(
     await fetchMutation(api.groups.deleteGroup, { id, apiAccessToken });
     return NextResponse.json({ data: true, error: null });
   } catch (error) {
-    const { status, body } = handleApiError(error);
-    return NextResponse.json(body, { status });
+    return handleApiError(error);
   }
 }

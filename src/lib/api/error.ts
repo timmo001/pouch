@@ -1,3 +1,5 @@
+import { NextResponse } from "next/server";
+
 function isObjectWithStatus(obj: unknown): obj is { status: number } {
   return (
     typeof obj === "object" &&
@@ -59,13 +61,26 @@ function getStatusCode(error: unknown): {
  * Formats an error into the standard API error response structure.
  */
 export function handleApiError(error: unknown) {
+  if (error instanceof Error && error.message.includes("Invalid API token")) {
+    return NextResponse.json(
+      {
+        error: {
+          message: "Invalid API token",
+          code: "UNAUTHORIZED",
+        },
+      },
+      { status: 401 },
+    );
+  }
+
   const { status, code } = getStatusCode(error);
   const message = error instanceof Error ? error.message : String(error);
-  return {
+
+  return NextResponse.json({
     status,
     body: {
       data: null,
       error: { message, code },
     },
-  };
+  });
 }

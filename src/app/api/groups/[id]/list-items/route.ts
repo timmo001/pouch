@@ -1,11 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { api } from "~/convex/_generated/api";
 import { fetchQuery, fetchMutation } from "convex/nextjs";
+import type z from "zod";
+import { api } from "~/convex/_generated/api";
+import type { Id } from "~/convex/_generated/dataModel";
 import { getApiToken } from "~/lib/api/auth";
 import { handleApiError } from "~/lib/api/error";
 import { CreateListItemRequestSchema } from "~/lib/api/schemas";
-import type { Id } from "~/convex/_generated/dataModel";
-import type z from "zod";
 
 /**
  * @openapi
@@ -36,8 +36,7 @@ export async function GET(
     });
     return NextResponse.json({ data: items, error: null });
   } catch (error) {
-    const { status, body } = handleApiError(error);
-    return NextResponse.json(body, { status });
+    return handleApiError(error);
   }
 }
 
@@ -84,7 +83,6 @@ export async function POST(
     })) as unknown as string;
     return NextResponse.json({ data: newId, error: null }, { status: 201 });
   } catch (error) {
-    const { status, body } = handleApiError(error);
-    return NextResponse.json(body, { status });
+    return handleApiError(error);
   }
 }

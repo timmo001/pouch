@@ -1,11 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { api } from "~/convex/_generated/api";
 import { fetchMutation } from "convex/nextjs";
+import type z from "zod";
+import { api } from "~/convex/_generated/api";
+import type { Id } from "~/convex/_generated/dataModel";
 import { getApiToken } from "~/lib/api/auth";
 import { handleApiError } from "~/lib/api/error";
 import { ReorderListItemsRequestSchema } from "~/lib/api/schemas";
-import type { Id } from "~/convex/_generated/dataModel";
-import type z from "zod";
 
 /**
  * @openapi
@@ -50,7 +50,6 @@ export async function POST(
     });
     return NextResponse.json({ data: result, error: null });
   } catch (error) {
-    const { status, body } = handleApiError(error);
-    return NextResponse.json(body, { status });
+    return handleApiError(error);
   }
 }
