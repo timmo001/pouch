@@ -49,8 +49,12 @@ export function UserSettings() {
 
   function handleCopyApiAccessToken() {
     if (user?.apiAccessToken) {
+      if (navigator?.clipboard) {
       try {
-        void navigator?.clipboard?.writeText(user.apiAccessToken);
+        if (!navigator?.clipboard) {
+          throw new Error("Clipboard is not supported");
+        }
+        void navigator.clipboard.writeText(user.apiAccessToken);
         toast.success("API Access Token copied!");
       } catch (error) {
         console.error("Failed to copy API Access Token:", error);
